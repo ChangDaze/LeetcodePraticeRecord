@@ -1,0 +1,119 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //這基本上測不準，直接submit檢查比較快
+            ListNode test = new ListNode(3) { next = new ListNode(2) { next = new ListNode(0) { next = new ListNode(-4) } } };
+            ListNode test2 = test.next;
+            test.next.next.next.next = test2;
+            //ListNode test = new ListNode(1);
+            //test.next = test;
+            //Console.WriteLine(test.next == test);
+            //Console.WriteLine(test == test.next);
+            Solution solution = new Solution();
+            ListNode result = solution.DetectCycle(test);
+
+
+
+            Console.WriteLine(result.val);
+            
+
+            Console.ReadKey();
+
+        }
+
+        public class ListNode
+        {
+            public int val;
+            public ListNode next;
+            public ListNode(int x)
+            {
+                val = x;
+                next = null;
+            }
+        }
+        //這個linked list 建構式跟之前的不太一樣
+
+
+        //public class Solution
+        //{
+        //    public ListNode DetectCycle(ListNode head)
+        //    {
+
+        //        if (head == null || head.next == null)//不會產生迴圈的返回null
+        //        {
+        //            return null;
+        //        }
+        //        ListNode node = head;
+        //        Dictionary<int, ListNode> collect = new Dictionary<int, ListNode>();//紀錄node
+        //        int count = 0;//這方便跟題目用相同的數數，感覺只要list<T>就行
+        //        while(node.next != null)
+        //        {
+        //            if (collect.ContainsValue(node))//主要node可以直接拿來比對我的方法才能成功
+        //            {
+        //                break;
+        //            }
+        //            collect.Add(count,node);//沒有的人就加入紀錄
+        //            count++;//隨意
+        //            node = node.next;//node要移動
+        //        }
+
+        //        if (node.next == null)//最後判斷的是node.next == null代表沒有循環
+        //        {
+        //            return null;
+        //        }
+
+
+        //        return node;//這代表是break出來的，代表有循環的點
+        //    }
+        //}
+
+        public class Solution
+        {
+            public ListNode DetectCycle(ListNode head)
+            {
+                if (head == null) return null;
+
+                var slow = head;
+                var fast = head;
+
+                while (fast != null && fast.next != null)
+                {
+                    slow = slow.next;
+                    fast = fast.next.next;//固定快一步所以有循環必定會追上重疊，fast = 2*short -> 多出的這一倍
+
+                    if (slow == fast) break;//  
+                }
+
+                if (fast == null || fast.next == null) return null;
+
+                slow = head;
+                while (slow != fast)
+                {
+                    slow = slow.next;
+                    fast = fast.next;
+                }
+
+                return fast;
+            }
+        }
+        //來源
+        //用快慢有點抽像但合理，簡單說就是floyd演算法，循環=C，支鏈(長度) = T = kC + r，相遇點會是C-r,找法是-T開始先走T、2T得到座標(0,kC+r = r mod C),再走C-r、2(C-r)得到座標(C-r,2C-r = C-r mod C)
+        //起點會是(相遇點起步走支鏈長度):T(循環起點) + (C-r)(相遇點) = (k+1)C = 0 mod C，
+        //mod C就是取C循環中相對座標
+        //https://www.youtube.com/watch?v=VVFPYw8XlGo影片解釋
+        //https://leetcode.com/problems/linked-list-cycle-ii/discuss/289840/C-slow-fast
+        //一樣的意思只是語法濃縮了
+        //https://leetcode.com/problems/linked-list-cycle-ii/discuss/44903/A-C-6-Line-Solution
+        //這是我的高階版，直接用hashset不可重複的特性和回傳加入成功或失敗處理了(這樣這個比較容易理解，雖然底層可能也是上面那種演算法)
+        //https://leetcode.com/problems/linked-list-cycle-ii/discuss/277962/C-98
+    }
+}

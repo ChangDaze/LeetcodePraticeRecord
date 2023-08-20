@@ -1,0 +1,40 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] nums = new int[] { 0, 2, 1, 5, 3, 4 };            
+            Solution solution = new Solution();
+            var result = solution.BuildArray(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+        public class Solution
+        {
+            public int[] BuildArray(int[] nums)
+            {
+                int[] result = new int[nums.Length];
+
+                //雖然很簡單，但應該是有個特性，只要nums裡面是0~nums.Length-1且distinct，其實只會將nums裡的值重新排列，可能可以用在其他題目的排列上?
+                for (int i = 0;i<nums.Length;i++)                
+                    result[i] = nums[nums[i]];
+                
+                return result;
+            }
+        }
+        //雖然速度很慢，但大家應該都這樣，直接照題目敘述做
+    }
+}

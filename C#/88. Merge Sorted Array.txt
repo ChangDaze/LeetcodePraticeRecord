@@ -1,0 +1,45 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var nums1 = new int[] { 1, 2, 3, 0, 0, 0 };
+            var nums2 = new int[] { 2, 5, 6 };
+            var m = 3;
+            var n = 3;
+            solution.Merge(nums1, m, nums2, n);
+            Console.WriteLine();
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public void Merge(int[] nums1, int m, int[] nums2, int n)
+            {
+                Array.Copy(nums2, 0, nums1, m, n);
+                Array.Sort(nums1);
+            }
+            //就Merge後再sort array，速度不錯
+            //其他
+            //這個就把兩個array比大小後存到array，最後再存回num1，速度普通
+            //https://leetcode.com/problems/merge-sorted-array/solutions/1825275/readable-c-solution/
+            //這個思路還蠻清晰的，這位方法跟第一位差不多，但步驟好很多，同樣是比大小，這位從後往前就避免了需要紀錄前面原本數字的問題了
+            //也比第一位少做了個迴圈(題目有說原本兩array就sort好，所以比完後num2有餘就補上，沒餘就代表num2本就該在那)
+            //這方法照理來說會比我快(目前看起來是)，畢竟應該是O(m+n)，速度不錯
+            //https://leetcode.com/problems/merge-sorted-array/solutions/2122405/c-solution/
+            //這位方法跟第二位一樣，不過這位多寫了一個不必要的迴圈(實際去掉後也是會通過)，速度不錯
+            //https://leetcode.com/problems/merge-sorted-array/solutions/2123130/c/
+        }
+    }
+}

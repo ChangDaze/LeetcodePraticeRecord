@@ -1,0 +1,66 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var grid = new int[4][] { new int[4] {9,9,8,1 },
+                                        new int[4] { 5, 6, 2, 6 },
+                                        new int[4] { 8,2,6,4 },
+                                        new int[4] { 6,2,2,2 },
+                                        };
+            var result = solution.LargestLocal(grid);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }        
+        public class Solution
+        {
+            public int[][] LargestLocal(int[][] grid)
+            {
+                int[][] result = new int[grid.Length-2][];
+                for(int i = 0;i< result.Length; i++)
+                {
+                    result[i] = new int[grid[0].Length-2];
+                }
+
+                for(int i = 1;i< grid.Length-1;i++) //row(min+1,max-1)會比grid長度-2
+                {                    
+                    for(int j = 1; j < grid[0].Length-1; j++) //column(min+1,max-1)會比grid長度-2
+                    {
+                        int max = 0;//9宮格可使比較前重置
+                        for (int k = i - 1; k <= i + 1; k++)//目前row位置前後+1都要比較
+                        {
+                            for (int l = j-1; l <= j + 1; l++)//目前column位置前後+1都要比較
+                            {
+                                if (grid[k][l] > max)//記得變數是k、l
+                                    max = grid[k][l];
+                            }
+                        }
+                        result[i - 1][j-1] = max;//對應到答案的位置，所以i-1、j-1
+                    }
+                    
+                }
+
+                return result;
+            }
+            //就硬解，沒什麼好說的，原本想每次都遞增3格找max，但發現每次也要縮3格，新的max而可能在要縮去的那3格內，感覺判斷好難就放棄了，速度普通
+            //其他
+            //這是LINQ的暴力解方式，寫法可以學一下，像是range和T[from..to](這有點猛，可以看一下)，不過本質還是暴力解，速度非常慢
+            //https://leetcode.com/problems/largest-local-values-in-a-matrix/solutions/2441520/c-1-liner/
+            //這也是暴力解，但他每個步驟拆得比較複雜，有趣的是他reult的row是跟著答案一起建立，不是一開始先建好，也是不同的寫法，可以看看，速度慢
+            //https://leetcode.com/problems/largest-local-values-in-a-matrix/solutions/2722137/c/
+            //這方法基本跟我一模一樣，但他這樣寫會比較清晰不用像我+1-1，可以看看，他還用了第二位用的reult的row是跟著答案一起建立，速度普通
+            //https://leetcode.com/problems/largest-local-values-in-a-matrix/solutions/2461517/c-solution/
+        }
+    }
+}

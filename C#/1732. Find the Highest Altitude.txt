@@ -1,0 +1,47 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Globalization;
+using System.Runtime.Remoting.Messaging;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var gain = new int[] { -5, 1, 5, 0, -7 };
+            var result = solution.LargestAltitude(gain);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int LargestAltitude(int[] gain)
+            {
+                int max = 0;//一開始高度是0，也要算
+                int altitude = 0;
+
+                foreach (int i in gain)
+                {
+                    altitude += i;
+                    max = Math.Max(max, altitude);
+                }
+
+                return max;
+            }
+        }
+        //這個比較特別可以看一下
+        //法1 : accumulate產生累加的list，然後python可以list相加，這裡是每個element + 0，然後從list取max
+        //法2 : 是法1的精簡版，用max直接從accumulate取出最大值，再跟0比較，避免負數
+        //accumulate在python本身不只累加還能累乘等等 https://blog.csdn.net/CSerwangjun/article/details/102540663
+        //https://leetcode.com/problems/find-the-highest-altitude/solutions/1031113/python3-1-line/
+    }
+}

@@ -1,0 +1,90 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] forts = new int[] {  1, 0, 1, -1, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 1};
+            Solution solution = new Solution();
+            var result = solution.CaptureForts(forts);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int CaptureForts(int[] forts)
+            {
+                int result = 0;int sum = 0;int y = 0;
+                int headX = -1; int tailX = -1;
+                for(int i = 0; i<forts.Length;i++)
+                    if (forts[i] == 1)
+                    {
+                        headX = i;break;
+                    }
+                        
+                for (int i = forts.Length - 1; i >= 0; i--)
+                    if (forts[i] == 1)
+                    {
+                        tailX = i; break;
+                    }
+
+                if (headX == -1 || tailX == -1) return 0;//檢查有沒有1，沒有就不算了，headX和tailX算是加減用，重要性不高
+
+                while (y< forts.Length)
+                {
+                    if (forts[y] != -1)
+                    {
+                        y+=1;continue;
+                    }
+
+                    sum = 0;//重置
+                    for (int i = y-1; headX < i; i--)//往前推，headX不能推headX或tailX，EX: 1,0,0,1,0,-1，這樣的應該要是sum=1，但從x推會變sum =2
+                    {
+                        if (forts[i] == 0)
+                            sum += 1;
+                        else if(forts[i] == -1)//遇到1和-1都要結束，但遇到-1是直接不算，因為題目是1 -> -1 間幾個0
+                        {
+                            sum = 0;
+                            break;
+                        }
+                        else 
+                            break;
+                    }
+                    
+                    result = Math.Max(result, sum);//比大小
+
+                    sum = 0;
+                    for (int i = y+1; tailX > i; i++)//往後推
+                    {
+                        if (forts[i] == 0)
+                            sum += 1;
+                        else if (forts[i] == -1)
+                        {
+                            sum = 0;
+                            break;
+                        }
+                        else 
+                            break;
+                    }
+                    result = Math.Max(result, sum);
+
+                    y += 1;
+                }
+                return result;
+            }
+            //嗯...，程式寫的超長，方法應該沒錯，主要看別人如何精簡或是有其他更好的two pointer
+        }
+    }
+}

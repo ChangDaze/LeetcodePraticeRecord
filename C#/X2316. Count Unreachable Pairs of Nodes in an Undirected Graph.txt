@@ -1,0 +1,46 @@
+public class Solution {
+    public long CountPairs(int n, int[][] edges)
+    {
+        HashSet<int>[] paths = new HashSet<int>[n];
+        for (int i = 0; i < n; i++)
+        {
+            paths[i] = new HashSet<int>();
+        }
+        foreach (int[] edge in edges)
+        {
+            paths[edge[0]].Add(edge[1]);
+            paths[edge[1]].Add(edge[0]);
+        }
+
+        decimal result = 0;
+        HashSet<int> visited = new HashSet<int>();
+
+        for (int i = 0; i < n; i++)
+        {
+            if (!visited.Contains(i))
+            {
+                int groupNodeCount = Dfs(i, paths, visited);
+                result += ((decimal)groupNodeCount * (n - groupNodeCount));
+            }
+        }
+        return (long)(result/2);
+    }
+
+    private int Dfs(int i, HashSet<int>[] paths, HashSet<int> visited)
+    {
+        if (visited.Contains(i))
+            return 0;
+        visited.Add(i);
+        int groupNodeCount = 1;
+        foreach (int next in paths[i])
+        {
+            groupNodeCount += Dfs(next, paths, visited);
+        }
+        return groupNodeCount;
+    }
+}
+
+//影片
+//https://www.youtube.com/watch?v=vH9CLfE82Rk&ab_channel=HuaHua
+//參考
+//https://leetcode.com/problems/count-unreachable-pairs-of-nodes-in-an-undirected-graph/solutions/2196059/c-dfs/

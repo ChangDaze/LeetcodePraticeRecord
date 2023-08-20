@@ -1,0 +1,63 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var nums = new int[][] { new int[] { 1, 2 }, new int[] { 3,4 } };
+            Solution solution = new Solution();
+            var result = solution.ProjectionArea(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public int ProjectionArea(int[][] grid)
+            {
+                int result = grid.Length * grid[0].Length;
+                int[] colmax = new int[grid[0].Length];//存col max用(為了跟row max一起處理)
+
+                for(int i = 0;i<grid.Length ; i++)
+                {
+                    int rowmax = 0;//存row max
+                    for (int j = 0; j < grid[i].Length; j++)
+                    {
+                        if (grid[i][j] > rowmax)
+                            rowmax = grid[i][j];
+
+                        if (grid[i][j] > colmax[j])
+                            colmax[j] = grid[i][j];
+
+                        if (grid[i][j] == 0)//因為0就代表完全沒有，從底部看就是空的，要--
+                            result--;
+                    }
+                    result += rowmax;//算完就加上，也不用存
+                }
+
+                return result + colmax.Sum();
+            }
+        }
+        //3 part
+        //(1)total count (2)each row max (3)each column max
+        //速度還行
+        //其他
+        //方法跟我一模一樣，不過他if(grid[i][j] > 0)用的不錯ㄟ(單純乾淨一點點)，速度還行
+        //https://leetcode.com/problems/projection-area-of-3d-shapes/solutions/2386292/c/
+        //這是用LINQ，就是把總結出的條件各用一條LINQ處理，速度還行，其實看了非常乾淨整齊，但範圍一擴大可能會出事，畢竟他整個grid走了3次
+        //https://leetcode.com/problems/projection-area-of-3d-shapes/solutions/695855/c-linq-4-lines/
+        //這有點狠，他直接grid[i][j](row)、grid[j][i](col)在同一迴圈處理，也剛好這grid是正方形，他才能這樣搞，不過能想到野蠻猛的，速度還行
+        //https://leetcode.com/problems/projection-area-of-3d-shapes/solutions/2578875/c-one-pass-solution-89ms-87/
+
+    }
+}

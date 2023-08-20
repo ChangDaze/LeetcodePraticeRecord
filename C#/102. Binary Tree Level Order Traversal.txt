@@ -1,0 +1,119 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            TreeNode tree = new TreeNode(3, new TreeNode(9), new TreeNode(20, new TreeNode(15), new TreeNode(7)));
+            Solution solution = new Solution();
+            IList<IList<int>> result = solution.LevelOrder(tree);
+
+
+
+            Console.WriteLine();
+
+
+            Console.ReadKey();
+
+        }
+
+        public class TreeNode
+        {
+            public int val;
+            public TreeNode left;
+            public TreeNode right;
+            public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+            {
+                this.val = val;
+                this.left = left;
+                this.right = right;
+            }
+        }
+
+
+        //public class Solution
+        //{
+        //    public IList<IList<int>> LevelOrder(TreeNode root)
+        //    {
+        //        if (root == null)
+        //        {
+        //            return new List<IList<int>>();
+        //        }
+        //        IList<IList<int>> result = new List<IList<int>>();
+        //        Queue<(int, TreeNode)> nowlevel = new Queue<(int, TreeNode)>();//感覺我有點濫用變數一直記，下面其他的活用tree的特性比較好
+
+        //        nowlevel.Enqueue((1, root));
+
+        //        while (nowlevel.Count > 0)
+        //        {
+        //            var (i, j) = nowlevel.Dequeue();
+        //            if (j == null)
+        //            {
+        //                continue;
+        //            }
+
+        //            if (result.Count < i)//如果層數少於會到達的層數就新增list
+        //            {
+        //                result.Add(new List<int>());
+        //            }
+
+        //            result[i - 1].Add(j.val);//依層數放入紀錄
+        //            nowlevel.Enqueue((i + 1, j.left));//將下層的東西放入預備位置，並記錄應放的層數
+        //            nowlevel.Enqueue((i + 1, j.right));
+        //        }
+
+
+
+        //        return result;
+        //    }
+        //}
+        //我這方法算BFS
+        //其他
+        //這方法差不多但他比較簡潔因為他沒有計算層數，是到哪層依那層現有的數量就把遍歷一次填滿list和填滿下層的數量(null就不算)才繼續下一層
+        //https://leetcode.com/problems/binary-tree-level-order-traversal/discuss/286133/C-queue
+        //這也差不多
+        //https://leetcode.com/problems/binary-tree-level-order-traversal/discuss/33543/C-Solution
+        //這也一樣
+        //https://leetcode.com/problems/binary-tree-level-order-traversal/discuss/542893/C-BFS-solution
+
+        public class Solution
+        {
+            public IList<IList<int>> LevelOrder(TreeNode root)
+            {
+                var result = new List<IList<int>>();
+
+                if (root == null) return result;
+
+                result.Add(new List<int>() { root.val });
+
+                TraverseTree(root.left, result);
+                TraverseTree(root.right, result);
+
+                return result;
+            }
+
+            private void TraverseTree(TreeNode node, IList<IList<int>> result, int depth = 0)
+            {
+                if (node == null) return;//那層沒東西不會新增list
+                if (result.Count == ++depth) result.Add(new List<int>());//這邊++後depth是會被改變的(但改變的只有那個迴圈的depth不是reference)，到新的一層時會新增那層的list來填滿，
+                                                                         //但已經有的那層只會紀錄不會新增List
+
+                result[depth].Add(node.val);
+
+                TraverseTree(node.left, result, depth);
+                TraverseTree(node.right, result, depth);
+            }
+        }
+        //這是DFS的版本，這方法不用特地紀錄哪層treenode，也是很天才，就只是每個點走過一次，猛
+        //https://leetcode.com/problems/binary-tree-level-order-traversal/discuss/611524/C-Simple-recursion-DFS
+    }
+
+
+
+}

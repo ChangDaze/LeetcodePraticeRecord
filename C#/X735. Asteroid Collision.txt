@@ -1,0 +1,52 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Globalization;
+using System.Runtime.Remoting.Messaging;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            int[] asteroids = new int[] {5,10,-5};
+            var result = solution.AsteroidCollision(asteroids);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int[] AsteroidCollision(int[] asteroids)
+            {
+                Stack<int> stack = new Stack<int>();                
+
+                for(int i = 0;i<asteroids.Length;i++)
+                {
+                    int input = asteroids[i];
+                    //input != 0是因為我拿來當特殊數字，後面if會用，且題目有限制!=0
+                    while (stack.Count > 0 && input != 0 && (stack.Peek() > 0 && input < 0))
+                    //while (stack.Count > 0 && input!=0 &&(stack.Peek()>0 != input > 0)) 
+                    //原本這樣好好的，但題目有點故意，要求負的left，正的right，所以-1,+1不會撞，+1,-1會撞
+                    {
+                        int temp = stack.Pop();
+                        input = Math.Abs(input) > Math.Abs(temp) ? input :
+                                    Math.Abs(input) < Math.Abs(temp) ? temp : 0;
+                    }
+
+                    if (input == 0) continue;
+                    stack.Push(input);
+                }
+
+                return stack.Reverse().ToArray();//stack變成其他陣列要reverse
+            }
+        }
+    }
+}

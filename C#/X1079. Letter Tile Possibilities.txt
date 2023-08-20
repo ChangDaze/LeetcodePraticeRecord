@@ -1,0 +1,61 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string tiles = "AAB";            
+            Solution solution = new Solution();
+            var result = solution.NumTilePossibilities(tiles);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            HashSet<string> record = new HashSet<string>();//好像也不用hashset
+            string titles = "";
+            bool[] flags;
+            public int NumTilePossibilities(string tiles)
+            {
+                this.titles= tiles;
+                flags = new bool[tiles.Length];
+                BackTracking("");
+                return record.Count;
+            }
+
+            private void BackTracking(string word)
+            {
+                if(word.Length >= titles.Length)
+                {
+                    record.Add(word);
+                    return;
+                }
+
+                for(int i = 0;i<titles.Length;i++)
+                {
+                    if (flags[i])
+                        continue;
+                    record.Add(word + titles[i]);
+                    flags[i] = true;
+                    BackTracking(word + titles[i]);
+                    flags[i] = false;
+                }
+            }
+        }
+        //就暴力解
+    }
+}

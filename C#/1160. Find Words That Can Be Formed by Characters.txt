@@ -1,0 +1,86 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string[] words = new string[] { "cat", "bt", "hat", "tree" };
+            string chars = "atach";
+            int result = solution.CountCharacters(words, chars);
+            Console.WriteLine(result);
+
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int CountCharacters(string[] words, string chars)
+            {
+                int result = 0;
+                Dictionary<char, int> map = new Dictionary<char, int>();//紀錄各個字母可用次數
+                foreach (char c in chars)
+                {
+                    if (map.ContainsKey(c))
+                    {
+                        map[c]++;
+                    }
+                    else
+                    {
+                        map.Add(c, 1);
+                    }
+                }
+                foreach (string word in words)
+                {
+                    bool flag = true;//假設都會通過
+                    List<char> templst = word.Distinct().ToList();//把word有用到的字篩出來給dic用
+                    foreach (char key in templst)
+                    {
+                        if (map.ContainsKey(key))
+                        {
+                            if (word.Count(x => x == key) <= map[key])//數word用的此字母數量是否dic夠提供
+                            {
+                                continue;
+                            }
+                        }
+                        flag = false;//不夠就失敗不用再比
+                        break;
+                    }
+                    if (flag)
+                    {
+                        result += word.Length;
+                    }
+                }
+                return result;
+            }
+            //個人覺得這種把需要的地方提出來比對算容易懂，但就是可能因此導致速度不快
+            //其他
+            //這個人全部用linq完成，不過他的dic會在迴圈中一直重複建，所以應該快不了多少
+            //不過他的groupby和count可以學一下(count好像是groupby中所有的一起count，比較像linq中用linq，所以不用特別指定的樣子)
+            //https://leetcode.com/problems/find-words-that-can-be-formed-by-characters/discuss/449086/c
+            //這是用lookup，跟groupby很像，不過沒有延遲的特性，可看https://dotblogs.com.tw/kirkchen/2011/07/16/toolookup_groupby_todicionary_introduction
+            //但很特別的是他是自己建立一個function建構式來做dic不管是s還是word都通過function再互相比較
+            //雖說只有三行，但要理解真的要花時間..，不過他s的dic只做一次，這點比上一個人好，但這樣串速度好像也不快
+            //https://leetcode.com/problems/find-words-that-can-be-formed-by-characters/discuss/461398/C-3-line
+            //這個人方法跟我差不多，但他跟第一個人一樣dic一直重做
+            //https://leetcode.com/problems/find-words-that-can-be-formed-by-characters/discuss/361118/C-Solution
+
+            #region 第2個人用的code
+            //public int CountCharacters(string[] words, string chars)
+            //{
+            //    IDictionary<char, int> ToCharCount(string s) => s.ToLookup(x => x).ToDictionary(x => x.Key, x => x.Count());
+            //    var set = ToCharCount(chars);
+            //    return words.Where(w => ToCharCount(w).All(x => set.ContainsKey(x.Key) && set[x.Key] >= x.Value)).Sum(w => w.Length);
+            //}
+            #endregion
+        }
+    }
+}

@@ -1,0 +1,40 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string sentence = "thequickbrownfoxjumpsoverthelazydog";
+            Solution solution = new Solution();
+            var result = solution.CheckIfPangram(sentence);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public bool CheckIfPangram(string sentence)
+            {
+                //pangram可以google意思，基本上就是句子中每個字母至少出現1次
+                //因為確定只有26個，所以也能用array[26]當flag，速度可能會快?
+                HashSet<char> record = new HashSet<char>();
+                foreach (char c in sentence)
+                    record.Add(c);
+                return record.Count >= 26;
+            }
+        }
+    }
+}

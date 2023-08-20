@@ -1,0 +1,47 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] position = new int[] { 1, 2, 3 };
+            Solution solution = new Solution();
+            var result = solution.MinCostToMoveChips(position);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int MinCostToMoveChips(int[] position)
+            {
+                int odd = 0;
+                int even = 0;
+                foreach(int item in position)
+                {
+                    if (item % 2 == 0)
+                        even += 1;
+                    else
+                        odd += 1;
+                }
+                return Math.Min(odd, even);
+            }
+            //這題基本上hint就把答案講完了
+            //第一個移法是奇偶不同會造成cost
+            //第二個移法是奇偶相同不造成cost
+            //所以可以把奇數都移到1，偶數都移到0，cost = 0
+            //然後看0和1位置誰的chip比較少，再一起移到另一邊
+        }
+    }
+}

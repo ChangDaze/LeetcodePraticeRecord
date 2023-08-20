@@ -1,0 +1,67 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var nums1 = new int[] { 4, 9, 5 };
+            var nums2 = new int[] { 9, 4, 9, 8, 4 };
+            var result = solution.Intersection(nums1, nums2);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public int[] Intersection(int[] nums1, int[] nums2)
+            {
+                HashSet<int> result = new HashSet<int>();//找唯一值無腦塞就好
+                Array.Sort(nums1);//排序才方便用two pointer比較
+                Array.Sort(nums2);
+                int i = 0;//two pointer
+                int j = 0;
+
+                while(i< nums1.Length && j< nums2.Length)
+                {
+                    if(nums1[i] == nums2[j])//唯一尷尬的是重覆的還是會一直檢測，但想想hashset應該也是if else在比，所以直接跑應該不會太慘(下面第一位有用另外的方法跳過重複)
+                    {
+                        result.Add(nums1[i]);
+                        i++;
+                        j++;
+                    }else if(nums1[i] < nums2[j])
+                    {
+                        i++;
+                    }
+                    else
+                    {
+                        j++;
+                    }
+                }
+
+
+                return result.ToArray();
+            }
+            //一開始題目看不懂，我是自己丟test case來看懂
+            //其他
+            //這個人發了跟我一樣的牢騷，題目看不懂哈哈，速度很快
+            //方法基本跟我一樣，不過他不用hashtable，跳用跳過重複的方式(某些角度來說也算加速檢查)
+            //while (i < nums1.Length - 1 && nums1[i] == nums1[i + 1]) i++ -> 他透過這個方式跳過重複(當然array也要先sort)
+            //https://leetcode.com/problems/intersection-of-two-arrays/solutions/722659/c/
+            //這個有點顛覆我認知，直接不用sort，他用hashset的constructor和兩個hashset，速度不錯，重點是程式碼簡潔有力
+            //https://leetcode.com/problems/intersection-of-two-arrays/solutions/310832/c-hashset/
+            //這個跟上一個差不多，不過一個用contain一個用remove(感覺remove會加快ㄟ，因為hashset會越來越短)，速度也不錯(雖然沒變快，但hashset變長可能就有差?)
+            //https://leetcode.com/problems/intersection-of-two-arrays/solutions/481080/c/
+        }
+
+    }
+}

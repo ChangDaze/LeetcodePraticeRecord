@@ -1,0 +1,78 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var nums = new int[] { 2, 2, 1, 1, 1, 2, 2 };
+            var result = solution.MajorityElement(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public int MajorityElement(int[] nums)
+            {
+                quicksort(nums, 0, nums.Length - 1);
+                return nums[nums.Length/2];
+            }
+
+            public void quicksort(int[]data, int left, int right)
+            {
+                if (left >= right)
+                    return;
+
+                int i = left;
+                int j = right;
+                int key = data[left];
+
+                while (i != j)
+                {
+                    while(data[j] > key && i < j)
+                    {
+                        j--;
+                    }
+
+                    while (data[i] <= key && i < j)
+                    {
+                        i++;
+                    }
+
+                    if (i < j)
+                    {
+                        int temp = data[i];
+                        data[i] = data[j];
+                        data[j] = temp;
+                    }
+                }
+                data[left] = data[i];
+                data[i] = key;
+
+                quicksort(data, left, i-1);
+                quicksort(data, i+1, right);
+            }
+            //因為majority element數量一定超過一半，所以sort後，一定能在array中間找到，就去抄了別人的quicksort來用，速度和空間還都很爛...
+            //其他
+            //這個用LINQ的Orderby就解決了，可能可以去看一下LINQ的orderby源碼，速度不錯，但其實已經不是同個array了
+            //https://leetcode.com/problems/majority-element/solutions/451411/c-solution/
+            //這也是LINQ，不過方法不同，他是用groupby+firstordefault找count最大的來答，速度也不錯
+            //https://leetcode.com/problems/majority-element/solutions/611922/c-linq-2-lines-code/
+            //這個解法有點猛，但要想得很清晰，基本上就是用majority element的特性，數量一定大於一半，扣去其他的數量，最後一定剩下majority element，速度很快，思想需要同步一下
+            //https://leetcode.com/problems/majority-element/solutions/293166/c-candidate/
+            //這個跟上一位差不多，不過寫法有點變形，上一位比較精簡，速度也還行
+            //https://leetcode.com/problems/majority-element/solutions/165243/c-o-n-time-complexity-and-space-complexity-o-1/
+        }
+
+    }
+}

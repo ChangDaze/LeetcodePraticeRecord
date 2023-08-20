@@ -1,0 +1,57 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var s = "abBAcC";
+            s = solution.MakeGood(s);
+            Console.WriteLine(s);
+            
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public string MakeGood(string s)
+            {
+                string standard;
+                do//先做再判斷
+                {
+                    standard = s;//錨點
+                    for (int i = 1; i < s.Length; i++)
+                    {
+                        if(s[i]-32==s[i-1] || s[i]+32 == s[i-1])//前一個字是大寫或小寫都算
+                        {
+                            s = s.Remove(i - 1, 2);
+                            i--;
+                        }
+                    }
+
+                }while (standard != s);//當執行完沒變化就代表結束
+                return s;
+            }
+            //題目算簡單，但想出不同的方法可能比較難?速度好像意外不慢
+            //其他
+            //ㄜ，這是用stringbuilder組字，方法算特別，最特別的是stringbuilder的用法，可以用--來退回
+            //仔細想想算厲害ㄟ，他的while其實只要走一圈就會全消，我的則不一定
+            //這個方法缺點是他的判斷式用太多upper和lower，換成用我的判斷式速度其實很容易就提起來了，再加上他的邏輯，感覺無敵ㄟ
+            //https://leetcode.com/problems/make-the-string-great/submissions/
+            //這個是用stack，用法跟上一個stringbuilder差不多，不過多stack過程又更合理多了(Peek拿出來看)，他判斷式的理念則跟我差不多，不過感覺又簡潔一點，速度不錯
+            //我一直想這題目很像處理()括號配對問題，她很好的演示給我看了
+            //https://leetcode.com/problems/make-the-string-great/discuss/780938/C-stack-solution
+            //這個也是用stack不過比上一位他都只用if甚至沒有else，感覺通順度就缺一些，不過他是用stack的list特性轉字串，不是用stringbuilder也還行
+            //判斷式還是用upper和lower不過比第一位簡潔了，速度其實還行
+            //https://leetcode.com/problems/make-the-string-great/discuss/1671595/C-Solution%3A-Easy-to-Understand-0(n)
+        }
+    }
+}

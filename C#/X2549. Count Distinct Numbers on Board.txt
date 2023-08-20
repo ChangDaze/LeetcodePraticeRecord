@@ -1,0 +1,38 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+using System.Reflection;
+using System.Security.AccessControl;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int n = 5;
+            Solution solution = new Solution();
+            var result = solution.DistinctIntegers(n);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+
+        public class Solution
+        {
+            public int DistinctIntegers(int n)
+            {
+                if (n == 1) return 1;//原本以為0，但1自己會在board上
+                else return n -1;//會放上除了1之外<n的值，因為 int % 1 都是 0
+            }
+        }
+        //這題目真的爛到笑，，範例敘敘也很奇怪，算是腦筋急轉彎吧，同時因為題目限制，就不用考慮10^9之類的問題
+    }
+}

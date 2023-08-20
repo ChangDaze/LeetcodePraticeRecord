@@ -1,0 +1,100 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] candies = new int[] { 2, 3, 5, 1, 3 };
+            int extraCandies = 3;
+            Solution solution = new Solution();
+            var result = solution.KidsWithCandies(candies, extraCandies);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        //public class Solution
+        //{
+        //    public IList<bool> KidsWithCandies(int[] candies, int extraCandies)
+        //    {
+        //        int[] record = new int[candies.Length];
+        //        bool[] result = new bool[candies.Length];
+        //        int max = -1;
+
+        //        for (int i = 0; i < candies.Length; i++)
+        //        {
+        //            if (candies[i] > max)
+        //                max = candies[i];
+        //            record[i] = candies[i] + extraCandies;
+        //        }
+
+        //        for (int i = 0; i < record.Length; i++)
+        //        {
+        //            if (record[i] >= max) //注意要用大於等於
+        //                result[i] = true;
+        //            else
+        //                result[i] = false;
+        //        }
+
+        //        return result;
+        //    }
+        //}
+
+        //2023/07/06
+        //public class Solution
+        //{
+        //    public IList<bool> KidsWithCandies(int[] candies, int extraCandies)
+        //    {
+        //        bool[] result = new bool[candies.Length];
+
+        //        //不能sort因為要照原本排序
+        //        int max = candies.Max();
+
+        //        for(int i = 0;i< candies.Length;i++)
+        //        {
+        //            if (candies[i] + extraCandies >= max)
+        //                result[i] = true;
+        //        }
+
+        //        return result;
+        //    }
+        //}
+
+        //2023.0807.1249
+        public class Solution
+        {
+            public IList<bool> KidsWithCandies(int[] candies, int extraCandies)
+            {
+                int standard = candies.Max()-extraCandies;
+
+                bool[] result = new bool[candies.Length];
+
+                for (int i = 0; i < candies.Length; i++)
+                    if (candies[i] >= standard)
+                        result[i] = true;                
+
+                return result;
+            }
+        }
+        //上面這應該是最簡單粗爆了，除了LINQ不太一定，但應該差不多
+        //其他人方法都差不多，可以欣賞一下寫法
+        //這位路途跟我差不多，用JAVA，Python處理LIST真的頗屌
+        //https://leetcode.com/problems/kids-with-the-greatest-number-of-candies/solutions/608614/java-python-3-2-liners-o-n/?envType=study-plan-v2&envId=leetcode-75
+        //Javascript
+        //https://leetcode.com/problems/kids-with-the-greatest-number-of-candies/solutions/631287/javascript-easy-to-understand-from-common-to-1-line/?envType=study-plan-v2&envId=leetcode-75
+        //C++，不過這個人找max用sortXD，所以看看
+        //https://leetcode.com/problems/kids-with-the-greatest-number-of-candies/solutions/1532728/c-easy-solution/?envType=study-plan-v2&envId=leetcode-75
+    }
+}

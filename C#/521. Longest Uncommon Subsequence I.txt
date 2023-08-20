@@ -1,0 +1,41 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string a = "aba", b = "cdc";            
+            int result = solution.FindLUSlength(a, b);
+            Console.WriteLine(result);           
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int FindLUSlength(string a, string b)
+            {
+                if (a == b)
+                    return -1;
+                else
+                    return a.Length > b.Length?a.Length:b.Length;
+            }
+        }
+        //這題就是在鬧，要點破才知道，最長的不相同字串，只要相等就不存在，不相等就是最長的字串，然後不知為啥速度100%
+        //其他，還是能看出一些解題細節
+        //比較慢，但用equal也很直覺，但也有一些不明意義的解法，跟我一樣
+        //https://leetcode.com/problems/longest-uncommon-subsequence-i/discuss/99433/c-solution
+        //速度普通，這個人是用math.max
+        //https://leetcode.com/problems/longest-uncommon-subsequence-i/discuss/99421/One-line-C-solution
+        //這人也普通也用math.max但也是最後有些不理想的保留處理?
+        //https://leetcode.com/problems/longest-uncommon-subsequence-i/discuss/502430/Accepted-C-Solution
+    }
+}

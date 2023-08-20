@@ -1,0 +1,111 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            bool result = solution.IsSubsequence("axc", "ahbgdc");
+
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        //public class Solution
+        //{
+        //    //只要有比對到的字，因順序關係，之後指要檢查此位置之後的字，沒有找到就是失敗
+        //    public bool IsSubsequence(string s, string t)
+        //    {
+        //        if (s.Length > t.Length)
+        //        {
+        //            return false;
+        //        }
+
+        //        int now = -1;
+        //        for (int i = 0; i < s.Length; i++)
+        //        {
+        //            int index = t.IndexOf(s[i], now + 1);//不用now = ...是因為now是-1開始，怕index<0這個判斷過不了
+        //            if (index < 0)
+        //            {
+        //                return false;
+        //            }
+        //            now = index;
+        //        }
+
+        //        return true;
+        //    }
+
+        //    //靈感來源，也很厲害，比對組前面有找到才找下一個(i)，被比對組不用回頭找因此只須走一圈loop(j)
+        //    //https://leetcode.com/problems/is-subsequence/discuss/411516/Easy-C-Solution
+        //    //這跟上面差不多，不過用兩個loop寫比較難看懂
+        //    //https://leetcode.com/problems/is-subsequence/discuss/1081758/c
+        //}
+
+        //20230714
+        //public class Solution
+        //{
+        //    public bool IsSubsequence(string s, string t)
+        //    {
+        //        if(s.Length== 0 ) return true;
+        //        if (t.Length >s.Length) return false;
+
+        //        int pointerS = 0;
+        //        int pointerT = 0;
+
+        //        while(pointerT < t.Length)
+        //        {
+        //            if (s[pointerS] == t[pointerT])
+        //            {
+        //                pointerT++;
+        //                pointerS++;
+        //                if(pointerS >= s.Length)
+        //                    return true;
+        //                continue;
+        //            }
+
+        //            pointerT++;
+        //        }
+
+        //        return false;
+        //    }
+        //}
+
+
+        public class Solution
+        {
+            public bool IsSubsequence(string s, string t)
+            {
+                if (s.Length == 0) return true;
+                if (s.Length > t.Length) return false;
+
+                Queue<char> queue = new Queue<char>();
+
+                foreach(char c in s)                
+                    queue.Enqueue(c);
+                
+                foreach(char c in t)
+                {
+                    if (c != queue.Peek())
+                        continue;
+
+                    queue.Dequeue();
+                    if (queue.Count == 0)
+                        break;
+                                            
+                }
+
+                return queue.Count <= 0;
+            }
+        }
+    }
+
+
+}

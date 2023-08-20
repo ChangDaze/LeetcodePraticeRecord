@@ -1,0 +1,43 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Globalization;
+using System.Runtime.Remoting.Messaging;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var nums = new int[] { 1, 4, 2, 5, 3 };
+
+
+            var result = solution.SumOddLengthSubarrays(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int SumOddLengthSubarrays(int[] arr)
+            {
+                int res = 0;
+                int n = arr.Length;
+
+                for(int i= 0;i<n;i++)                
+                    res += ((i + 1) * (n - i) + 1) / 2 * arr[i];
+
+                return res;
+            }
+        }
+
+        //https://leetcode.com/problems/sum-of-all-odd-length-subarrays/solutions/854184/java-c-python-o-n-time-o-1-space/
+    }
+}

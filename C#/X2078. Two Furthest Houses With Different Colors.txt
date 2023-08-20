@@ -1,0 +1,45 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] colors = new int[] { 1, 1, 1, 6, 1, 1, 1 };
+            Solution solution = new Solution();
+            var result = solution.MaxDistance(colors);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int MaxDistance(int[] colors)
+            {
+                //答案就是最左和右邊比或最右和左邊比
+                //至於為甚麼，可能是因為目標是找【差異色】且【距離最大】，所以能擋住距離的就是同色
+                //唯一預設的是非最左或最右能否產生最大距 -> 那就是最左或最右同色 -> 但也須跟中間產生的最大距的其中一個同色
+                //-> 但這樣最左或最右一樣能跟中間的異色產生最大距 -> 最大距回歸最左會最右
+                //這邊我也只能反證這個假設是對的
+                int left = colors[0];
+                int right = colors[colors.Length-1];
+                for(int i =0;i<colors.Length ;i++)
+                {
+                    if (left != colors[colors.Length - 1 - i] || right != colors[i])
+                        return colors.Length - 1 - i;//兩個判斷都是返回這樣答案(不知是剛好還是怎樣)
+                }
+                return 0;
+            }
+        }
+    }
+}

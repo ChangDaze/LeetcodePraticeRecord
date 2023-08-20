@@ -1,0 +1,109 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string [] strs = new string[] { "flower", "flow", "flight" };
+            Solution solution = new Solution();            
+
+            Console.WriteLine(solution.LongestCommonPrefix(strs));
+
+            var strsArray = new char[10][];
+            var fArray = strs[0].ToCharArray();
+            Console.ReadKey();
+
+        }
+
+        //public class Solution
+        //{
+        //    public string LongestCommonPrefix(string[] strs)
+        //    {
+        //        if(strs.Length == 0)
+        //        {
+        //            return "";
+        //        }
+
+        //        int singal = 0;
+        //        int stringlen = strs[0].Length;
+        //        string result = "";
+        //        for (int i = 1; i < strs.Length; i++)//找到最短字串防止常字串後續比對造成index太大錯誤
+        //        {
+        //            if(strs[i].Length < stringlen)
+        //            {
+        //                singal = i;
+        //            }
+        //        }
+
+        //        result = strs[singal];
+
+        //        foreach(string str in strs)
+        //        {
+        //            string tempstring = "";
+        //            for(int i = 0; i < result.Length; i++)
+        //            {
+        //                if(result[i] == str[i])
+        //                {
+        //                    tempstring = tempstring + str[i];//有比對到的保留
+        //                }
+        //                else
+        //                {
+        //                    break;
+        //                }
+        //            }
+        //            result = tempstring;//每次都會縮減剩下要比對的結果
+        //            if(result.Length == 0)//沒了就可以不比了
+        //            {
+        //                break;
+        //            }
+        //        }
+
+        //        return result;
+        //    }
+        //    //其他
+        //    //這是我一開始想試的方法，用任一個詞直接照順序抓自出來跟所有詞比對，
+        //    //他解決了我當時擔心的詞不是最短的問題 -> 當比對的字index長於最短詞時就直接break就好
+        //    //可能是因為都比較早break掉，所以花的時間沒有長太多
+        //    //https://leetcode.com/problems/longest-common-prefix/discuss/7006/C-Solution
+        //}
+
+        public class Solution
+        {
+            public string LongestCommonPrefix(string[] strs)
+            {
+                if (strs.Length == 0 || Array.IndexOf(strs, "") != -1)//這裡多一個提早離開的方法，確認陣列中有無""
+                    return "";
+                string res = strs[0];//隨便找個
+                int i = res.Length;//需要確認的長度，也是共同prex長度
+                foreach (string word in strs)
+                {
+                    int j = 0;
+                    foreach (char c in word)//一個詞比完才換下個詞，所以可能提早break
+                    {
+                        if (j >= i || res[j] != c)// j>i -> 出現較長字串，後面也不用比，res[j] != c -> 不共同的prefix
+                            break;
+                        j += 1;//j到word結束就不會變了，所以遇到短字串沒問題
+                    }
+                    i = Math.Min(i, j);//j有不符合共同條件或較短字串時時就能拿來縮短i，不然沒變得話就是共同prefix還沒變
+                }
+                return res.Substring(0, i);
+            }
+            //雖然都是照條件，但感覺想很多 -> 把條件清晰列出來，用複雜的想組出最短的路徑
+            //很快
+            //https://leetcode.com/problems/longest-common-prefix/discuss/292303/C-straightforward
+            //這個一些步驟差不多，但特別的是他一樣一個詞一個字一個字拉出來比對，但他是全部詞比完才換下一個字，可能因此所以漫溢點
+            //https://leetcode.com/problems/longest-common-prefix/discuss/278148/C-simple-while
+            //這也是沒個詞比完一個字才換比下個字
+            //https://leetcode.com/problems/longest-common-prefix/discuss/281741/C-100ms-faster-than-96
+            //這個直接把字串拆成char list和char list(char list)這樣來一個個比，可能比較快?但變好複雜因為變數很多
+            //https://leetcode.com/problems/longest-common-prefix/discuss/156998/C-solution-beat-100-of-c-submissions
+        }
+
+    }
+}

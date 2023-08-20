@@ -1,0 +1,49 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] arr = new int[] { -10, 8, 6, 7, -2, -3 };
+            Solution solution = new Solution();
+            var result = solution.FindMaxK(arr);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+        public class Solution
+        {
+            public int FindMaxK(int[] nums)
+            {
+                Array.Sort(nums);
+                int negative = 0;
+                int positive = nums.Length - 1;
+                int result = -1;
+                while(negative< positive)
+                {
+                    if (-nums[negative] > nums[positive])
+                        negative++;
+                    else if (-nums[negative] < nums[positive]) 
+                        positive--;
+                    else
+                    {
+                        result = nums[positive];
+                        break;
+                    }
+                }
+                return result;
+            }
+        }
+    }
+}

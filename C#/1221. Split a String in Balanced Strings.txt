@@ -1,0 +1,52 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var s = "RLRRLLRLRL";
+            var result = solution.BalancedStringSplit(s);
+            Console.WriteLine(result);
+            
+            Console.ReadKey();
+
+        }
+        
+
+        public class Solution
+        {
+            public int BalancedStringSplit(string s)
+            {
+                int standard = ('R' + 'L')/2;
+                int check = 0;
+                int result = 0;
+
+                foreach(char c in s)
+                {
+                    check = check + c - standard;
+                    if(check == 0)
+                        result++;
+                }
+
+                return result;
+            }
+            //原本覺得公倍數時會破功，但只有[兩個]且[一大一小]，組合好像唯一好像不會破功，速度還行
+            //其他
+            //這就是一開始大家都會有的想法if equal('R') ++ esle --，不過蠻精簡的，速度也不錯
+            //https://leetcode.com/problems/split-a-string-in-balanced-strings/solutions/435121/c-memory-optimized-solution/
+            //這方法和上面的人基本一樣，不過他L和R的出現次數是分開計的，速度普通
+            //https://leetcode.com/problems/split-a-string-in-balanced-strings/solutions/403772/short-c-solution/
+            //這跟第二位基本一模一樣，速度忽快忽慢ㄟ
+            //https://leetcode.com/problems/split-a-string-in-balanced-strings/solutions/407465/c-solution/
+        }
+
+    }
+}

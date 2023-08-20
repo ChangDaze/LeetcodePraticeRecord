@@ -1,0 +1,55 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            int result = solution.MinCostClimbingStairs(new int[10] { 1, 100, 1, 1, 1, 100, 1, 1, 100, 1 });
+
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int MinCostClimbingStairs(int[] cost)
+            {
+                //目標是把成本加到cost.length - 1 和 cost.length - 2的位置並取MIN，因最後一步到cost.length沒有成本
+                //跟台大計概公開課第十一講的shortest path 一樣
+
+                if (cost.Length == 0 || cost == null)
+                    return 0;
+
+                int prevprevcost = cost[0];//到index0走到終點的成本
+                int prevcost = cost[1];//到index1終點的成本
+
+                //從index2開始，一直推進下去，最後prevcost=totalcost[cost.length-1]、prevprevcost=totalcost[cost.length-2]
+                //包含走下一步到終點的成本(已加上目前位置的cost)
+                for (int i = 2; i < cost.Length; i++)
+                {
+                    int temp = cost[i] + Math.Min(prevprevcost,prevcost);
+                    prevprevcost = prevcost;
+                    prevcost = temp;//順序接往後一格
+                }
+
+                return Math.Min(prevprevcost, prevcost);
+            }
+        }
+        //別人解法，其實都類似
+        //https://leetcode.com/problems/min-cost-climbing-stairs/discuss/1033764/C-DP-solution 我是參考這個的方法2
+        //https://leetcode.com/problems/min-cost-climbing-stairs/discuss/416094/C-DP 這個是用倒過來的，不過概念差不多，可是會更難懂
+        //https://leetcode.com/problems/min-cost-climbing-stairs/discuss/146002/C-Solution
+        //https://leetcode.com/problems/min-cost-climbing-stairs/discuss/165234/C-dynamic-programming-solution
+    }
+
+
+}

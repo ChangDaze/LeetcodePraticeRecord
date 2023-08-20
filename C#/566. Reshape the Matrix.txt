@@ -1,0 +1,77 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var mat = new int[][] { new int[2] {1,2}, new int[2] { 3, 4 } };
+            var result = solution.MatrixReshape(mat,4,1);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+            //HashSet<int> test = new HashSet<int>();
+            //test.Add(1);
+            //test.Add(2);
+            //test.Add(1);
+            //Console.ReadKey();
+        }
+
+
+        public class Solution
+        {
+            public int[][] MatrixReshape(int[][] mat, int r, int c)
+            {
+                if (r * c != mat.Length * mat[0].Length)//確認數量
+                    return mat;
+
+                int[][] result = new int[r][];//只能設array數(有個重點，array預設null -> 不能Copy過去)
+                int[] temparray = new int[c];//另建array長度
+                int row = 0;
+                int col = 0;
+
+                for (int i = 0; i < mat.Length; i++)//依row填入
+                {
+                    for(int j = 0; j < mat[0].Length; j++)
+                    {
+                        if(col < c-1)//col是reshape後計算換行用
+                        {
+                            temparray[col] = mat[i][j];
+                            col++;
+                        }
+                        else//reshape後的matrix談完整行後動作
+                        {
+                            temparray[col] = mat[i][j];
+                            col = 0;
+                            int [] addarray = new int[c];//因為array的address問題，所以要另存array
+                            temparray.CopyTo(addarray,0);//把值copy過去
+                            //Array.Copy(temparray, result[row], c);//這應該也能通
+                            result[row] = addarray;                            
+                            row++;                                                        
+                        }
+                    }
+                }
+
+                return result;
+            }
+            //這題花我最多時間的是用1.row,col來達成taget matrix換行 2.Array.Copy的taget不能是null
+            //其他
+            //速度不錯，思考方式也能學學，但我覺得我的方法比較易懂
+            //1.先將target matrix完全做好(我只做好一半只做array數量)
+            //2.然後他用[count / c][count % c]填入，前者是target row數，後者是array位置(跟我比對是我用row、col、count他只用count)
+            //https://leetcode.com/problems/reshape-the-matrix/solutions/449760/c-solution/
+            //這方法跟我的一樣，不過他是(x,y)，還有多用if((x < curRows) || (y < curColumns))，速度不錯
+            //https://leetcode.com/problems/reshape-the-matrix/solutions/404605/c-simple-solution/
+            //這個人return是錯的，不過可以學一下他的int[,]，解題方式則是偏向第一位解法
+            //https://leetcode.com/problems/reshape-the-matrix/solutions/240937/c/
+        }
+
+    }
+}

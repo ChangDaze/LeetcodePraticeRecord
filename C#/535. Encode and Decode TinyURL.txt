@@ -1,0 +1,90 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string url = "https://leetcode.com/problems/design-tinyurl";
+            Codec codec = new Codec();
+            codec.decode(codec.encode(url));
+            Console.WriteLine();
+            Console.ReadKey();
+
+        }
+        //public class Codec
+        //{
+        //    //實際上很簡單，導致變得很微妙
+        //    public List<string> record = new List<string>();
+        //    // Encodes a URL to a shortened URL
+        //    public string encode(string longUrl)
+        //    {
+        //        record.Add(longUrl);
+        //        return "http://tinyurl.com/" + (record.Count - 1).ToString();
+        //    }
+
+        //    // Decodes a shortened URL to its original URL.
+        //    public string decode(string shortUrl)
+        //    {
+        //        var info = shortUrl.Split('/');
+        //        return record[Convert.ToInt32(info[info.Length - 1])];//int64是long不能用在int[]上
+        //    }
+        //}
+        //基本上是抄第一位的第一個方法(不好的方法)，速度普通
+        //其他
+        //這位的第一個方法就是我用的方法，第二個方法比較猛，考慮到較多可能性，靈活性也高，可以多學學
+        //重點是這位將第一二種方法的優缺點甚至是擴展方法都跟你說明了
+        //https://leetcode.com/problems/encode-and-decode-tinyurl/solutions/100268/two-solutions-and-thoughts/
+        //這是C#的，加密方式跟第一位的第二個方法比較像，不過好像因為用dictionary好像比第一位順，只用一個dic，不知道是不是因為C++的原因
+        //https://leetcode.com/problems/encode-and-decode-tinyurl/solutions/1974089/c-faster-than-54-33/
+        //這個是直接嘲諷題目呵呵
+        //https://leetcode.com/problems/encode-and-decode-tinyurl/solutions/100280/a-true-stateless-one-in-c-joke/
+        //主要看第一第二位的可以學到一些基礎的加密方式
+
+        //抄第二位的方法
+        public class Codec
+        {
+            //key 存 short、 value 存 long
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            Random random = new Random();
+            string chars = string.Empty;
+            string prefix = "http://tinyurl.com/";
+
+            // Encodes a URL to a shortened URL
+            public string encode(string longUrl)
+            {
+                var check = dict.FirstOrDefault(x => x.Value == longUrl).Key;
+                if(check!= null) return check;
+
+                string newKey = string.Empty;
+                //48~122  //注意不要有 "/"
+                if(chars == string.Empty)
+                    for(int i = 48; i<123; i++)//只是隨便把數字和英文都有的範圍圈起來，越多應該會越不容易重複，另外應為每次取一字，應該也不會特別影響速度，但要注意特殊字
+                        chars += Convert.ToChar(i);
+                
+                while(newKey == string.Empty || dict.ContainsKey(newKey))    //newKey == string.Empty是因為怕string.Empty也在dict中，應該也能防止dict.ContainsKey發生錯誤，dict.ContainsKey同時要防止重複key
+                    newKey = prefix + new string(Enumerable.Repeat(chars,6)  //重複6次在chars中選出一個字組成字串，若key真的常常重複，可以從6繼續加長
+                                                  .Select(x => x[random.Next(x.Length)])// random.next(Length)會丟出0~Length-1的亂數
+                                                  .ToArray());
+                                                  //這是用 new string(char[])組字串
+                dict.Add(newKey, longUrl);//當然key越長會讓速度越慢
+                return newKey;
+            }
+
+            // Decodes a shortened URL to its original URL.
+            public string decode(string shortUrl)
+            {
+                return dict[shortUrl];
+            }
+        }
+    }
+}

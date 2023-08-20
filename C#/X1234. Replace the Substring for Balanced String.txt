@@ -1,0 +1,62 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Globalization;
+using System.Runtime.Remoting.Messaging;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string s = "WWEQERQWQWWRWWERQWEQ";
+            var result = solution.BalancedString(s);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int BalancedString(string s)
+            {
+                int standard = s.Length / 4;
+                Dictionary<char, int> record = new Dictionary<char, int>
+                {
+                    {'Q',0 },
+                    {'W',0 },
+                    {'E',0 },
+                    {'R',0 },
+                };
+
+                foreach(char c in s)
+                    record[c]++;
+                int result = int.MaxValue;
+                int i = 0;
+                for(int j = 0; j < s.Length; j++)
+                {
+                    record[s[j]]--;
+                    while(i<s.Length && record['Q']<=standard&& record['W'] <= standard && record['E'] <= standard && record['R'] <= standard)
+                    {
+                        result = Math.Min(result, j-i+1);
+                        record[s[i++]]++;
+                    }
+                    //兩種情況
+                    //(1) 因為是0 index 所以要 j-i+1
+                    //(2) 本身是nice的話 i會數次跑到>j變-1，所以j-i+1
+                }
+
+                return result;
+
+                
+
+            }
+        }
+    }
+}

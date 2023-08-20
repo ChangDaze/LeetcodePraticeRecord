@@ -1,0 +1,106 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string sentence = "The quick brown fox jumped over the lazy dog";
+            var result = solution.ToGoatLatin(sentence);
+            Console.WriteLine(result);
+
+
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            List<string> lst = new List<string>() { "a", "e", "i", "o", "u" };
+            public string ToGoatLatin(string sentence)//多重function或許可以從母function行數是否超過30開始考慮要不要用
+            {                
+                int count = 1;
+                char firstsuffix = ' ';//確認是否為母音
+                string suffix = "";
+                firstsuffix = getfirstsuffix(sentence[0]);//remove prefix ; 這裡是先remove prefix再insert suffix
+                if (firstsuffix != ' ')
+                    sentence = sentence.Remove(-1 + 1, 1);//sentence異動是預設在遇到' '(動空白前後的word)的index，所以第一個' 'index是-1
+                for (int i = 0; i < sentence.Length; i++)
+                {
+                    if(sentence[i] == ' ')
+                    {
+                        suffix = getcombinesuffix(count, firstsuffix);//insert suffix
+                        sentence = sentence.Insert(i, suffix);
+                        i = i + count + 2;//修正sentence的index異動，回歸到目前' '的index
+                        if (firstsuffix != ' ')
+                            i = i + 1;//若有firstsuffix要再補1偏差
+
+                        count++;//進入到下一個word
+                        firstsuffix = getfirstsuffix(sentence[i + 1]);//remove prefix
+                        if (firstsuffix != ' ')
+                            sentence = sentence.Remove(i + 1, 1);
+                    }
+                }
+
+                suffix = getcombinesuffix(count, firstsuffix);//insert suffix
+                sentence = sentence.Insert(sentence.Length, suffix);
+
+                return sentence;
+            }
+            /// <summary>
+            /// 取得suffix的第一個char
+            /// </summary>
+            /// <param name="firstchar"></param>
+            /// <returns></returns>
+            public char getfirstsuffix(char firstchar)
+            {
+                char firstsuffix;
+                if (!lst.Contains(firstchar.ToString().ToLower()))//若是母音就返回' '，不然就返回非母音
+                {
+                    firstsuffix = firstchar;
+                }
+                else
+                {
+                    firstsuffix = ' ';
+                }
+
+                return firstsuffix;
+            }
+            /// <summary>
+            /// 取得suffix
+            /// </summary>
+            /// <param name="count"></param>
+            /// <param name="firstsuffix"></param>
+            /// <returns></returns>
+            public string getcombinesuffix(int count, char firstsuffix)
+            {
+                string suffix = "ma";         
+                for (int j = 0; j < count; j++)//依照count到第幾個word補上a
+                {
+                    suffix = suffix + "a";
+                }
+
+                if (firstsuffix != ' ')//若有firstsuffix要補在第一個
+                {
+                    suffix = firstsuffix + suffix;
+                }
+
+                return suffix;
+            }
+            //速度時快時慢，但拆function訂流程時算有成就感，另外就是最初我想沿著sentence走完就結束，所以沒有用split這算特殊(可以少處理整體長度1次)
+            //這個用split，整體流程就比我簡單清晰許多,雖然感覺他寫得有點長，不過效能好像還不錯
+            //https://leetcode.com/problems/goat-latin/discuss/128360/C-solution
+            //這也是用split，有個比較特殊的用法builder.Append('a', endCount++);，這好像是append可以包含reepeat的功能ㄟ，效能普普
+            //https://leetcode.com/problems/goat-latin/discuss/497887/Easy-C-Solution
+            //這也是用split，仔細看子是把其他人單獨寫的function寫到linq裡而已，效能還行
+            //https://leetcode.com/problems/goat-latin/discuss/1094583/C%3A-Linq
+        }
+    }
+}

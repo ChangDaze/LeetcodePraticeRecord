@@ -1,0 +1,71 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Diagnostics.Contracts;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var grid = new int[][] { new int[] { 1, },
+            new int[] { 2, },
+            new int[] { 3, },
+            new int[] { 4, },
+            new int[] { 7, },
+            new int[] { 6, },
+            new int[] { 5, },};
+            int k = 1;
+            Solution solution = new Solution();
+            var result = solution.ShiftGrid(grid,k);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public IList<IList<int>> ShiftGrid(int[][] grid, int k)
+            {
+                int[][] TMatrix = new int[grid[0].Length][];
+                for (int i = 0; i < grid[0].Length; i++)
+                    TMatrix[i] = new int[grid.Length];
+
+                for (int i = 0;i<grid.Length; i++)
+                    for(int j = 0; j < grid[0].Length; j++)
+                        TMatrix[j][i] = grid[i][j];//這邊是以grid走[i][j]，那就要grid[i][j]走，因為這樣才是正常走grid(不能grid[j][i]，因為m!=n)
+
+                for (int i = 0; i < k; i++)
+                    TMatrix = Shift(TMatrix);
+
+                for (int i = 0; i < TMatrix.Length; i++)
+                    for (int j = 0; j < TMatrix[0].Length; j++)
+                        grid[j][i] = TMatrix[i][j];//跟上面同理
+
+                return grid;
+            }
+
+            public int[][] Shift(int[][] TMatrix)
+            {
+                int[] temparray = new int[TMatrix[0].Length];
+                Array.Copy(TMatrix[TMatrix.Length - 1], temparray, TMatrix[0].Length);                
+
+                for(int i = TMatrix.Length-1;i>0; i--)
+                    TMatrix[i] = TMatrix[i-1];
+
+                int temp = temparray[temparray.Length - 1];
+                for (int i = temparray.Length - 1; i > 0; i--)
+                    temparray[i] = temparray[i - 1];
+
+                temparray[0] = temp;
+                TMatrix[0] = temparray;
+                return TMatrix;
+            }
+        }
+    }
+}

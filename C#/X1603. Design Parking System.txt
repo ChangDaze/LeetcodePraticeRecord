@@ -1,0 +1,55 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+using System.Reflection;
+using System.Security.AccessControl;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            ParkingSystem obj = new ParkingSystem(1,1,0);
+            bool param_1 = obj.AddCar(1);
+            //int[] piles = new int[] { 17, 13, 11, 2, 3, 5, 7 };
+            //Solution solution = new Solution();
+            //var result = solution.DeckRevealedIncreasing(piles);
+            //Console.WriteLine(result);
+            Console.ReadKey();
+        }
+
+        public class ParkingSystem
+        {
+            Dictionary<int,int> space = new Dictionary<int,int>();
+            public ParkingSystem(int big, int medium, int small)
+            {
+                space[1] = big;
+                space[2] = medium;
+                space[3] = small;
+            }
+
+            public bool AddCar(int carType)
+            {
+                if (space[carType] <= 0)
+                {
+                    return false;
+                }                    
+                else
+                {
+                    space[carType]--;
+                    return true;
+                }
+            }
+        }
+        //速度很慢，不過100%的人方法差不多
+    }
+}

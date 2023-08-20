@@ -1,0 +1,67 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var path = "ENNNNNNNNNNNEEEEEEEEEESSSSSSSSSS";
+            var result = solution.IsPathCrossing(path);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            //用命名避免if 'W' else 之類的
+            public Dictionary<char, Tuple<int, int>> direction =
+                new Dictionary<char, Tuple<int, int>>
+                {{'N', new Tuple<int,int>(0,1)},
+                  {'W', new Tuple<int,int>(-1,0)},
+                    {'S', new Tuple<int,int>(0,-1)},
+                        {'E', new Tuple<int,int>(1,0)}};
+
+            public bool IsPathCrossing(string path)
+            {
+                HashSet<string> lst = new HashSet<string>();//用單純string有個好處，因為用int[]會有ref或address問題，就算值一樣也會認為是不相等
+                int[] position = new int[2] { 0, 0 };
+                string now = null;
+                lst.Add("0,0");                
+
+                foreach (char d in path)
+                {
+                    position[0] = position[0]+direction[d].Item1;
+                    position[1] = position[1]+direction[d].Item2;
+                    now = position[0].ToString() +','+ position[1].ToString();//要用逗點隔開，不然11,1和1,11或被認為是一樣的
+
+                    if (lst.Contains(now))
+                    {
+                        return true;
+                    }
+                    lst.Add(now);
+                }
+
+                return false;
+            }
+            //總體來說我算很喜歡這個解法，包含用命名和使用字串存定位，雖然可能也只是我還不會更好的解法而已，速度普通
+            //其他
+            //第一個人就有點震碎我三觀了，雖然都是我遇過的東西，就兩點 1.Point資料類型，以後座標類的可以多用用了 2.HashSet<Point>感覺是要唯一，不過後面還是會用contain所以用處我是存疑
+            //其他就是一般switch case了，速度不錯，也算簡單易懂可以學
+            //https://leetcode.com/problems/path-crossing/solutions/2042652/c-simple-solution-hashset/
+            //這個概念跟第一個人也差不多，不過他沒特地用Point類型直接用(int X, int Y)，這應該算C#的特殊用法或是大家最原始的存座標法?不過也能學學，速度意外的快..
+            //https://leetcode.com/problems/path-crossing/solutions/717886/c/
+            //這好像才應該是最原始的存座標型態!就是一個class兩個field存int加限制條件啥的，雖然寫的人加了一些用不到的功能，但總體來說我看到我想看到的了!速度一般
+            //https://leetcode.com/problems/path-crossing/solutions/727702/c-easy-solution/
+        }
+
+    }
+}

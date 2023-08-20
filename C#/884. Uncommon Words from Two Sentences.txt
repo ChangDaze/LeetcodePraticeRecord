@@ -1,0 +1,73 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string s1 = "this apple is sweet";
+            string s2 = "this apple is sour";
+            string[] result = solution.UncommonFromSentences(s1, s2);
+            Console.WriteLine(result);
+
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public string[] UncommonFromSentences(string s1, string s2)
+            {
+                List<string> result = new List<string>();//用來存uncommon word的，最後要轉成array
+                if (s1 == s2)
+                {
+                    return result.ToArray();
+                }
+                string[] words1 = s1.Split(' ');//把sentence依空白拆成words
+                string[] words2 = s2.Split(' ');
+                var words = words1.Concat(words2);//把sentence1和2組成一個
+                Dictionary<string, int> record = new Dictionary<string, int>();//words計數
+                foreach (string word in words)
+                {
+                    if (record.ContainsKey(word))
+                    {
+                        record[word]++;
+                    }
+                    else
+                    {
+                        record.Add(word, 1);
+                    }
+                }
+
+                foreach (string word in record.Keys)
+                {
+                    if (record[word] == 1)//只出現一次的才是uncommon
+                    {
+                        result.Add(word);
+                    }
+                }
+
+                return result.ToArray();
+
+                //怎麼講，就是感覺方法很土，沒多思考過的樣子，但速度感覺還行
+                //其他
+                //這個人是用linq但感覺適合一次解決，很像function，不知道在更多功能下適不適合用
+                //跟我一樣是組成一個sentence，但之後是用groupby 和 where count，速度應該算差不多
+                //https://leetcode.com/problems/uncommon-words-from-two-sentences/discuss/474220/C
+                //這個人跟我一樣用dic不過他沒組成一sentence才計數，是A計完接著計B，所以理所當然不用再用array把兩sentence合併
+                //步驟上可能會比我快(有沒有比較好不知道)，速度感覺差不多
+                //https://leetcode.com/problems/uncommon-words-from-two-sentences/discuss/395667/A-very-intuitive-C-solution-faster-than-98.56!
+                //這個人本質上跟我差不多，但他組唯一sentence的方法經驗了我，簡單又直接，大大的提醒了我 => string C = A + " " + B; 就好
+                //後面他計數的方法比我更土，直接用兩層foreach和count，2次方比對，感覺這算一個方法但不好，因為沒有東西紀錄，速度直接看應是差不多
+                //https://leetcode.com/problems/uncommon-words-from-two-sentences/discuss/271562/C-100-fast-ez-code
+            }
+        }
+    }
+}

@@ -1,0 +1,62 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Globalization;
+using System.Runtime.Remoting.Messaging;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var nums = new int[] { 1, 1, 0, 1 };
+            var result = solution.LongestSubarray(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int LongestSubarray(int[] nums)
+            {
+                int sum = 0;
+                int max = int.MinValue;
+                List<int> record = new List<int>();
+                int left = 0;
+                int right = 0;
+
+                while(right< nums.Length)
+                {                    
+                    if(record.Count > 1)
+                    {
+                        if (left == record[0])
+                            record.RemoveAt(0);
+                        else
+                            sum--;
+                        left++;
+                    }
+                    else
+                    {
+                        if (nums[right] == 0)
+                            record.Add(right);
+                        else
+                            sum++;
+                        right++;
+                    }
+                    
+                    if(record.Count < 2)                    
+                        max = max > sum ? max : sum;
+                }
+                
+                return max == nums.Length ? (max-1):max;
+            }
+        }
+    }
+}

@@ -1,0 +1,72 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var moves = new int[][] { new int[] { 2, 2 }, new int[] { 0,1 }, new int[] { 2, 1 }, new int[] { 0,0 }, new int[] { 0, 2 }};
+            Solution solution = new Solution();
+            var result = solution.Tictactoe(moves);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public string Tictactoe(int[][] moves)
+            {
+                int result = 0;
+                int[][] record = new int[3][];
+                for(int i =0;i<3; i++)                
+                    record[i] = new int[3];
+
+                for(int i = 0;i<moves.Length;i++)
+                {
+                    if(i%2==0)
+                        record[moves[i][0]][moves[i][1]] = 1;
+                    else
+                        record[moves[i][0]][moves[i][1]] = 2;
+                }
+
+                if ((record[0][0] == record[0][1]) && (record[0][0] == record[0][2]) && (record[0][0] != 0))
+                    result = record[0][0];
+                else if ((record[1][0] == record[1][1]) && (record[1][0] == record[1][2]) && (record[1][0] != 0))
+                    result = record[1][0];
+                else if ((record[2][0] == record[2][1]) && (record[2][0] == record[2][2]) && (record[2][0] != 0))
+                    result = record[2][0];
+                else if ((record[0][0] == record[1][0]) && (record[0][0] == record[2][0]) && (record[0][0] != 0))
+                    result = record[0][0];
+                else if ((record[0][1] == record[1][1]) && (record[0][1] == record[2][1]) && (record[0][1] != 0))
+                    result = record[0][1];
+                else if ((record[0][2] == record[1][2]) && (record[0][2] == record[2][2]) && (record[0][2] != 0))
+                    result = record[0][2];
+                else if ((record[0][0] == record[1][1]) && (record[0][0] == record[2][2]) && (record[0][0] != 0))
+                    result = record[0][0];
+                else if ((record[2][0] == record[1][1]) && (record[2][0] == record[0][2]) && (record[2][0] != 0))
+                    result = record[2][0];
+
+                if(result != 0)
+                    return result == 1 ? "A" : "B";
+                else
+                {
+                    if (moves.Length < 9)
+                        return "Pending";
+                    else
+                        return "Draw";
+                }
+
+                                  
+
+            }
+        }
+    }
+}

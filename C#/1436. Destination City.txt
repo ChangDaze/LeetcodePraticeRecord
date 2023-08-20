@@ -1,0 +1,68 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            IList<IList<string>> paths = new List<IList<string>> {//不知為啥IList<IList不能過
+                new List<string> { "London", "New York" } ,
+                new List<string> { "New York", "Lima" } ,
+                new List<string> { "Lima", "Sao Paulo" }
+            };
+            string result = solution.DestCity(paths);
+            Console.WriteLine(result);
+
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public string DestCity(IList<IList<string>> paths)
+            {
+                Dictionary<string, string> map = new Dictionary<string, string>();
+                foreach (IList<string> path in paths)
+                {
+                    map.Add(path[0], path[1]);//因為一個地點只能有一個目的不然會造成迴圈，所以才可選dic
+                }
+
+                string start = paths[0][0];//隨便選個起始點
+                string destination = "";//暫存用
+                while (map.Count > 0)
+                {
+                    if (map.ContainsKey(start))
+                    {
+                        destination = map[start];//存起目的地當下個起點
+                        map.Remove(start);//移除原本起始點
+                        start = destination;
+                    }
+                    else//如果找不到就是到目的了
+                    {
+                        return start;
+                    }
+                }
+
+                return start;
+            }
+            //這題解法算是很好理解，個人認為方法沒好太多可以不用換
+            //其他
+            //這個人有點屌，第一步是好像Linq的todic方法，第二是detination起手就比我快，
+            //第三是提醒了我其實不用remove最後也必定無路可走，以上三點所以他快我蠻多是正常的
+            //https://leetcode.com/problems/destination-city/discuss/742281/C
+            //這個人解法也是很有趣，他是把start和destination分開排隊有對方的就刪除，所以對他來說刪除是必要的，但全走一次變必然了
+            //(但感覺還好因為我做dic也把全部走了一遍)
+            //https://leetcode.com/problems/destination-city/discuss/1019888/Easy-understanding-c
+            //這個人也用dic但真的有點難以言數，他是規劃成start+detination會共出現2次，一次用來造keu一次用來累積value，所以唯一0的key就是答案
+            //不好說但有點彎曲(但說不定很正常，也會比較快?)
+            //https://leetcode.com/problems/destination-city/discuss/610007/C-Outdegree
+        }
+    }
+}

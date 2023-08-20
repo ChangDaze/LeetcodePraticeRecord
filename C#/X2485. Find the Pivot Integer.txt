@@ -1,0 +1,49 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Globalization;
+using System.Runtime.Remoting.Messaging;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            int n = 8;
+            var result = solution.PivotInteger(n);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int PivotInteger(int n)
+            {
+                int[] arr = new int[n];
+                int preSum = 0;
+                int suffSum = 0; 
+
+                for(int i = 0; i < n; i++)
+                {
+                    preSum += i + 1;
+                    arr[i] += preSum;
+
+                    suffSum += (arr.Length-1)-i+1 ;
+                    arr[(arr.Length - 1) - i] -= suffSum;
+
+                    if (arr[i] == 0) return i+1;
+                }
+
+
+                return -1;
+            }
+        }
+    }
+}

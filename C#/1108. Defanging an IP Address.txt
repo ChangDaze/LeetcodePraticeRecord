@@ -1,0 +1,40 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var s = "255.100.50.0";
+            var result = solution.DefangIPaddr(s);
+            Console.WriteLine(result);
+            
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public string DefangIPaddr(string address)
+            {
+                return address.Replace(".", "[.]");
+            }
+            //就是看大家用甚麼方法
+            //其他
+            //(1)join+split(2)stringbuilder組字
+            //https://leetcode.com/problems/defanging-an-ip-address/solutions/427653/c-two-solutions/
+            //(1)index remove和insert(2)replace
+            //https://leetcode.com/problems/defanging-an-ip-address/solutions/775506/ez-c/
+            //(1)stringbuilder + replace (2) stringbuilder組字 (3) stringbuilder組字寫法不同
+            //https://leetcode.com/problems/defanging-an-ip-address/solutions/329492/c-100-dynamic-array/
+        }
+
+    }
+}

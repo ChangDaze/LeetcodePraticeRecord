@@ -1,0 +1,85 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string s = "III";
+            int[] result = solution.DiStringMatch(s);
+            Console.WriteLine(result);
+
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int[] DiStringMatch(string s)
+            {
+                //左右指標
+                int[] result = new int[s.Length + 1];//因比較是i跟i+1比，所以int[]會有s.Length + 1
+
+                int leftside = 0;//由最大和最小的數字開始填才不會容易填到後面剩極端的數字無法比大小(看例題其實也有這個規律)
+                int rightside = s.Length;//因為含0所以s.Length
+                int position = 0;//手動計數int[]填到的位置
+
+                foreach (char c in s)
+                {
+                    if (c == 'I')//小於下個數字
+                    {
+                        result[position] = leftside;//填入目前最小的數(下個不管是誰必定比它小)
+                        leftside++;//從用過的數字移到下個最小的數(因為int[]長度剛好不用擔心leftside和rightside用到重複的數)
+                    }
+                    else//'D'大於下個數字
+                    {
+                        result[position] = rightside;//填入目前最大的數
+                        rightside--;
+                    }
+                    position++;//數字列也要移動
+                }
+
+                result[s.Length] = leftside;//填rightside也行，因為s長度到了，要填下最後剩下的數
+
+                //int turn = 0;
+                //while(leftside <= rightside)
+                //{
+                //    if(turn == 0)
+                //    {
+                //        result[position] = leftside;
+                //        leftside++;
+                //        turn = 1;
+                //    }
+                //    else
+                //    {
+                //        result[position] = rightside;
+                //        rightside--;
+                //        turn = 0;
+                //    }                    
+                //    position++;
+                //}
+                return result;
+            }
+            //速度時快時慢真的不好說
+            //其他
+            //這方法跟我一模一樣ㄟ，自然速度也差不多
+            //https://leetcode.com/problems/di-string-match/discuss/195236/C
+            //這方法也一樣，自然速度也差不多
+            //https://leetcode.com/problems/di-string-match/discuss/378072/Simple-C-solution
+            //這方法也差不多，不過大家用3元運算式比較多
+            //https://leetcode.com/problems/di-string-match/discuss/195178/c-two-pointers
+        }
+
+
+
+
+
+    }
+}

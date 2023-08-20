@@ -1,0 +1,60 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var root = new TreeNode(2, new TreeNode(1), new TreeNode(3, new TreeNode(0), new TreeNode(1)));
+            Solution solution = new Solution();
+            var result = solution.EvaluateTree(root);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class TreeNode
+        {
+            public int val;
+            public TreeNode left;
+            public TreeNode right;
+            public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+            {
+                this.val = val;
+                this.left = left;
+                this.right = right;
+            }
+        }
+
+        public class Solution
+        {
+            public bool EvaluateTree(TreeNode root)
+            {
+                Recurive(root);
+                return root.val == 1?true:false;//root.val已經出來答案了
+            }
+
+            public void Recurive(TreeNode node) 
+            {
+                if(node.left == null) return;
+                Recurive(node.left);                
+                Recurive(node.right);
+                if(node.val == 2)                
+                    node.val = (node.left.val+node.right.val)==0?0:1;//or的話只有都0才false
+                else
+                    node.val = (node.left.val + node.right.val) == 2 ? 1 : 0;//and的話只有都1才true
+                return;
+
+            }
+            //感覺很不真實，不過基本上是流出一個degree來讓兩層degree能決定root是true還是false
+        }
+    }
+}

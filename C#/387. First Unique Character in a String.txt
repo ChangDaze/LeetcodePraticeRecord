@@ -1,0 +1,148 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //var a = "loveleetcode".Distinct();
+            Solution solution = new Solution();
+            
+            int result = solution.FirstUniqChar("loveleetcode");
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public int FirstUniqChar(string s)
+            {
+                Dictionary<char,int> collect = new Dictionary<char,int>();//紀錄候補字元(character,index)
+                HashSet<char> recordlist = new HashSet<char>();//紀錄已經失去資格的字元
+
+                for(int i= 0; i < s.Length; i++)
+                {
+                    if (recordlist.Contains(s[i]))
+                    {
+                        continue;//失去資格就跳過
+                    }
+                    if (collect.ContainsKey(s[i]))
+                    {
+                        collect.Remove(s[i]);//候補中再次出現就失去資格
+                        recordlist.Add(s[i]);
+                    }
+                    else
+                    {
+                        collect.Add(s[i], i);//第一次出現就加入候補
+                    }
+                }
+
+                if(collect.Count > 0)//候補大於1代表有不同答案
+                {
+                    //var a = collect.OrderBy(x => x.Value);//可以看看型別，好像不是單純dictionary可以定義
+                    return collect.OrderBy(x => x.Value).FirstOrDefault().Value;//依index排序後取第一個出現的
+                }
+                else
+                {
+                    return -1;
+                }
+                
+            }
+        }
+        //速度偏慢雖然試著然迴圈只走一次，但可能變數存太多又有判斷讓速度變慢了?不過速度感覺意外挺快的
+        //其他
+        //這個人用的方法跟我很像，不過他用dic<char,list>來記錄所有char的位置，並且用list.count來判斷數量，最後用minindex來篩選最小index，
+        //裡面還有出現int minIndex = Int32.MaxValue;之類的有趣的定標準方式，速度普通
+        //https://leetcode.com/problems/first-unique-character-in-a-string/discuss/391040/A-very-simple-C-solution
+        //這個可能不適合參考，用了Linq Count和IndexOf，照理說拿掉distinct應該沒差，但卻會timeout，本身速度也很慢，可能linq有一些邏輯上的限制，但想法可參考
+        //https://leetcode.com/problems/first-unique-character-in-a-string/discuss/232174/C-Linq-Count-Method
+        //這是很簡單地把迴圈(題目string)走兩遍，第一次記數，第二次確認數量返回最小index，不過真的如果字串沒有到很大或字串答案不是在很後面，速度蠻快的，感覺這種簡單的解法會最快
+        //https://leetcode.com/problems/first-unique-character-in-a-string/discuss/318242/C-charAndCount
+        //說明在下面solution2沒mark掉，速度還行
+        //https://leetcode.com/problems/first-unique-character-in-a-string/discuss/1031783/C-one-pass-solution-based-on-alphabet-array
+
+        //原本想用distinct找出只出現一次的，但後來發現1)distinct是遇到多個只當1個，所以還是會有重複出現過的在裡面2)好像沒index可用
+        //public class Solution2
+        //{
+        //    public int FirstUniqChar(string s)
+        //    {
+        //        var a = s.ToCharArray().Distinct();
+        //        char? target = s.ToCharArray().Distinct().FirstOrDefault();
+        //        if(target != null)
+        //        {
+        //            for(int i=0;i<s.Length;i++)
+        //            {
+        //                if(s[i]== target)
+        //                {
+        //                    return i;
+        //                }
+        //            }
+        //        }
+
+        //        return -1;
+
+        //    }
+        //}
+
+        //第4位的解法
+        public class Solution2
+        {
+            public int FirstUniqChar(string s)
+            {
+                const int noSuchChar = -3; // must be less zero -> 代表還沒出現過
+                const int charIsDup = -2; // must be less zero -> 代表出現過了
+
+                const int minDoesntExist = -1; // return value when all chars isn't unique -> 用來記錄最小的index
+
+                var chars = new int[26]; // store first position or noSuchChar or charIsDup ->會用來記錄26個字母的index 
+
+                for (int i = 0; i < chars.Length; i++)
+                {
+                    chars[i] = noSuchChar;//先都當還沒出現過
+                }
+
+                for (int i = 0; i < s.Length; i++)
+                {
+                    int c = s[i] - 'a';//確認字母對應的int有點像 x-0 =x
+
+                    switch (chars[c])
+                    {
+                        case noSuchChar:
+                            chars[c] = i;//還沒出現過就紀錄index
+                            break;
+
+                        case charIsDup:
+                            break;//出現過就跳過
+
+                        default:
+                            chars[c] = charIsDup;
+                            break;//上面都沒有代表重複出現，紀錄為重複出現
+                    }
+                }
+
+                var min = minDoesntExist;//有點像current vs standard
+
+                foreach (var element in chars)
+                {
+                    if (element == noSuchChar || element == charIsDup)//若是沒出現或重複出現就跳過
+                        continue;
+
+                    if ((min != minDoesntExist && element < min )||( min == minDoesntExist && element >= 0))
+                    {
+                        //若 minDoesntExist=index，需要比他小的index才做紀錄||若 minDoesntExist= -1，只要是正常的index就紀錄
+                        min = element;//紀錄最小index
+                    }
+                }
+
+                return min;
+            }
+        }
+    }
+}

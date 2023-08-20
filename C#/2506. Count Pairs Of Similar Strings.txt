@@ -1,0 +1,65 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string[] words = new string[] { "aba", "aabb", "abcd", "bac", "aabc" };
+            Solution solution = new Solution();
+            var result = solution.SimilarPairs(words);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+        public class Solution
+        {
+            public int SimilarPairs(string[] words)
+            {
+                int result = 0;
+
+                List<HashSet<char>> record = new List<HashSet<char>>();
+                foreach(string w in words)//prepare each word's hashset list
+                    record.Add(w.ToHashSet());
+
+                while (record.Count() > 1)
+                {
+                    Stack<int> removeLst = new Stack<int>();
+                    HashSet<char> standard = record[0];//use standard find how many same hashset
+                    for (int i = 0;i< record.Count() ;i++)
+                    {
+                        if (standard.SetEquals(record[i]))
+                            removeLst.Push(i);
+                    }
+
+                    if (removeLst.Count() > 1)//count pairs
+                        result += removeLst.Count() * (removeLst.Count() - 1) / 2;//count pairs use formula C(n, 2) = n*(n-1)/(1*2)，Cn取2相對簡單
+
+                    while (removeLst.Count > 0)//remove the hashset has been counted, because they will not the same to other hashset       
+                        record.RemoveAt(removeLst.Pop());
+                    
+                }
+                return result;
+            }
+        }
+        //速度意外還行，但題目一有數學就好難
+        //其他
+        //這個原理跟hashset很像，但操作方法是用比較細緻的bit manipulation，像是<<左移運算子|=或等於(bit上的)，等用bit當mask判斷一不一樣，然後用hashtable計數，基本看不懂，但速度應該很快
+        //https://leetcode.com/problems/count-pairs-of-similar-strings/solutions/2923505/c-java-python3-frequency-table-mask/
+        //喔喔，這個人的方法我當初也想過，就是在過程中就用dictionary計好數，然後一次算，但我怕haset當key會出事，這位是把hashset編碼成字串，感覺也是一個不錯的方法，其實也只是set+order後join起來，不過確實在python上這樣的動作程式碼很短
+        //https://leetcode.com/problems/count-pairs-of-similar-strings/solutions/3166484/o-1-space-o-n-k-time-hashmap-approach-python3/
+        //這位C++前面的方法跟第二位一樣，但他就不是計數了，就照原位置放回，後面算的方法不是用公式是直接全跑，所以看起來弱一些，好像就是hint的方法
+        //https://leetcode.com/problems/count-pairs-of-similar-strings/solutions/2923556/set-string/
+    }
+}

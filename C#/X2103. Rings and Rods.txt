@@ -1,0 +1,61 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string rings = "B0B6G0R6R0R6G9";
+            Solution solution = new Solution();
+            var result = solution.CountPoints(rings);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int CountPoints(string rings)
+            {
+                int result = 0;
+                Dictionary<char,int> map = new Dictionary<char, int>()//加減用
+                {
+                    { 'R', 0 },
+                    { 'G',1},
+                    {'B',2 }
+                };
+                Dictionary<char, bool[]> record = new Dictionary<char, bool[]>();//因為前提條件都寫死了，我也不用跳別去想如何可維護
+
+                for(int i = 1; i < rings.Length; i+=2)
+                {
+                    if (!record.Keys.Contains(rings[i]))//雖然我這樣寫可以有使用竿子時才加入dictionary，但如果知道竿子範圍其實竿子也能提前用loop做好
+                        record.Add(rings[i], new bool[] { false, false, false });
+
+                    record[rings[i]][map[rings[i - 1]]] = true;
+                }                                 
+                   
+                foreach(char key in record.Keys)
+                {
+                    bool check = true;
+                    foreach(bool ring in record[key])
+                    {
+                        if(!ring) check = false;                        
+                    }
+                    if (check) result += 1;
+                }
+                return result;
+            }
+        }
+    }
+}

@@ -1,0 +1,66 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string date = "20th Oct 2052";
+            var test = DateTime.Parse(date.Replace(//在即時視窗測試時記得那調空白不然會跳過一些程式
+            new string(date.SkipWhile(char.IsDigit)//直到遇到非數字前要跳過(前兩數字之後的每個char)
+                .TakeWhile(c => !char.IsWhiteSpace(c))//直到遇到空白前都要拿起('t','h')
+                .ToArray()
+            ), ""));//new string產生"th"然後replace
+            //最後用Date Parse直接轉換
+            string result = solution.ReformatDate(date);
+            Console.WriteLine(result);
+
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            //不能用<string,int>，因為一位數會缺0
+            Dictionary<string, string> month = new Dictionary<string, string>()
+                { { "Jan", "01" },{ "Feb", "02" },{ "Mar", "03" },
+                { "Apr", "04" },{ "May", "05" },{ "Jun", "06" },
+                { "Jul", "07" },{ "Aug", "08" },{ "Sep", "09" },
+                { "Oct", "10" },{ "Nov", "11" },{ "Dec", "12" }};
+            public string ReformatDate(string date)
+            {
+                
+                string[] datepart = date.Split(' ');
+                string result = "";
+                result = result + datepart[2] + "-";//年份直接拿來用
+                result = result + month[datepart[1]]+ "-";//字典
+                result = result + datepart[0].Remove(datepart[0].Length - 2, 2);//移除後兩字，但只有一位數的要補零在下一步(也可以用字典但懶的用)
+                if(result.Length < 10)
+                {
+                    result = result.Insert(8, "0");//補零的特定位置寫死，因為想說答案長度固定
+                }                
+                return result;
+            }
+
+            //這是最直接的轉換所以相對簡單，只要傳入的東西合法基本就不會錯，速度也不慢，不過我想到另一個補零的方式，或許可以試著用string formate直接yyyy-MM-dd
+            //其他
+            //這個人跟我一樣是用拆解的方式，不過他用stringbuilder且拆解的方式很乾淨，速度很快ㄟ，內容基礎易懂
+            //https://leetcode.com/problems/reformat-date/discuss/997197/C-solution
+            //這個很猛，解說code放在上面Main，主要是把string轉成date parse讀得懂的型態直接轉換，
+            //但過程比較複雜，因此速度很慢，但不造輪子的思維和自己的思想的感覺蠻清晰的
+            //https://leetcode.com/problems/reformat-date/discuss/741962/C-One-Liner
+            //他跟第一個人的方法很像，但他最後的步驟是用for組字串，第一個人是用substring(length-2)，這部分感覺第一個人比較值得學習
+            //不過他們都用string builder且比較快，這部分可能要考慮stringbuilder是不是其實很好用?
+            //https://leetcode.com/problems/reformat-date/discuss/730800/C-Split-String
+            //這個人也是很好玩，用了很多小技巧，且過程相對活一些，值得參考拿來其他用途(真的)，速度普通，不會太難懂
+            //https://leetcode.com/problems/reformat-date/discuss/730542/C-Simple-Parse
+        }
+    }
+}

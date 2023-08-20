@@ -1,0 +1,99 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            #region solution1 肉眼找規律
+            //int n =3;//0~3共4個數，所以陣列長度會+1
+            ////var Ceiling = Math.Ceiling(Math.Log(Convert.ToDouble(n + 1), 2));//用ceiling就是減回沒長到的部分
+            ////計算會長大幾次(floor -> 正常長大次數)
+            ////長大方式
+            ////0 0次方(長大次數)
+            ////[0][ 0+1] 1次方
+            ////[0 0+1] [0+1 0+1+1] 2次方
+            ////長大方式是上一個陣列全部+1，這比較像找規律比較少用到Binary
+            //var powerfloor = Math.Floor(Math.Log(Convert.ToDouble(n+1), 2));
+            ////沒長完全的部分要加回
+            //var remain = Convert.ToInt32((n+1) - Math.Pow(2, powerfloor));
+            ////List方便操作
+            //List<int> bitlist = new List<int> {0};
+            //int[] resultarray;
+
+            //if ( n == 0)//n=0時維持預設
+            //{
+            //    resultarray = new int[1] {0};
+            //}
+            //else
+            //{
+            //    for (int i = 0; i < powerfloor; i++)//計算正常長大
+            //    {
+            //        bitlist.AddRange(bitlist.Select(x => x + 1).ToList());
+            //    }
+
+            //    bitlist.InsertRange(bitlist.Count, bitlist.Select(x => x + 1).ToList().GetRange(0, remain));//加入不正常長大，ToList才能用GetRange
+            //    resultarray = bitlist.ToArray();
+            //}
+
+
+            //for (int i = 0; i < bitlist.Count; i++)
+            //{
+            //    Console.WriteLine(bitlist[i]);
+            //}
+            //Console.ReadKey();
+            #endregion
+
+            #region solution2 用10進位轉換2進位的方法算，且隱含遞迴
+            //int n = 5;
+            //int[] res = new int[n + 1];
+            //if (n == 0)
+            //{
+            //    res = new int[1] { 0 };
+            //}
+            //else
+            //{
+            //    res[0] = 0;
+            //    for (int i = 1; i <= n; i++)
+            //    {
+            //// &當數字運算子就是bit的and，ex:2 & 1 = 0
+            ////1 0
+            ////0 1 
+            ////0 0 (結果)
+            //        //>>就是右移(除2、right shift)返回的就是除2的商(沒看餘數)
+            //        //其實就是把大的數除2(右移)拿那個陣列(之前算好的)的來用，有餘數就+1(第一位就補1)，遞迴的部分就是實際只看餘數，其他的都是由前面堆積而來
+            //        //反過來看就是小的數左移，有餘數第一位就補1
+            //        res[i] = (res[i >> 1]) + (i & 1);
+            //    }
+            //}                       
+
+            //for (int i = 0; i < res.Length; i++)
+            //{
+            //    Console.WriteLine(res[i]);
+            //}
+            //Console.ReadKey();
+            #endregion
+            #region solution3 其實就是solution2用一般運算子做，然後不知道為啥比用shift快空間還省超多(或蓄意班運算子才是常用的shift?)
+            //public int[] CountBits(int num)
+            //{
+            //    int[] result = new int[num + 1];
+            //    for (int i = 0; i <= num; i++)
+            //    {
+            //        result[i] = result[i / 2] + (i % 2);
+            //    }
+            //    return result;
+            //}
+            #endregion
+        }
+
+
+    }
+
+
+}

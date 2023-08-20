@@ -1,0 +1,66 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var root = new Node(1,new List<Node> { new Node(3, new List<Node> {new Node(5), new Node(6) }), new Node(2) , new Node(4) });
+            Solution solution = new Solution();
+            var result = solution.Postorder(root);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class Node
+        {
+            public int val;
+            public IList<Node> children;
+            public Node() { }
+
+            public Node(int _val)
+            {
+                val = _val;
+            }
+
+            public Node(int _val, IList<Node> _children)
+            {
+                val = _val;
+                children = _children;
+            }
+        }
+
+        public class Solution
+        {
+            List<int> children = new List<int>();
+            public IList<int> Postorder(Node root)
+            {
+                if(root ==null)//因為root題目也會給null才檢查一下
+                    return children;
+                Recursive(root);
+                return children;
+            }
+
+            public void Recursive(Node node)
+            {
+                //基本上因為不是binary tree所以直接用foreach走各個son，因為沒有就不用走所以也不用檢查null
+                foreach(var son in node.children)
+                {
+                    Recursive(son);
+                }
+                children.Add(node.val);//root在son走完後後檢查值所以是postorder，這種foreach可以preorder、postorder，但indorder可能就不行
+                return;
+            }
+        }
+    }
+}

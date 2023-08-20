@@ -1,0 +1,67 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Diagnostics.Contracts;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[][] matrix = new int[][] { new int[] { 7,8 },
+            new int[] { 1,2 }};
+            Solution solution = new Solution();
+            var result = solution.LuckyNumbers(matrix);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public IList<int> LuckyNumbers(int[][] matrix)
+            {
+                List<int> result = new List<int>();
+                int[] rowminid = new int[matrix.Length];
+                int[] colmax = new int[matrix[0].Length];
+                int[] colmaxid = new int[matrix[0].Length];
+                for(int i = 0; i<matrix.Length;i++)
+                {
+                    int tempid = 0;
+                    int temp = 100001;
+                    for (int j = 0; j < matrix[0].Length; j++)
+                    {
+                        if (matrix[i][j] > colmax[j])
+                        {
+                            colmax[j] = matrix[i][j];
+                            colmaxid[j] = i;
+                        }
+                            
+                        if (matrix[i][j] < temp)
+                        {
+                            temp = matrix[i][j];
+                            tempid = j;
+                        }                            
+                    }
+                    rowminid[i] = tempid;
+                }
+
+                //這裡有點複雜，簡單說就是下面這樣
+                for(int i = 0; i< rowminid.Length; i++)//每row最小(先col的迴圈也行，沒差)
+                    for (int j = 0; j < colmaxid.Length; j++)//每col最大
+                        if (rowminid[i] == j && colmaxid[j]==i)
+                            //當【每row最小】的值(col id) == 【每col最大】的index(col id) 且
+                            //當【每col最大】的值(row id) == 【每row最小】的index(row id)                             
+                            //其實就是 目標的 row = row && col = col 就確定了
+                            result.Add(matrix[colmaxid[i]][rowminid[j]]);
+
+                return result;
+            }
+        }
+    }
+}

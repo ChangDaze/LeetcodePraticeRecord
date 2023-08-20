@@ -1,0 +1,67 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string s = "abbccddeeffgghhiijjkkllmmnnooppqqrrssttuuvvwwxxyyzza";
+            int[] distance = new int[] { 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            Solution solution = new Solution();
+            var result = solution.CheckDistances(s,distance);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+        public class Solution
+        {
+            public bool CheckDistances(string s, int[] distance)
+            {
+                bool[] flags = new bool[distance.Length];
+                int[] record = new int[distance.Length];
+
+                for(int i = 0; i < s.Length;i++) 
+                {
+                    if (record[s[i] - 97] == 0 && !flags[s[i] - 97])//用record[s[i] - 97] == 0 ，起手i是0會無法紀錄已來過
+                    {
+                        flags[s[i] - 97] = true;//有出現的都要記錄，後面要用
+                        record[s[i] - 97] = -i;
+                    }                        
+                    else
+                        record[s[i] - 97] += (i-1);//是數中間差距不單純是互減
+                }
+
+                for(int i = 0; i < distance.Length;i++)
+                {
+                    if(!flags[i] )
+                        continue;
+                    if (record[i] != distance[i])
+                        return false;
+                }
+
+                return true;
+            }
+        }
+        //速度普通，題目不看清楚會寫到頭破血流...，ex:record[i] != distance[i]不是>、有出現的都要記錄，後面要用、是數中間差距不單純是互減、起手i是0會無法紀錄已來過
+        //其他
+        //第一個方法，跟我差不多，不過他是用+1的方式避免起手i是0，和處理數中間差距的問題的樣子，還有他是第二次遇到就檢查distance
+        //第二個方法，我覺得比較厲害，是用distance當載體，第一次遇到時就用distance逆推出第二次出現應該在的位置(或s長度不夠)，檢查完就把distance[i] =-1(這樣就不會檢查其他位置了，只檢查原地，應該也可以直接跳過就好)，不過也剛好要求==distance才能這樣逆推
+        //https://leetcode.com/problems/check-distances-between-same-letters/solutions/2527292/track-first-vs-check-second/
+        //這是用dic+list紀錄兩次出現的位置，最後統一比對
+        //https://leetcode.com/problems/check-distances-between-same-letters/solutions/2531135/python3-3-lines-t-m-36ms-13-8mb/
+        //這位方法跟第一位第一個方法差不多
+        //https://leetcode.com/problems/check-distances-between-same-letters/solutions/2527370/last-position-c-java/
+        //我發現有設計過的方法都有點難懂...
+    }
+}

@@ -1,0 +1,71 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var root = new TreeNode(1, new TreeNode(2, new TreeNode(4), new TreeNode(5)), new TreeNode(3, new TreeNode(6)));
+            Solution solution = new Solution();
+            var result = solution.IsCompleteTree(root);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class TreeNode
+        {
+            public int val;
+            public TreeNode left;
+            public TreeNode right;
+            public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+            {
+                this.val = val;
+                this.left = left;
+                this.right = right;
+            }
+        }
+
+
+        public class Solution
+        {
+            Dictionary<int, int> inPos = new Dictionary<int, int>();
+            int postPointer = -1;
+            int[] postArray;
+            public TreeNode BuildTree(int[] inorder, int[] postorder)
+            {
+                for(int i = 0;i<inorder.Length;i++)
+                    inPos[inorder[i]] = i;
+                postPointer = postorder.Length - 1;
+                postArray = postorder;
+                return ConstructTree(0, postPointer);//其實用inorder.Length - 1表現比較正確
+            }
+
+            public TreeNode ConstructTree(int begin,int end)
+            {
+                int mid = inPos[postArray[postPointer]];//取得此node root對應inorder哪裡當作binary search中點用來檢查binary search是否該停下
+                //postorder由後往前在binary search沒停下前都會是下個【右subtree】node的root,停下後會移轉到【左subtree】然後重複
+                TreeNode node = new TreeNode(postArray[postPointer]);
+                postPointer -= 1;//移到下個node的root
+                //這裡就偏向binary search的變化
+                //迴圈組tree
+                if (mid != end)
+                    node.right = ConstructTree(mid + 1, end);
+                if (mid != begin)
+                    node.left = ConstructTree(begin, mid-1);
+                return node;
+            }
+        }
+        //參考
+        //https://leetcode.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/solutions/1259896/c-recursion-o-n/
+    }
+}

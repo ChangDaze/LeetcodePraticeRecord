@@ -1,0 +1,166 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string str1 = "TAUXXTAUXXTAUXXTAUXXTAUXXTAUXXTAUXXTAUXXTAUXX", str2 = "TAUXXTAUXXTAUXXTAUXXTAUXX";
+            string result = solution.GcdOfStrings(str1, str2);
+            Console.WriteLine(result);
+
+            Console.ReadKey();
+
+        }
+
+        //2023.08.11
+        public class Solution
+        {
+            public string GcdOfStrings(string str1, string str2)
+            {
+                if (str1 + str2 == str2 + str1)//如果有最大公因數，兩者相加必相等
+                {
+                    //ex: 1 * ab + 2 * ab = 2 * ab + 1 * ab = ababab
+                    return str1.Length > str2.Length ?
+                        str1.Substring(0, GCD(str1.Length, str2.Length)) :
+                        str2.Substring(0, GCD(str2.Length, str1.Length));
+                }
+
+                return "";
+            }
+            //輾轉相除法找最大公因數(公式應該有分大小放前後)
+            private int GCD(int a, int b)
+            {
+                if (b == 0)
+                    return a;
+                return GCD(b, a % b);
+            }
+        }
+
+        //public class Solution
+        //{
+        //    public string GcdOfStrings(string str1, string str2)
+        //    {
+        //        string lengthtarget = str1.Length > str2.Length ? str2 : str1;
+        //        for (int i = lengthtarget.Length; i > 0; i--)
+        //        {
+        //            if (str1.Substring(0, i) == str2.Substring(0, i))
+        //            {
+        //                string coPrefix = lengthtarget.Substring(0, i);
+        //                if (CheckDivisor(coPrefix, str1) && CheckDivisor(coPrefix, str2))
+        //                {
+        //                    return lengthtarget.Substring(0, i);
+        //                }
+        //            }
+        //        }
+        //        return "";
+        //    }
+
+        //    private bool CheckDivisor(string divisor, string str)
+        //    {
+        //        if (str.Length % divisor.Length == 0)
+        //        {
+        //            int rounds = str.Length / divisor.Length;
+        //            string temp = "";
+        //            for (int i = 0; i < rounds; i++)
+        //            {
+        //                temp = temp + divisor;
+        //            }
+        //            if (temp == str)
+        //            {
+        //                return true;
+        //            }
+        //            else
+        //            {
+        //                return false;
+        //            }
+
+        //        }
+        //        else
+        //        {
+        //            return false;
+        //        }
+
+        //    }
+
+
+        //    //我覺得最滿意的是我倒過來找prefix和另外拉出checkdivisor，速度感覺還行，但會吃容量?應該都差不多
+        //    //其他
+        //    //這個人和我差不多，不過他的checkdivisor，感覺比我粗糙一些
+        //    //https://leetcode.com/problems/greatest-common-divisor-of-strings/discuss/583891/c-solution
+        //    //這個人他程度好像不高，主要分2個步驟，速度不快
+        //    //0.取得prefix
+        //    //1.用prefix跟str.substring(index,prefix.length)比不同就跳出，直到index>prefix.length，達成確認divisor(index+=prefix.length)
+        //    //2.再1.的外層有個迴圈所以當break出來的index<對應str.length就continue(若是divisor會index=對應str.length)
+        //    //https://leetcode.com/problems/greatest-common-divisor-of-strings/discuss/580648/c-solution
+        //    //這個人是Linq派的，程度鐵定是高的，但複雜很多，因為解說複雜code就放下面
+        //    //好處也不少，他去出的list會有所有可能divisor，我則是一個個檢查，雖然說速度上我應該較快，但並沒有，因此就變它的好處了
+        //    //https://leetcode.com/problems/greatest-common-divisor-of-strings/discuss/488195/C-Solution
+
+
+        //    //public string GcdOfStrings(string str1, string str2)
+        //    //{
+        //    //    if (str1.Length < str2.Length) (str1, str2) = (str2, str1);//小的會放在str2，這是str1和str2換值
+        //    //    //strs好像是個list類的
+        //    //    var strs = GetDivisors(str2.Length)
+        //    //        .Select(d => str2.Substring(0, d))//取出除數中可能的divisor
+        //    //        .Where(s => str2.Replace(s, "") == "");//因為replace會把重複出現的都replace，所以是divisor就會透過replace變""
+
+        //    //    foreach (var str in strs)
+        //    //        if (str1.Replace(str, "") == "")//用取出的divisor來另一個字串式，因排序過所以最先是到的會是最大dicisor
+        //    //            return str;
+
+        //    //    return "";
+
+        //    //    List<int> GetDivisors(int n)
+        //    //    {
+        //    //        var list = new List<int>();
+        //    //        for (var i = 1; i <= (int)Math.Sqrt(n); i++)//最大除數是Math.Sqrt(n)
+        //    //            if (n % i == 0)
+        //    //                list.AddRange(new List<int> { i, n / i });//兩個數其實都是str.lenth的除數，只是他一次加兩個(好像沒必要特別這樣做，比較明顯的是n會加進來)
+        //    //                                                          //addrange其實就是list相加，n = i*(n/i)
+        //    //        return list.Distinct().OrderByDescending(x => x).ToList();//去重複、排序
+        //    //    }
+        //    //}
+        //}
+
+        //2023/07/06
+        //public class Solution
+        //{
+        //    public string GcdOfStrings(string str1, string str2)
+        //    {
+        //        string sWord = str1.Length <= str2.Length ? str1 : str2;
+        //        string lWord = str1.Length > str2.Length ? str1 : str2;
+        //        string pre = "";
+
+        //        for(int i = sWord.Length; i>=0; i--)
+        //        {
+        //            if(sWord.Substring(0,i) == lWord.Substring(0, i))
+        //            {
+        //                pre = sWord.Substring(0, i);
+        //                break;
+        //            }
+        //        }
+
+        //        bool flag = false;
+
+        //        while(!flag && (pre.Length != 0))
+        //        {
+        //            if(sWord.Replace(pre,"") == "" && lWord.Replace(pre, "") == "")
+        //                flag = true;
+        //            else
+        //                pre = pre.Substring(0, pre.Length - 1);
+        //        }
+
+        //        return pre;
+        //    }
+        //}
+    }
+}

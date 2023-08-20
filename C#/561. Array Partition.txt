@@ -1,0 +1,46 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var nums = new int[] { 6, 2, 6, 5, 1, 2 };
+            var result = solution.ArrayPairSum(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public int ArrayPairSum(int[] nums)
+            {
+                int result = 0;
+                var sortednums = nums.OrderBy(x => x).ToArray();//突然想到LINQ的order會比quicksort快很多可就是因為他用另一個space一般放入一邊sort所以不用多次比對?
+                for(int i = 0; i < sortednums.Length; i = i + 2)
+                {
+                    result = result + sortednums[i];
+                }
+                return result;
+            }
+            //min(n,n-1) + min(n-2,n-3)....，但速度意外的很慢ㄟ
+            //其他
+            //原來Array本來就有Array.Sort，可能可以去看源碼，直接查別人array怎麼sort(js或C、C++)應該也行，速度普通(不像我另外存速度就快了)，解題方法本身差不多
+            //https://leetcode.com/problems/array-partition/solutions/330410/c-sorted-array/
+            //這是LINQ的熟練使用，直接變one line了，不過速度跟我差不多慢，可能LINQ吧
+            //https://leetcode.com/problems/array-partition/solutions/448845/c/
+            //這個跟第一為差不多用Array.Sort，速度也差不多
+            //https://leetcode.com/problems/array-partition/solutions/117620/c-solution/
+        }
+
+    }
+}

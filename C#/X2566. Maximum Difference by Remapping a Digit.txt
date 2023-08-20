@@ -1,0 +1,77 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int num = 11891;
+            Solution solution = new Solution();
+            var result = solution.MinMaxDifference(num);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int MinMaxDifference(int num)
+            {
+                //這題greedy的地方就是把第1個非0換成9，第1個非9換成0
+                char[] nums = num.ToString().ToCharArray();
+                char minPointer = ' ';
+                char maxPointer = ' ';
+                string min = "";
+                string max = "";
+                foreach (char c in nums)
+                {
+                    string tempMin = c.ToString();
+                    string tempMax = c.ToString();
+
+                    if (minPointer!=' ')
+                    {
+                        if (c == minPointer)
+                            tempMin = "0";
+                    }
+                    else
+                    {
+                        if (c != '0') 
+                        {
+                            minPointer = c;
+                            tempMin = "0";
+                        }                            
+                    }
+                        
+                    if (maxPointer != ' ')
+                    {
+                        if (c == maxPointer)
+                            tempMax = "9";                         
+                    }                        
+                    else
+                    {
+                        if (c != '9')
+                        {
+                            maxPointer = c;
+                            tempMax = "9";
+                        }                                                    
+                    }
+
+                    min += tempMin;
+                    max += tempMax;
+                }
+                
+                return Convert.ToInt32(max) - Convert.ToInt32(min);
+            }
+        }
+    }
+}

@@ -1,0 +1,95 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            int m = 3;
+            int n = 3;
+            var ops = new int[2][] { new int[2] {2,2 },
+                                        new int[2] {3,3 }
+                                        };
+            var result = solution.MaxCount(m, n, ops);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+        //這應該是原本要用暴力解把每格都慢慢加上去，最後再檢查每格=max
+        //public class Solution
+        //{
+        //    public int MaxCount(int m, int n, int[][] ops)
+        //    {
+        //        int[][] matrix = new int[m][];
+        //        int max = ops.Length;//max = 會做幾次ops
+        //        int result = 0;
+
+        //        for (int i = 0; i < m; i++)
+        //        {
+        //            matrix[i] = new int[n];
+        //        }
+
+
+        //        foreach (int[] op in ops)
+        //        {
+        //            for(int i = 0; i< op[0]; i++)
+        //            {
+        //                for (int j = 0; j < op[1]; j++)
+        //                {
+        //                    matrix[i][j]++;
+        //                }
+        //            }
+        //        }
+
+        //        for (int i = 0; i < m; i++)
+        //        {
+        //            for (int j = 0; j < n; j++)
+        //            {
+        //                if (matrix[i][j] == max)
+        //                {
+        //                    result++;
+        //                }
+        //            }
+        //        }
+
+        //        return result;
+        //    }
+        //}
+
+        public class Solution
+        {
+            public int MaxCount(int m, int n, int[][] ops)
+            {
+                if (ops.Length == 0) return m * n;
+
+                int minrow = 40000;
+                int mincol = 40000;//單存最高40000
+
+                foreach (int[] op in ops)
+                {
+                    if (op[0] < minrow) minrow = op[0];//逐漸縮小每次都被覆蓋的地方(理論上[1,1]每次都會被加到)
+                    if (op[1] < mincol) mincol = op[1];
+                }
+
+
+                return minrow * mincol;//返回數量
+            }
+            //速度普通，他前提蠻多的，所以比較好解，像是至少[1,1]，妹次都從左上角開始
+            //其他
+            //這方法一模一樣，速度不錯
+            //https://leetcode.com/problems/range-addition-ii/solutions/1435156/c-solution/
+            //這方法一模一樣，速度不錯(乾速度怎麼越來越快)
+            //https://leetcode.com/problems/range-addition-ii/solutions/2829109/c-solution/
+            //這第一種方法一模一樣，速度普通，第二種是暴力解，out of memory(我原本的暴力解好像也是這樣?)
+            //https://leetcode.com/problems/range-addition-ii/solutions/3073279/easy-c-solution/
+        }
+    }
+}

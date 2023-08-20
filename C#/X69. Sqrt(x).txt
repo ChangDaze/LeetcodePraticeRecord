@@ -1,0 +1,45 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.ComponentModel;
+using System.Security.Cryptography;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var num = 8;
+            Solution solution = new Solution();
+            var result = solution.MySqrt(num);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int MySqrt(int x)
+            {
+                int left = 0;
+                int right = x;
+
+                while (left <= right) 
+                {
+                    double mid = left + (right - left) / 2;
+                    if (mid * mid <= x)
+                        left = (int)mid + 1;
+                    else
+                        right = (int)mid - 1;
+                }
+
+                return left-1;
+            }
+        }
+    }
+}

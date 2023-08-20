@@ -1,0 +1,56 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string key = "the quick brown fox jumps over the lazy dog";
+            string message = "vkbs bs t suepuv";
+            Solution solution = new Solution();
+            var result = solution.DecodeMessage(key, message);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+        public class Solution
+        {
+            public string DecodeMessage(string key, string message)
+            {
+                bool[] record = new bool[26];
+                char[] map = new char[26];
+                int check = 0;
+
+                foreach(char c in key)
+                {
+                    if (c == ' ' || record[c - 'a'] == true) continue;
+
+                    record[c - 'a'] = true;
+                    map[c - 'a'] = Convert.ToChar(check+'a');
+                    check++;
+
+                    if (check >= 26) break;
+                }
+
+                string result = "";
+
+                foreach(char c in message)
+                {
+                    if (c == ' ')
+                        result += c;
+                    else
+                        result += map[c - 'a'];
+                }
+                return result;
+            }
+        }
+    }
+}

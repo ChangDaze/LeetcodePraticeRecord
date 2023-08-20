@@ -1,0 +1,41 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] prices = new int[] { 1, 2, 2 };
+            int money = 3;
+            Solution solution = new Solution();
+            var result = solution.BuyChoco(prices,money);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+        public class Solution
+        {
+            public int BuyChoco(int[] prices, int money)
+            {
+                Array.Sort(prices);
+
+                int result = money - prices[0] - prices[1];
+
+                if (result < 0)
+                    return money;
+                return result;
+
+            }
+        }
+    }
+}

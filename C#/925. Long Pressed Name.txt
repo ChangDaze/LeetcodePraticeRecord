@@ -1,0 +1,101 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var name = "pyplrz";
+            var typed = "ppyypllr";
+            var result = solution.IsLongPressedName(name,typed);
+            Console.WriteLine(result);
+            
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public bool IsLongPressedName(string name, string typed)
+            {
+                int i = 0;
+                int count = 1;
+                
+                if(name[0] != typed[0] || typed.Length < name.Length)//直接檢查開頭和name和typed長度夠不夠
+                    return false;
+
+                for(int j = 1; j<typed.Length;j++)
+                {
+                    if (name[i] == typed[j])
+                    {    
+                        count++;//checkcharacter用
+                        continue;
+                    }
+                    else
+                    {
+                        if(!checkcharacter(ref i, name, ref count))
+                            return false;
+
+                        if(i + 1 < name.Length)//先確認這個j還有沒有name可以比
+                        {
+                            if (name[++i] == typed[j])
+                            {
+                                count = 1;//跟這輪j有比到就給1
+                                continue;
+                            }                                
+                        }
+                        
+                        return false;//若j沒有name可以比，就代表是多出來的
+                    }
+                        
+                }
+                
+                if (!checkcharacter(ref i, name, ref count))
+                    return false;
+
+                if (i < name.Length - 1)//若通過checkcharacter長度還是不足就是沒有跑完name
+                    return false;
+
+                return true;
+            }
+
+            //檢查name中有連續相同的char時用
+            public bool checkcharacter(ref int _i, string _name, ref int _count)
+            {
+                while (_i + 1 < _name.Length)
+                {
+                    if (_name[_i] == _name[_i + 1])
+                    {
+                        _count--;//剩下的是 for _i + 1，所以不能=0
+                        _i++;
+                        if (_count <= 0)
+                            return false;
+                        continue;
+                    }
+                    break;
+                }
+                return true;
+            }
+        }
+        //速度很慢，因為很多流程想的不夠清楚所以攪在一起，下次要注意一點
+        //其他
+        //這個寫得蠻清楚的，這位是不斷推進name[i]來比對type，同時檢查長度有無超過來防止overrange這可以學一下 if (nameIndex < name.Length && name[nameIndex] == typed[i])
+        //第二個是確認j的重複字，因為每個name[i]都會被及時檢查道所以反而可以不管，j的重複字只要用變數暫存即可  if (typed[i] != prevChar)
+        //其他就都是false了，剩下就檢查name[i]有無跑完，速度不快，雖然不令人驚豔，但易懂好理解，這比較像我上面提到的想清楚流程，也是我想要的
+        //https://leetcode.com/problems/long-pressed-name/solutions/343029/c-readable-solution/
+        //這個寫得有點複雜，感覺跟我有點像，雖然他比較精煉，但看起來還是有點亂，但她比我好的地方是 if (i < name.Length - 1 && name[i] == name[i + 1])，他做完這個檢查後i和j會一起往前，
+        //就不會像我只有j往前，後來又回頭處理i這部分和第一位處理方法有一點不同，但我都能學，速度普通
+        //https://leetcode.com/problems/long-pressed-name/solutions/1185217/c-easy/
+        //這個人的判斷法跟第一個人很像，就是及時判斷name[i]，但第一位邏輯明顯比較清晰，這位多用了while，同時用name和type都跑迴圈所以複雜了不少，第一位只用了type跑，速度不快
+        //https://leetcode.com/problems/long-pressed-name/solutions/372160/c-two-pointer/
+
+    }
+}

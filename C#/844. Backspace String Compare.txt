@@ -1,0 +1,67 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string s = "a##c", t = "#a#c";
+            var result = solution.BackspaceCompare(s,t);
+            Console.WriteLine(result);
+            
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public bool BackspaceCompare(string s, string t)
+            {
+                if(translatebackspace(s) == translatebackspace(t)) 
+                    return true;
+                else
+                    return false;
+            }
+
+            public string translatebackspace(string s)
+            {
+                if(s[0]=='#')
+                    s = s.Remove(0,1);
+                for(int i =0; i < s.Length; i++)
+                {
+                    if (s[i] == '#')//要注意的是#也占要消去的字元之一
+                    {
+                        if(i == 0)//因為有可能##連續消到頭，所以for迴圈內要防
+                        {
+                            s = s.Remove(i, 1);
+                            i = i - 1;
+                        }
+                        else
+                        {
+                            s = s.Remove(i - 1, 2);
+                            i = i - 2;
+                        }                        
+                    }
+                }
+                return s;
+            }
+        }
+        //速度偏差，沒想到方法，可能應該要靠資料結構?
+        //其他
+        //這個就不錯ㄟ，是用stack來組字串，跟我remove是相反，但因為我沒有另存答案，如果另存答案下這個合理多了
+        //不過pop還是要防count<0有點尷尬，他有用個比較特別的是 toarray 用 compare 來比，速度不錯
+        //https://leetcode.com/problems/backspace-string-compare/discuss/183094/C-using-stack
+        //這個用的是stingbuilder，流程根用stack差不多，某種意義上stringbuilder也是資料結構?這個人用equals比，速度普通
+        //https://leetcode.com/problems/backspace-string-compare/discuss/629730/C-StringBuilder
+        //這個人寫得有點複雜，速度沒比較快，反而慢 1.他預定是倆倆比較(這一起做反而讓他變複雜，不過如果有更好的方法應該會有效，或者說數字很長時有效?)
+        //2.他是從後面往前推，遇到單一不同就跳掉 3.他在處理#的理念時他特地拆分，數#時index--(這是去掉#本身)，再用#數index--(這裡是做back，會防count<0)
+        //https://leetcode.com/problems/backspace-string-compare/discuss/571698/C-Solution
+    }
+}

@@ -1,0 +1,68 @@
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var root = new Node(1,new List<Node>() { new Node(3, new List<Node>() { new Node(5), new Node(6) }), new Node(2) , new Node(4) });
+            Solution solution = new Solution();
+            var result = solution.MaxDepth(root);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class Node
+        {
+            public int val;
+            public IList<Node> children;
+
+            public Node() { }
+
+            public Node(int _val)
+            {
+                val = _val;
+            }
+
+            public Node(int _val, IList<Node> _children)
+            {
+                val = _val;
+                children = _children;
+            }
+        }
+
+        public class Solution
+        {
+            int depth = 0;
+            public int MaxDepth(Node root)
+            {
+                if(root == null)
+                    return 0;
+                Recurive(root, 0);
+                return depth;
+            }
+            public void Recurive(Node node, int tempDepth)
+            {
+                tempDepth++;
+                depth = Math.Max(depth, tempDepth);
+                if(node.children!= null)//node.children是null時會錯誤
+                    foreach (var child in node.children)
+                        Recurive(child, tempDepth);
+                return;
+            }
+        }
+
+        
+    }
+}

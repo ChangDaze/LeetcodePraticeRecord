@@ -1,0 +1,49 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+
+            Solution solution = new Solution();
+            //char c = (char)65;//int可以直接轉char
+            //string s = Encoding.ASCII.GetString(new byte[] { 65 });
+            //int a = (int)'A';//char也能直接轉int
+            //Console.WriteLine(a);
+            Console.WriteLine(solution.TitleToNumber("AB"));
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public int TitleToNumber(string columnTitle)
+            {
+                int result = 0;
+                foreach (char c in columnTitle)
+                {
+                    result = result * 26 + (int)c - 65 + 1;//65對應ASCI的A，因為是1開始~26所以每一位數加回1，
+                                                           //(本質是0~25加1只是方便轉換不用考慮之外的影響，進位*26也是0~25+1 = *10也是0~9+1的感覺)
+                                                           //從另一個角度想式捨棄0這個位數起始數字從1~26，所以每一位補+1而已
+                }
+
+                return result;
+            }
+        }
+        //以下方法速度都差不多，但char+-int = int 的計算在每個方法裡好像是常識
+        //其他
+        //這個使用LINQ的aggregate自訂function因此變得很簡潔，算式跟我一樣 https://ithelp.ithome.com.tw/articles/10197334
+        //https://leetcode.com/problems/excel-sheet-column-number/discuss/1371512/C-LINQ-One-Liner
+        //這方法是算出每個位數的數值然後每進一位數就多乘26相加，方法差不多
+        //https://leetcode.com/problems/excel-sheet-column-number/discuss/293245/C-for
+        //這個也是跟第2個人相同，不過他是用pow，然後順序是正的來
+        //https://leetcode.com/problems/excel-sheet-column-number/discuss/158032/Simple-c-solution
+    }
+}

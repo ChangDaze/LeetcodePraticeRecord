@@ -1,0 +1,59 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[][] grid = new int[][] { new int[] { 3, 1, 2, 2 }, new int[] { 1, 4, 4, 5 }, new int[] { 2, 4, 2, 2 }, new int[] { 2, 4, 2, 2 } };
+            Solution solution = new Solution();
+            var result = solution.EqualPairs(grid);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+        //2023.0723
+        public class Solution
+        {
+            public int EqualPairs(int[][] grid)
+            {
+                //contain the same elements in the same order，是字串hash的先決條件
+                Dictionary<string,int> set = new Dictionary<string, int>();//因為內容完全一樣的row就要算複數次，所以要dictionary計數
+                string[] columns = new string[grid[0].Length];
+
+                for(int i = 0;i< grid.Length;i++)
+                {
+                    string row = "";
+                    for(int j = 0; j < grid[0].Length;j++)
+                    {
+                        row += grid[i][j].ToString()+",";//會有[1,11] vs [11,1]，所以要逗點區隔順序
+                        columns[j]+= grid[i][j] + ",";
+                    }
+
+                    if(set.ContainsKey(row))
+                        set[row]++;
+                    else
+                        set[row] = 1;
+                }
+
+                int result = 0;
+                foreach(string column in columns)                
+                    if(set.ContainsKey(column))
+                        result+= set[column];
+
+                return result;
+            }
+        }
+        //速度意外慢
+    }
+}

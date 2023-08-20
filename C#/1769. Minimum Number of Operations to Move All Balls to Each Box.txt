@@ -1,0 +1,55 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string boxes = "110";
+            Solution solution = new Solution();
+            var result = solution.MinOperations(boxes);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+        public class Solution
+        {
+            public int[] MinOperations(string boxes)
+            {
+                //就很微妙
+                int[] result = new int[boxes.Length];
+                int steps = 0;
+
+                for (int i = 0; i < result.Length; i++)
+                {
+                    steps = 0;
+
+                    for (int j = 0; j < result.Length; j++)
+                        steps += (boxes[j] - '0') * Math.Abs(i - j);
+                    result[i] = steps;
+                }
+                return result;
+            }
+        }
+        //就是暴力解，把每個距離下有球的部分做計算要移幾次，速度還不錯...
+        //其他
+        //這位的解法很有趣ㄟ，有點像DP，他從左到右把所有球遇到的球帶著跑來計算行動次數，同時記錄到這格左邊要多少次行動，reset後，再從右到左執行一次，這次算右邊，這樣res array就有總次數了
+        //把原本我的暴力解從指數複雜度變成只有O(n)ㄟ，好猛，另外要善用for迴圈可以字帶多變數，下次學學
+        //https://leetcode.com/problems/minimum-number-of-operations-to-move-all-balls-to-each-box/solutions/1075474/c-java-o-n-ltr-rtl/
+        //這是python的，方法跟第一位一樣
+        //https://leetcode.com/problems/minimum-number-of-operations-to-move-all-balls-to-each-box/solutions/1075895/easy-python-beats-100-time-and-space/
+        //這個更狠，只接把兩個loop融合，本質上還是第一位的方式，不過原來C# for loop不只可以多變數，還可以多變數++--!? 速度確實很快
+        //https://leetcode.com/problems/minimum-number-of-operations-to-move-all-balls-to-each-box/solutions/1657474/c-1-looper/
+        //這也是C#，方法一樣，不過沒那簡潔
+        //https://leetcode.com/problems/minimum-number-of-operations-to-move-all-balls-to-each-box/solutions/1160020/c-o-n-solution/
+        //結果只有我暴力解ㄟ...
+    }
+}

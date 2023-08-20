@@ -1,0 +1,45 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] arr = new int[] { 0, 0, 0, 0, 0, 0, 0 };
+            Solution solution = new Solution();
+            solution.DuplicateZeros(arr);
+            Console.WriteLine();
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public void DuplicateZeros(int[] arr)
+            {
+                var temp = new int[arr.Length];//暫存原始資料，因為要動員本的記憶體
+                Array.Copy(arr,temp, arr.Length);
+                int x = 0;
+                int y = 0;
+                while (x < arr.Length)
+                {
+                    arr[x] = temp[y];//要做，不然多走的會被蓋掉
+                    if (temp[y] == 0 && ++x < arr.Length)//++x是加完再用，x++是用完再加
+                        arr[x] = 0;//類似arr[x+1] = 0的複製
+                    y += 1;
+                    x += 1;
+                }
+            }
+            //題目一直說可以用額外的記憶體，但感覺這樣寫有點白癡，多看看別人怎麼寫好了
+        }
+    }
+}

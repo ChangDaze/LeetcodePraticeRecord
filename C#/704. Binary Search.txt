@@ -1,0 +1,69 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+
+            Solution solution = new Solution();  
+            int[] nums = new int[] { -1, 0, 3, 5, 9, 12 };
+            Console.WriteLine(solution.Search(nums, 9));
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int Search(int[] nums, int target)
+            {
+                //其實就是二分搜尋法
+                //https://zh.wikipedia.org/zh-tw/%E4%BA%8C%E5%88%86%E6%90%9C%E5%B0%8B%E6%BC%94%E7%AE%97%E6%B3%95
+                int min = 0;
+                int max = nums.Length;
+                int preposition = (min + max) / 2;//因為int只會給商數所以可以很容易一直找中間數(我這也沒有處理得很精確，不過有找到接近中間的地方切就好)
+                int nowposition = preposition;//紀錄位置
+
+                while (true)
+                {                    
+
+                    if(nums[nowposition] == target)//找到就不多做了
+                    {
+                        return nowposition;
+                    }else if(nums[nowposition] > target)//當目標小於時就往小的地方再裁一半
+                    {
+                        max = nowposition;//把上限調低往小的方向找
+                        preposition = nowposition;//紀錄之前位置方便判斷找不到
+                        nowposition = (min + max) / 2;//新位置                    
+                    }
+                    else//直接用else應該可以省去判斷
+                    {
+                        min = nowposition;//上面的相反
+                        preposition = nowposition;
+                        nowposition = (min + max) / 2;
+                    }
+
+                    if(preposition == nowposition)//重複同一位置時就知道沒有了
+                    {
+                        return -1;
+                    }
+                }
+
+            }
+        }
+        //其他方法
+        //這個方法會透過+1之類的方法達到判斷左指標和右指標交錯(還可以把範圍都放到沒碰到過的數之類的?)知道找不到數，有趣的是找中間數的辦法int mid = (right - left) / 2 + left;(找到左指標要加多少達到中間數)
+        //https://leetcode.com/problems/binary-search/discuss/884635/C-solution
+        //方法跟上一個差不多，說不定這是較通用的模式?
+        //https://leetcode.com/problems/binary-search/discuss/437048/Elementary-C-Solution
+        //這也是同樣的方法，意外的是宣告變數(如果多次重複)如果比較短或合適?好像會跑比較快?
+        //https://leetcode.com/problems/binary-search/discuss/2068423/C-Solution
+        //recursive版也很有趣，應該說值得思考
+        //https://leetcode.com/problems/binary-search/discuss/1515348/704.-Binary-Search-or-C-With-recursion
+    }
+}

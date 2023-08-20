@@ -1,0 +1,58 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string s = "FlaG";
+
+            //bool result = solution.DetectCapitalUse(s);
+            bool firstIsCapital = 'a' - 'A' < 26;
+            int a = 'a' - 'A';
+            Console.WriteLine(a);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public bool DetectCapitalUse(string word)
+            {                
+                //就是把題目的三種情況都考慮而已
+                //1.第一個大寫其他小寫2.都大寫3.都小寫
+                if(word.Length > 1)
+                {
+                    if(word.Substring(0,1).ToUpper() + word.Substring(1,word.Length - 1).ToLower() == word)
+                    {
+                        return true;
+                    }
+                }
+
+                if((word.ToUpper() == word || word.ToLower() == word))
+                {
+                    return true;
+                }
+
+                return false;
+            }
+        }
+        //速度算慢，畢竟就是最直接的方法
+        //方法差不多
+        //https://leetcode.com/problems/detect-capital/discuss/99364/C-solution-with-comments
+        //方法差不多，但粗糙
+        //https://leetcode.com/problems/detect-capital/discuss/99351/C-solution
+        //這個人用ascii計算方式相對upper lower快
+        //1.用linq他很聰明只檢查(1)全大寫(2)第二個以後全小寫(因為第一個不管大小寫後面全小寫就都會過),速度很快,另外word.Substring(1);好像是取word[1]以後所有char
+        //2.方法不難理解，但他把達成條件混在一起，每次都要檢查第一第二個char是否大小寫並用||都檢查，可能因此就變很慢了
+        //https://leetcode.com/problems/detect-capital/discuss/99284/C-1-liner
+
+
+    }
+}

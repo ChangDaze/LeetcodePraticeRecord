@@ -1,0 +1,63 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var g = new int[] { 1, 2, 3 };
+            var s = new int[] { 1, 1 };
+            var result = solution.FindContentChildren(g, s);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int FindContentChildren(int[] g, int[] s)
+            {
+                Array.Sort(g);
+                Array.Sort(s);
+                int i = 0;
+                int j = 0;
+                int result = 0;
+
+
+                while (i < g.Length && j < s.Length)//g、i是小孩，s、j是餅乾
+                {
+                    if (s[j] >= g[i])
+                    {
+                        j++;
+                        i++;
+                        result++;
+                    }
+                    else
+                    {
+                        j++;
+                    }
+                }
+
+                return result;
+            }
+            //用two pointer，然後小到大，小對小大對大看最多滿足幾個，速度不錯
+            //其他
+            //方法基本一模一樣，但他的精簡不少(他把計數用satisfied children來表示，不錯)，速度還行
+            //https://leetcode.com/problems/assign-cookies/solutions/893432/c-greedy-solution/
+            //方法基本一模一樣，這位用while，速度不錯
+            //https://leetcode.com/problems/assign-cookies/solutions/344963/c-sort-then-greedy/
+            //方法基本一模一樣，不過這位的寫法蠻有趣的，比較沒有two pointer的感覺，但基本上結果和過程是一樣的，速度不錯
+            //https://leetcode.com/problems/assign-cookies/solutions/2959541/c-simple-solution/
+            //這裡greedy好像偏向，最小條件下能滿足就換下一個(可能就是所謂的局部滿足 = 全體滿足的情況)
+        }
+
+    }
+}

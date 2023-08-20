@@ -1,0 +1,70 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] bills = new int[]{ 5, 5, 10, 10, 20 };
+            Solution solution = new Solution();
+            var result = solution.LemonadeChange(bills);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public bool LemonadeChange(int[] bills)
+            {
+                Dictionary<int,int> changes = new Dictionary<int, int>()
+                {
+                    {20, 0},//value是綜合值，非數量
+                    {10, 0},
+                    {5, 0},
+                };
+                int[] guide = new int[] { 20, 10, 5 };//因為dictionary可能會有order問題，所以另用一個索引
+                //要從大排到小，不手排可用order，盡可能避免不找10元找2個5元導致下個人要找5元卻不夠的情況
+                foreach(int bill in bills)
+                {
+                    int change = bill - 5;
+                    foreach(int key in guide)
+                    {
+                        if(key<=change)//若找零面額比要找的面額大，就換下個面額
+                        {
+                            if (changes[key] - change >= 0 && change%key == 0)//若是能用此面額整除就全找
+                            {
+                                changes[key] -= change;//調自己錢
+                                change = 0;//調找出的錢
+                            }
+                            else if (changes[key] - change >= 0)//若是不能用面額整除，此面額能找一部份時(能全找就在前一步擋下了，所以能找一定只能找一部份)
+                                //若是面額更小能找，會在小面額再處理(餘數)
+                            {
+                                changes[key] -= (change/key)*key;//因為是int除完會把餘數去掉
+                                change -= (change / key) * key;
+                            }
+                            else//changes[key] - change<0，代表此面額錢不夠，把此面額都先給出，看下個面額能不能處理
+                            {
+                                change -= changes[key];
+                                changes[key]=0;                                    
+                            }
+                        }
+                    }
+                    if (change > 0)//若沒找完就失敗
+                        return false;                    
+                    changes[bill] += bill;//收錢
+                }
+                return true;
+            }
+        }
+    }
+}

@@ -1,0 +1,63 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string[] emails = new string[] { "test.email+alex@leetcode.com", "test.e.mail+bob.cathy@leetcode.com", "testemail+david@lee.tcode.com" };
+            var result = solution.NumUniqueEmails(emails);
+            Console.WriteLine(result);
+
+
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int NumUniqueEmails(string[] emails)
+            {
+                HashSet<string> result = new HashSet<string>();//好set好處很明顯，就是重複的加入時不會加入也不會出錯，只是不知道底層邏輯是怎麼達到快速比對
+                foreach(string email in emails)
+                {
+                    string temp = email;//要另存不然不能操作
+                    int end = temp.IndexOf('@');//終點後仍要保留保持獨特性
+                    for(int i = 0; i < end; i++)
+                    {
+                        if(temp[i] == '.')
+                        {
+                            temp = temp.Remove(i, 1);//移掉.,不過感覺用replace(".","")比較順
+                            i = i - 1;//remove後所有index都要變
+                            end = end - 1;
+                        }else if(temp[i] == '+')//捨棄點
+                        {
+                            temp = temp.Remove(i, end - i);//打捨棄點到終點間丟掉
+                            break;
+                        }
+                    }
+                    result.Add(temp);
+                }
+
+                return result.Count;
+            }
+        }
+        //速度忽快忽慢，我覺得還行除了部分還能再精簡(用replace之類的)，不過我跟大部分人差異就是我沒用split
+        //其他
+        //這個是錯的，一相情願的認為一定有'+'，但如果有他就可能是通的，因為很有趣所以紀錄一下
+        //https://leetcode.com/problems/unique-email-addresses/discuss/198325/C
+        //表現偏差，但他的核心是Contain，不過就像評論說的有些地方其實不用contain，不過他也是沒有用split的那種
+        //https://leetcode.com/problems/unique-email-addresses/discuss/214876/C-solution
+        //這個人少了一點東西，像評論最後補上'@'就好，他是用split('+')[0]、replace(".","")、hashset這種，說實在還蠻簡潔有力的，速度忽快忽慢
+        //https://leetcode.com/problems/unique-email-addresses/discuss/261882/c-116ms
+        //這個人跟上個人基本一樣，不過上個人比較簡潔，且這位沒用replace改用join("")，表現普通
+        //https://leetcode.com/problems/unique-email-addresses/discuss/186739/C-readable-code
+    }
+}

@@ -1,0 +1,67 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var list1 = new string[] { "Shogun", "Tapioca Express", "Burger King", "KFC" };
+            var list2 = new string[] { "Piatti", "The Grill at Torrey Pines", "Hungry Hunter Steakhouse", "Shogun" };
+            var result = solution.FindRestaurant(list1, list2);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public string[] FindRestaurant(string[] list1, string[] list2)
+            {
+                Dictionary<string, int> record = new Dictionary<string, int>();
+                List<string> result = new List<string>();
+
+                for (int i = 0; i < list1.Length; i++)//取得list1的字串(感覺用LINQ比較順，todictionary)，同時需要index
+                {
+                    record.Add(list1[i], i);
+                }
+
+                int min = 2001;//因為上限2000所以隨便找個值
+                for (int i = 0; i < list2.Length; i++)
+                {
+                    if (record.ContainsKey(list2[i]))//有在lst1的字串做判斷
+                    {
+                        if (record[list2[i]] + i < min)//更小就更新答案
+                        {
+                            min = record[list2[i]] + i;
+                            result.Clear();//更新答案記得清
+                            result.Add(list2[i]);
+                        }
+                        else if (record[list2[i]] + i == min)//相等字串就放入lst
+                        {
+                            result.Add(list2[i]);
+                        }
+                    }
+                }
+
+                return result.ToArray();
+            }
+            //題目有前提，兩lst裡面字串都是unique的(可以不多做判斷來處理)，速度不錯
+            //其他
+            //這方法一樣，不過他算min的初始標準可以參考一下，速度不錯
+            //https://leetcode.com/problems/minimum-index-sum-of-two-lists/solutions/103680/c-using-hashtable/
+            //方法一樣，不過他用的一些方法可以看看(dictionary的TryGetValue(list1[i], out otherIdx)，out是函式預設的?)，速度不錯
+            //https://leetcode.com/problems/minimum-index-sum-of-two-lists/solutions/433523/easy-c-solution/
+            //這人有用LINQ做dictionary，不過做得有點複雜??可以看看就好，速度還行
+            //https://leetcode.com/problems/minimum-index-sum-of-two-lists/solutions/405353/c-using-linq/
+        }
+
+    }
+}

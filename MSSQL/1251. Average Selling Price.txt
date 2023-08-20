@@ -1,0 +1,43 @@
+Create table #Prices (product_id int, start_date date, end_date date, price int)
+Create table #UnitsSold (product_id int, purchase_date date, units int)
+
+insert into #Prices (product_id, start_date, end_date, price) values ('1', '2019-02-17', '2019-02-28', '5')
+insert into #Prices (product_id, start_date, end_date, price) values ('1', '2019-03-01', '2019-03-22', '20')
+insert into #Prices (product_id, start_date, end_date, price) values ('2', '2019-02-01', '2019-02-20', '15')
+insert into #Prices (product_id, start_date, end_date, price) values ('2', '2019-02-21', '2019-03-31', '30')
+
+insert into #UnitsSold (product_id, purchase_date, units) values ('1', '2019-02-25', '100')
+insert into #UnitsSold (product_id, purchase_date, units) values ('1', '2019-03-01', '15')
+insert into #UnitsSold (product_id, purchase_date, units) values ('2', '2019-02-10', '200')
+insert into #UnitsSold (product_id, purchase_date, units) values ('2', '2019-03-22', '30')
+
+select * from #Prices
+select * from #UnitsSold
+
+--因為原本是int所以注意要先轉型才會有小數點
+select product_id, ROUND(CONVERT(decimal,sum(sales))/sum(units),2) average_price from (
+select A.product_id, A.price * B.units sales, B.units from #Prices A
+join #UnitsSold B
+on 
+A.product_id = B.product_id 
+and A.start_date <= B.purchase_date
+and A.end_date >= B.purchase_date
+) C
+group by product_id
+
+--速度很慢ㄟ@@
+--其他
+--這位有3個點注意，速度慢
+--1.他用cte(Common Table Expression)， 類似temptable，不過是with範圍內一次性的查詢
+--2.日期可以用betweenㄟ，不知道會不會比較快
+--3.他沒用convert decimal，他用 * 0.01，這樣好像可以直接轉成最多到2位數，好像頗好用
+--https://leetcode.com/problems/average-selling-price/solutions/921150/ms-sql-using-cte/
+--這位方法跟我差不多，但他比我少一層selectㄟ，可能我要學一下精簡化，速度普通
+--https://leetcode.com/problems/average-selling-price/solutions/3358797/straightforward-ms-sql-server-solution/
+--這位跟第2位一樣，我要再精簡，不過他變有小數位是用*1.0，所以可能是變成float，就不是decimal了?速度普通
+--https://leetcode.com/problems/average-selling-price/solutions/817105/ms-sql-solution-easy/
+
+--值得注意的是，第一位和第二位是用left join，如果要讓沒賣出的product也顯示，應該也要left join 才對
+
+drop table #Prices
+drop table #UnitsSold

@@ -1,0 +1,52 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            int n = 1234;
+            var result = solution.ThousandSeparator(n);
+            Console.WriteLine(result);
+            
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public string ThousandSeparator(int n)
+            {
+                string s = Convert.ToString(n);
+                int digit = 1;//digit要從1開始
+                for (int i = s.Length - 1; i > 0; i--)//個位數是從右邊開始
+                {
+                    if (digit % 3 == 0)
+                    {
+                        s = s.Insert(i, ".");
+                        //不用i--，因為.不算進digit，而digit要從1開始
+                        //所以遇到點digit=0，下一個digit=1反而剛好
+                    }
+                    digit++;
+                }
+                return s;
+            }
+            //照直覺做，速度忽快忽慢，但還算簡單易懂
+            //其他
+            //這又是一個LINQ達人，不過這種簡單的替換也蠻適合LINQ的，可以變成簡單易懂的one-liner，理念是stringformat+replace(",",".")，速度普通偏慢畢竟LINQ
+            //https://leetcode.com/problems/thousand-separator/discuss/826154/C-one-liner
+            //這個人是用stringbuilder，跟我相比他是組字，我是直接插入而已，速度普通，不過可以注意他count的方法，讓每次digit直接從1開始，另外是評論的人有提供稍微優化的方法
+            //https://leetcode.com/problems/thousand-separator/discuss/822897/C-with-StringBuilder
+            //這方法基本就跟我一樣了，速度也是忽快忽慢
+            //https://leetcode.com/problems/thousand-separator/submissions/
+            //比較有收穫的是第一個人的方法，不用LINQ基本也只是兩行的事，簡單易懂就是速度可能會稍微慢一點
+        }
+    }
+}

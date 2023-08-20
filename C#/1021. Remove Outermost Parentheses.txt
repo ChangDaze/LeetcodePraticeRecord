@@ -1,0 +1,65 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var s = "(()())(())";
+            var result = solution.RemoveOuterParentheses(s);
+            Console.WriteLine(result);
+            
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public string RemoveOuterParentheses(string s)
+            {
+                List<int> lst = new List<int>();
+                int startindex = 0;
+                int left = 0;
+                int right = 0;
+                for(int i = 0; i < s.Length; i++)
+                {                    
+                    if (s[i] == '(')                    
+                        left++;                    
+                    else                    
+                        right++;
+
+                    if (left == right)
+                    {
+                        lst.Add(startindex);
+                        lst.Add(i);
+                        startindex = i+1;
+                    }
+                }
+
+                for(int i = lst.Count-1;i>=0 ; i--)
+                {
+                    s = s.Remove(lst[i],1);
+                }
+
+                return s;
+            }
+            //速度普通，這種括號的，符合規則下就是把握好左右會相等就好，反而是在想怎麼左右一起消除和消除的順序比較消耗我時間
+            //其他
+            //這個解法很有趣ㄟ，他是用切割的方式，把要處理的每段都先切割好放進list，然後切割好後的統一處理撥開最前和最後一個char，最後在一起組合
+            //有個小地方我可以直接學，就是不用left和right直接統一成leftt++right--就能用一個變數搞定了，速度普通
+            //https://leetcode.com/problems/remove-outermost-parentheses/solutions/1020187/c-solution/
+            //速度超快@@，這個對題目已經理解到比較深的地方了，他是直接用stack，像平常處理Parentheses的方式加些變化而已，這個變化就是組合第一個人個分段和substring方式，但他是動態進行
+            //https://leetcode.com/problems/remove-outermost-parentheses/solutions/792809/c-simple-solution/
+            //這個人是走精簡風的，邏輯能力應該很強，但判斷就相對可重用但會做多次，所以速度不快，這邊主要就是2分法 c == '(' && i > 1 || c == ')' && i > 0，只要不是這兩總情況的就不加入組字串
+            //但這精簡到這地步有點容易錯了還不知錯在哪，所以我個人不算推，但很好看
+            //https://leetcode.com/problems/remove-outermost-parentheses/solutions/467915/c/
+        }
+    }
+}

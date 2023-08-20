@@ -1,0 +1,47 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var matrix = new int[][] { new int[] { 1, 2, 3 }, new int[] { 3, 1, 2 }, new int[] { 2, 3, 1 }};
+            Solution solution = new Solution();
+            var result = solution.CheckValid(matrix);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public bool CheckValid(int[][] matrix)
+            {               
+                HashSet<int> rowrecord = new HashSet<int>();
+                HashSet<int> columnrecord = new HashSet<int>();
+
+                for (int i = 0; i<matrix.Length; i++)
+                {
+                    for (int j = 0; j < matrix[0].Length; j++)
+                    {
+                        rowrecord.Add(matrix[i][j]);
+                        columnrecord.Add(matrix[j][i]);//因為是n*n才能這樣搞
+                    }
+                    if (rowrecord.Count != matrix.Length || columnrecord.Count != matrix.Length)//一個不合格就false了，正常每row和col的distinct = 數字 = n
+                        return false;
+                    rowrecord.Clear();//還原
+                    columnrecord.Clear();
+                }
+
+                return true;//出來就是全部通過
+            }
+        }
+    }
+}

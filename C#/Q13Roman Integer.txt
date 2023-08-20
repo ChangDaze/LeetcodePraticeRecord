@@ -1,0 +1,58 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //一般樹敘事左邊由大到小往右排
+            //因只需處理文字轉數字所以不複雜
+            //會出現特別情況的只有4、9...等數字，所以只需考慮5-1、100-10之類的狀況，(不會有5-2、10-2之類的)
+            //當左邊的數字小於右邊的數字就減去
+            string input = "XIV";
+            Dictionary<char, int> map =
+                new Dictionary<char, int>() { 
+                {'I',1},
+                {'V',5},
+                {'X',10},
+                {'L',50},
+                {'C',100},
+                {'D',500},
+                {'M',1000}
+                };
+
+            int sum = 0;
+            //Console.WriteLine(input[0]);
+            for (int i = 0; i < input.Length; i++)
+            {
+                var s1 = map[input[i]];
+                var s2 = 0;
+                if (i+1 < input.Length)
+                {
+                    s2 = map[input[i+1]];
+                }
+
+                if (s1 < s2)
+                {
+                    sum = sum - s1;
+                }
+                else
+                {
+                    sum = sum + s1;
+                }
+                
+            }
+
+
+            //Console.WriteLine(map["I"]);
+            //Console.WriteLine(input[1]);
+            Console.Write(sum);
+            Console.ReadKey();
+        }
+    }
+}

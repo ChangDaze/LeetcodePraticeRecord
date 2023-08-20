@@ -1,0 +1,41 @@
+Create table #Activities (sell_date date, product varchar(20))
+insert into #Activities (sell_date, product) values ('2020-05-30', 'Headphone')
+insert into #Activities (sell_date, product) values ('2020-06-01', 'Pencil')
+insert into #Activities (sell_date, product) values ('2020-06-02', 'Mask')
+insert into #Activities (sell_date, product) values ('2020-05-30', 'Basketball')
+insert into #Activities (sell_date, product) values ('2020-06-01', 'Bible')
+insert into #Activities (sell_date, product) values ('2020-06-02', 'Mask')
+insert into #Activities (sell_date, product) values ('2020-05-30', 'T-Shirt')
+select * from #Activities 
+
+select 
+	sell_date,
+	count(1) num_sold,
+	STRING_AGG(product,',') WITHIN GROUP(order by product) products --WITHIN GROUP(order by product desc)
+from 
+	(select distinct * 
+	from #Activities
+	) A
+group by sell_date
+order by sell_date
+
+--第四位的古早做法，要懂得有點多，這感覺偏向子查詢組字串
+--SELECT sell_date, COUNT(DISTINCT product) num_sold,
+--       STUFF((SELECT DISTINCT ','+ product
+--             FROM #Activities
+--             WHERE sell_date = a.sell_date
+--             FOR XML PATH('')),1,1,'') products
+--FROM #Activities a
+--GROUP BY sell_date
+
+--意外的蠻多人用STRING_AGG，還沒出現以前大家好像是用遞回變數之類的
+--其他
+--這是mysql的，他們有GROUP_CONCAT處理group by 後的值，裡面還可以放distinct..
+--https://leetcode.com/problems/group-sold-products-by-the-date/solutions/2139850/simple-explanation-easy/
+--這是mssql的，基本跟我一樣，不過他沒去處理細節
+--https://leetcode.com/problems/group-sold-products-by-the-date/solutions/2134094/ms-sql-solution-with-string-agg/
+--這是mssql的，方法基本跟我一樣，不過他多用with
+--https://leetcode.com/problems/group-sold-products-by-the-date/solutions/1997039/ms-sql-using-string-agg/
+--mssql 非STRING_AGG，這個XPATH好像是第二多用的方法ㄟ..
+--https://leetcode.com/problems/group-sold-products-by-the-date/solutions/853276/ms-sql-server-98-45-runtime/
+drop table #Activities

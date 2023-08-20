@@ -1,0 +1,60 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string text = "hello world";
+            string brokenLetters = "demkibuyjtsxgfzwahnc";
+            Solution solution = new Solution();
+            var result = solution.CanBeTypedWords(text, brokenLetters);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+        public class Solution
+        {
+            public int CanBeTypedWords(string text, string brokenLetters)
+            {
+                bool[] flags = new bool[123];//避免-'a'
+                foreach(char c in brokenLetters)
+                    flags[c] = true;
+                int result = 0;
+                int record = 0;
+
+                foreach(char c in text)
+                {
+                    if ( c == ' ')
+                    {
+                        if (record == 0)
+                            result++;
+                        record = 0;
+                    }else if (flags[c])
+                        record++;
+                }
+
+                if (record == 0)//最後沒有空白所以要再算一次
+                    result++;
+
+                return result;
+            }            
+        }
+        //速度不錯
+        //其他
+        //這是C++的某些語法，他flag和hashset的方法都有用糖還不錯，像是res += cnt == 0;或是broken.count(text[i])
+        //https://leetcode.com/problems/maximum-number-of-words-you-can-type/solutions/1344926/hash-set-or-array/
+        //這是用類似linq的方法先split空白在確認每個字有無含brokenLetters，也是強大的APIㄟ
+        //https://leetcode.com/problems/maximum-number-of-words-you-can-type/solutions/1345084/java-1-line/
+        //這是第二位C#版本，他是用word.Intersect(brokenLetters).Count()，因為沒有拆分hashset，可能也比一般haset快?也是很猛的用法，不過速度慢
+        //https://leetcode.com/problems/maximum-number-of-words-you-can-type/solutions/2286677/c-using-intersect-faster-than-11-43/
+    }
+}

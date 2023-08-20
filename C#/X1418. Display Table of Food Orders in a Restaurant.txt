@@ -1,0 +1,84 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+using System.Reflection;
+using System.Security.AccessControl;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            IList<IList<string>> orders = new List<IList<string>>() { 
+                new List<string>() { "David", "3", "Ceviche" },
+            new List<string>() { "Corina", "10", "Beef Burrito" },
+            new List<string>() { "David","3","Fried Chicken" },
+            new List<string>() { "Carla","5","Water" },
+            new List<string>() { "Carla","5","Ceviche" },
+            new List<string>() { "Rous","3","Ceviche" },};
+            Solution solution = new Solution();
+            var result = solution.DisplayTable(orders);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+
+        public class Solution
+        {
+            public IList<IList<string>> DisplayTable(IList<IList<string>> orders)
+            {
+                Dictionary<string,int> record = new Dictionary<string, int>();
+
+                HashSet<string> rows = new HashSet<string>();
+                HashSet<string> columns = new HashSet<string>();
+
+                foreach(IList<string> order in orders)
+                {
+                    var temp = order[1] + order[2];
+                    if (record.Keys.Contains(temp))//List和array都不能直接拿來當key，所以用組合字串
+                        record[temp]++;
+                    else
+                        record[temp]= 1;
+
+                    rows.Add(order[1]);
+                    columns.Add(order[2]);//做好table rows(桌號)
+                }
+
+                List<string>rowsLst = rows.OrderBy(x => Convert.ToInt32(x)).ToList();//因為會有兩位數，所以還是要轉數字來排
+                List<string>columnsLst = columns.OrderBy(x => x, StringComparer.Ordinal).ToList();//讓他用ASCII的方式排，預設是UNICODE，題目也有點坑，明明說字母排序，還是說ASCII排法就是所謂的字母排序??
+                //https://stackoverflow.com/questions/26144979/is-sorting-in-linq-by-ascii-code
+                columnsLst.Insert(0, "Table");//做好table columns(餐點)
+
+                IList<IList<string>> result = new List<IList<string>>();
+                result.Add(columnsLst);
+
+                for(int r = 0; r < rowsLst.Count(); r++)
+                {
+                    List<string> row = new List<string>();
+                    row.Add(rowsLst[r]);
+                    for(int c = 1; c < columnsLst.Count(); c++)
+                    {
+                        //在table上填入對應數字
+                        if(record.Keys.Contains(rowsLst[r] + columnsLst[c]))
+                            row.Add(record[rowsLst[r] + columnsLst[c]].ToString());
+                        else
+                            row.Add("0");
+                    }
+                    result.Add(row);
+                }
+
+                return result;
+            }
+            //題目的display table是【表】的意思，比較容易會錯意，上面就暴力法，可以參考別人的，速度不錯
+            //樣本數好像很少，C#其他人方法幾乎一模一樣ㄟ，還是他呈現分佈的範例會挑?
+        }
+    }
+}

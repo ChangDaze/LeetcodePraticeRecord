@@ -1,0 +1,62 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] arr = new int[] { 0, 2, 1, -6, 6, -7, 9, 1, 2, 0, 1 };
+            Solution solution = new Solution();
+            var result = solution.CanThreePartsEqualSum(arr);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public bool CanThreePartsEqualSum(int[] arr)
+            {
+                //這題最坑的就是subarray，他是要求分割的部分要是連續的，才能達成以下解法
+                int total = arr.Sum();                
+                if (total % 3 != 0) return false;
+
+                int target = total / 3;
+                int targetPart = target == 0 ? 3 :2;//一般可分出兩段 + 剩餘值 = total
+
+                int sum = 0;
+                for (int i = 0; i < arr.Length && targetPart > 0 ; i++)
+                {
+                    sum += arr[i];
+                    if(sum == target)//因為subarray才這樣
+                    {
+                        targetPart--;
+                        sum = 0;
+                    }
+                }
+
+                if (targetPart != 0) return false;
+
+                return true;
+            }
+        }
+        //參考的人
+        //https://leetcode.com/problems/partition-array-into-three-parts-with-equal-sum/solutions/260885/c-6-lines-o-n-target-sum/
+        //當target = 0 要檢查3次的原因如下，可能實際上總共只能兩次array就到底了
+        //這個參考的人一開始假設 最後 part一定 == 3，但 target = 0時可能會出現3次以上(因為一般非0時 total 會限制發展)
+        //[1,-1,1,-1]
+        //題解中文
+        //https://www.cnblogs.com/grandyang/p/14356913.html
+
+    }
+}

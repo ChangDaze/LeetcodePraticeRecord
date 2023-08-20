@@ -1,0 +1,75 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var root = new TreeNode(1, new TreeNode(2), new TreeNode(3));
+            Solution solution = new Solution();
+            var result = solution.SumNumbers(root);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class TreeNode
+        {
+            public int val;
+            public TreeNode left;
+            public TreeNode right;
+            public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+            {
+                this.val = val;
+                this.left = left;
+                this.right = right;
+            }
+        }
+
+
+        public class Solution
+        {
+            int sum = 0;
+            public int SumNumbers(TreeNode root)
+            {
+                Recurive(root, "");
+                return sum;
+                //除了可能可以提升速度外，完全看不出這題為啥mediumㄟ
+                //就單純preorder然後注意要是葉子，然後加起來每條路徑而已
+            }
+
+            public void Recurive(TreeNode node,string path)
+            {
+                if (node == null) return;
+                path = path + node.val.ToString();
+                if(node.left == null && node.right == null)
+                {
+                    sum += Convert.ToInt32(path);
+                    return;
+                }
+                Recurive(node.left,path);
+                Recurive(node.right, path);
+            }
+            //速度慢
+            //這是超級濃縮版one liner，可以參考一下，基本上就是返回左遞迴+右遞迴，速度普通
+            //https://leetcode.com/problems/sum-root-to-leaf-numbers/solutions/3294403/c-1-liner-recursion/
+            //這也是返回左遞迴+右遞迴，不過沒有特別濃縮，速度普通
+            //https://leetcode.com/problems/sum-root-to-leaf-numbers/solutions/706374/c-simple-recursion/
+            //這個人可以多看看，他有三種方法
+            //(1)一般DFS preorder
+            //(2)透過stack(先進後出)iterate的DFS，iterate就容易比較快，速度不錯
+            //(3)透過queue(先進先出)iterate的BFS，結果是錯的..應該是path沒抓好，不過確實queue能做到bfs(但這題能不能用不知道)
+            //https://leetcode.com/problems/sum-root-to-leaf-numbers/solutions/707492/c-dfs-and-bfs-solutions/
+        }
+
+    }
+}

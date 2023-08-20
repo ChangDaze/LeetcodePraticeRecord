@@ -1,0 +1,126 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var nums = new int[] { 0, 1, 0, 3, 12 };
+            solution.MoveZeroes(nums);
+            //Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public void MoveZeroes(int[] nums)
+            {
+                int i = 0;
+                int j = 0;
+
+                while(j< nums.Length)
+                {
+                    if(nums[j] == 0)
+                    {
+                        j++;
+                    }
+                    else
+                    {
+                        nums[i] = nums[j];
+                        i++;
+                        j++;
+                    }
+                }
+
+                while(i < nums.Length)
+                {
+                    nums[i] = 0;
+                    i++;
+                }
+
+            }
+            //參考別人重建array的方法，用起來還蠻順的，速度不錯
+            //其他
+            //這就是最原始的做法，遇到零就把所有都後移一排，不過他寫的還蠻複雜的，連零也要一直不斷重新塞回..，速度還不慢
+            //https://leetcode.com/problems/move-zeroes/solutions/1469032/c-solution/
+            //怎麼說，雖然他用了三種方法，但另外兩種感覺只是第三種的變形應用，還是硬要的
+            //https://leetcode.com/problems/move-zeroes/solutions/1943601/c-3-approaches/
+            //這跟第一位差不多，就很像擠泡泡，不過他多用了一些小聰明加速判斷ex:if (nums[j + 1] == 0) break;不過第一位也有用-count加速，速度也不慢
+            //https://leetcode.com/problems/move-zeroes/solutions/451294/c-solution/
+            //我覺得我的算好
+        }
+
+        //20230714
+        //public class Solution
+        //{
+        //    public void MoveZeroes(int[] nums)
+        //    {
+        //        int pointerNum = 0; //找到num
+        //        int pointerZero = 0; //找到0
+
+        //        while(pointerZero < nums.Length)
+        //        {
+        //            if(nums[pointerZero] != 0)
+        //            {
+        //                pointerZero++;
+        //                continue;
+        //            }
+
+        //            pointerNum = pointerZero + 1;
+        //            while(pointerNum < nums.Length)
+        //            {
+        //                if (nums[pointerNum] != 0)
+        //                    break;
+
+        //                pointerNum++;
+        //            }
+
+        //            if (pointerNum >= nums.Length)
+        //                break;
+
+        //            int temp = nums[pointerZero];
+        //            nums[pointerZero] = nums[pointerNum];
+        //            nums[pointerNum] = temp;
+        //        }
+
+        //    }
+        //}
+
+        //public class Solution
+        //{
+        //    public void MoveZeroes(int[] nums)
+        //    {
+        //        int pointerNum = 0; 
+        //        int pointerZero = 0; 
+
+        //        while (pointerZero < nums.Length)
+        //        {
+        //            if (nums[pointerZero] == 0)
+        //            {
+        //                pointerZero++;
+        //                continue;
+        //            }                  
+                        
+        //            //nums[pointerZero]!=0
+        //            //非0就擺
+        //            int temp = nums[pointerZero];
+        //            nums[pointerZero] = nums[pointerNum];
+        //            nums[pointerNum] = temp;
+        //            pointerZero++;//要憶起前進，避免其中一方重複做
+        //            pointerNum++;
+        //        }
+
+        //    }
+        //}
+
+    }
+}

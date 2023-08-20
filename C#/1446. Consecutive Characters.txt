@@ -1,0 +1,59 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var s = "cc";
+            var result = solution.MaxPower(s);
+            Console.WriteLine(result);
+            
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int MaxPower(string s)
+            {                
+                int maxpower = 1;
+                int temppower = 0;//我的要從第一個開始到最後，這兩行不能設錯(有種感覺但寫不清晰)
+                char temp = s[0];
+                foreach(char c in s)
+                {
+                    if(c == temp)
+                    {
+                        temppower++;
+                    }
+                    else
+                    {                                                
+                        maxpower = Math.Max(maxpower, temppower);
+                        temppower = 1;
+                        temp = c;
+                    }                                        
+                }
+                maxpower = Math.Max(maxpower, temppower);//最後一個走完不是因為中斷，所以要補做一次
+                return maxpower;
+            }
+            //題目是每個位置的power都記錄，最後找最大，我這邊是跑完一段比對一次，速度有點忽快忽慢
+            //其他
+            //這比較像兩指標，前指標負責探路，後指標負責定位index，起始長度為1，感覺也還行，但用了兩層while有點不安
+            //速度忽快忽慢
+            //https://leetcode.com/problems/consecutive-characters/discuss/960048/Easy-and-fast-C-solution
+            //這是用比較簡單的比對for迴圈，簡單，速度也還不錯，若s長度只有1就不會進入迴圈，
+            //不過他的if power是每次都判斷感覺不
+            //https://leetcode.com/problems/consecutive-characters/discuss/710366/C
+            //這方法跟第二個差不多，不過他if power就比較像我不是每次做了，速度忽快忽慢
+            //https://leetcode.com/problems/consecutive-characters/discuss/635570/C-O(n)
+            //意外的是題目給的hint反而沒看到用作答案的，我以為至少會有一些
+        }
+    }
+}

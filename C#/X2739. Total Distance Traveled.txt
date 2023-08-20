@@ -1,0 +1,44 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+using System.Reflection;
+using System.Security.AccessControl;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int mainTank = 10, additionalTank = 1;
+            Solution solution = new Solution();
+            var result = solution.DistanceTraveled(mainTank, additionalTank) ;
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+        public class Solution
+        {
+            public int DistanceTraveled(int mainTank, int additionalTank)
+            {
+                int result = 0;
+
+                while (mainTank >= 5 && additionalTank > 0)
+                {
+                    result += 50;
+                    mainTank -=(5-1);
+                    additionalTank--;
+                }
+
+                return result + (mainTank * 10);
+            }
+        }
+    }
+}

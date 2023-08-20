@@ -1,0 +1,58 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var grid = new int[][] { new int[] { 1, 2, 4 }, new int[] { 3, 3, 1 } };
+            var result = solution.DeleteGreatestValue(grid);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int DeleteGreatestValue(int[][] grid)
+            {
+                int result = 0;
+                foreach (int[] row in grid)
+                {
+                    Array.Sort(row);//把每列排列
+                }
+
+                //每行找max，要注意誰在外層迴圈誰在內層迴圈
+                for(int i = 0; i < grid[0].Length ; i++)//index = column
+                {
+                    int max = 0;
+                    for(int j = 0;j<grid.Length ;j++)//each row
+                    {
+                        if (max < grid[j][i])
+                            max = grid[j][i]; 
+                    }
+                    result = result + max;
+                }
+
+                return result;
+            }
+        }
+        //速度普通
+        //其他
+        //也是用sort each row，不過他找max是用LINQ，但他用LINQ在int[][]找max的方法可以參考一下，就是把int[]當成單純一元變數，速度普通
+        //https://leetcode.com/problems/delete-greatest-value-in-each-row/solutions/2900919/c-sorting/
+        //這方法跟我一模一樣，小地方不同而已，但細節也能參考一下，速度不錯
+        //https://leetcode.com/problems/delete-greatest-value-in-each-row/solutions/2905631/c/
+        //這是用LINQ來sort而已，方法一模一樣，速度普通
+        //https://leetcode.com/problems/delete-greatest-value-in-each-row/solutions/2970543/c-straightforward-solution/
+
+    }
+}

@@ -1,0 +1,73 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var root = new TreeNode(7);
+            var nodel1 = new TreeNode(4);
+            var noder1 = new TreeNode(3);
+            noder1.left = new TreeNode(6);
+            noder1.right = new TreeNode(19);
+            root.left = nodel1;
+            root.right = noder1;
+            Solution solution = new Solution();
+            var result = solution.GetTargetCopy(root, root, noder1);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class TreeNode
+        {
+            public int val;
+            public TreeNode left;
+            public TreeNode right;
+            public TreeNode(int x) { val = x; }
+        }
+
+        public class Solution
+        {
+            TreeNode result;
+            TreeNode t;
+            public TreeNode GetTargetCopy(TreeNode original, TreeNode cloned, TreeNode target)
+            {
+                t = target;
+                Query(original, cloned);
+                return result;
+            }
+
+            public void Query(TreeNode o, TreeNode c)
+            {
+                if (o == null || c == null || result != null)
+                    return;
+                if (o.val == t.val && c.val == t.val)
+                {
+                    result = c;
+                    return;
+                }
+                Query(o.left, c.left);
+                Query(o.right, c.right);
+            }
+        }
+        //1.The values of the nodes of the tree are unique  (因為這點就可以用o.val == t.val
+        //2.original tree and cloned tree is the same structure (因為這點就可以兩棵樹一起爬
+        //3.target is a node in the original tree (用這點則可以直接o == t，若不是源自同棵樹就不能這樣比
+        //速度普通
+        //這方法一樣，當初我應該有參考他的，速度不錯
+        //https://leetcode.com/problems/find-a-corresponding-node-of-a-binary-tree-in-a-clone-of-that-tree/solutions/2046372/c-dfs-faster-than-62-30/
+        //這個方法也一樣，不過這更直接一點(有1.在確實應該這樣做)，只爬cloned tree，照理來說這方法會比較快喔，速度不錯
+        //https://leetcode.com/problems/find-a-corresponding-node-of-a-binary-tree-in-a-clone-of-that-tree/solutions/2046155/c-dfs/
+        //這個比較特別的是他沒再另外開一個函式寫遞迴，雖然不知道有沒有比較好，但一定會相對複雜些，解題本質沒變，寫法可以看看，速度很慢
+        //https://leetcode.com/problems/find-a-corresponding-node-of-a-binary-tree-in-a-clone-of-that-tree/solutions/804375/c-simple-recursion/
+    }
+}

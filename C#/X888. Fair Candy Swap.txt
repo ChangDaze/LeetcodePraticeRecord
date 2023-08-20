@@ -1,0 +1,58 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.ComponentModel;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var aliceSizes = new int[]{ 1, 1 };
+            var bobSizes = new int[] { 2, 2 };
+            Solution solution = new Solution();
+            var result = solution.FairCandySwap(aliceSizes, bobSizes);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int[] FairCandySwap(int[] aliceSizes, int[] bobSizes)
+            {
+                int suma = aliceSizes.Sum();
+                int sumb = bobSizes.Sum();
+                int sum = Math.Abs(suma+sumb)/2;
+
+                int[] alice = aliceSizes.Distinct().OrderBy(x => x).ToArray();
+                int[] bob = bobSizes.Distinct().OrderBy(x => x).ToArray();
+
+                foreach(int i in alice)
+                {
+                    int left = 0;
+                    int right = bob.Length-1;
+                    int target = sum - suma + i;//sum - suma會正(A比B少)或負(A比B多)，正就要從b拿多，負就要從b拿少，要畫圖比較好懂
+                    while (left <= right)
+                    {
+                        int mid = (left + right) / 2;
+                        if (bob[mid] < target)
+                            left = mid + 1;
+                        else if (bob[mid] > target)
+                            right = mid - 1;
+                        else
+                            return new int[2] { i, bob[mid] };
+                    }
+                }
+
+                return new int[0];
+            }
+            //https://leetcode.com/problems/fair-candy-swap/solutions/1623804/java-binary-search-solution/?q=Binary&orderBy=most_relevant
+        }
+    }
+}

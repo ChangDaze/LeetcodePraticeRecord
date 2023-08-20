@@ -1,0 +1,52 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+using System.Reflection;
+using System.Security.AccessControl;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[][] brackets = new int[3][] { new int[] { 3,50}, new int[] { 7,10 }, new int[] { 12,25 } };
+            int income = 10;
+            Solution solution = new Solution();
+            var result = solution.CalculateTax(brackets,income);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+
+        public class Solution
+        {
+            public double CalculateTax(int[][] brackets, int income)
+            {
+                double result = 0;
+                int prevBound = 0;
+
+                foreach (int[] bracket in brackets)
+                {
+                    if (prevBound >= income)
+                        break;
+                    else
+                    {
+                        result += (Math.Min(bracket[0], income) - prevBound) * bracket[1];
+                        prevBound = bracket[0];
+                    }
+                }
+
+                return result/100;//這跟100%的偷學的，這應該叫結合律?
+            }
+        }
+        //微妙的簡單，速度不錯，100%也有單純窮舉的，可能還有更好的方法或單純寫的人少?
+    }
+}

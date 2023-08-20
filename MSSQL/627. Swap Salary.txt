@@ -1,0 +1,24 @@
+Create table #Temp (id int, name varchar(100), sex char(1), salary int)
+
+insert into #Temp (id, name, sex, salary) values ('1', 'A', 'm', '2500')
+insert into #Temp (id, name, sex, salary) values ('2', 'B', 'f', '1500')
+insert into #Temp (id, name, sex, salary) values ('3', 'C', 'm', '5500')
+insert into #Temp (id, name, sex, salary) values ('4', 'D', 'f', '500')
+select * from #Temp
+
+
+update #Temp
+set sex = case when sex = 'm' then 'f'
+			else 'm' end
+--原本以為需要用cursor，不過case when也行，不過畢竟不會update 1 row 就 select 一次，所以case when 逐行也算合理			?
+--速度還行
+--其他
+--這也一樣，不過他就沒用else，定義清楚可能比較好
+--https://leetcode.com/problems/swap-salary/solutions/3275881/sql-server-clean-easy/
+--這就跟我一樣用else
+--https://leetcode.com/problems/swap-salary/solutions/2656201/sql-server/
+--這是用iifㄟ，三元運算式，但新式Server才能用，速度普通
+--https://leetcode.com/problems/swap-salary/solutions/2845253/ms-sql-server-solution/
+
+drop table #Temp
+

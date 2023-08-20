@@ -1,0 +1,70 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //Dictionary<int, int> map = new Dictionary<int, int>();
+            //map[1] = 1;
+            Solution solution = new Solution();
+            string pattern = "abba";
+            string s = "1 2 2 1";
+            bool result = solution.WordPattern(pattern, s);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public bool WordPattern(string pattern, string s)
+            {
+                Dictionary<char, string> dic = new Dictionary<char, string>();
+                string[] sarray = s.Split(' ');//前提是格式固定空白間隔
+                if(pattern.Length != sarray.Length)//最初步檢查
+                {
+                    return false;
+                }
+
+                bool result = true;
+
+                for(int i = 0; i < pattern.Length; i++)
+                {
+                    if (!dic.ContainsKey(pattern[i]))//加入格式
+                    {
+                        if (!dic.ContainsValue(sarray[i]))//因為不同key同value算錯
+                        {
+                            dic.Add(pattern[i], sarray[i]);
+                            continue;
+                        }
+                        result = false;
+                        break;
+                    }
+
+                    if(dic[pattern[i]] != sarray[i])//格式確定後值不同就out
+                    {
+                        result = false;
+                        break;
+                    }
+                }
+
+                return result;
+            }
+        }
+        //速度還算可以
+        //其他
+        //這個人是先遍歷後先建立dic和index list，然後第一步檢查key下的list是不是都相同，第二步檢查是否不同key值不同，可能是因為我用了containvalues吧，他又比我快一些
+        //https://leetcode.com/problems/word-pattern/discuss/73413/C-Solution
+        //這個人是選擇不用split但也因此複雜不少，(1)他是用index遇到空白就跳過，+1(2)他也用index找string內容，使用indexstart和indexend因此就略顯繁複且粗糙
+        //(3)他用2個dic來達成不同key值也要不同(就一個<char,string>一個<string,char>)然後都檢查，速度就普通但dic[i]可以直接指定可以學一下(但他這邊是重複指定就不用學了)
+        //https://leetcode.com/problems/word-pattern/discuss/73457/C-just-pointers-no-split
+        //這方法就幾乎跟我一樣了，除了ifelse使用和多了一點linq和equal，但也可能因此減慢，他比我慢不少，單然也可能是網路問題
+        //https://leetcode.com/problems/word-pattern/discuss/73622/C-Solution-104ms
+    }
+}

@@ -1,0 +1,94 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {            
+            Solution solution = new Solution();
+            //Console.WriteLine("9".ToLower());//意外的不會報錯ㄟ
+            bool result = solution.IsPalindrome("A man, a plan, a canal: Panama");
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public bool IsPalindrome(string s)
+            {
+                s = s.ToLower();//其他人有用另一種做法算更合理
+                int start = 0;
+                int startcount = 0;//計算以核對回文數量在checkstatus用，後來知道可以不用，原本想說會有start >= end卻做對比的情況，但如果是回文就算超過中線也該相同，頂多說明不用再判斷而已
+                int end = s.Length-1;
+                int endcount = 0;
+
+                while (start < end)
+                {
+                    //int startprint = (int)s[start];//原本要記錄起來，但start++和end--後就變不一樣了，所以不能用
+                    //int endprint = (int)s[end];
+
+                    while (!((int)s[start] >= 97 && (int)s[start] <= 122) && !((int)s[start] >= 48 && (int)s[start] <= 57))//判斷是不是數字或小寫英文字
+                    {
+                        start++;//不是就跳過
+                        if (start >= end)
+                        {
+                            return CheckStatus(start, end, startcount, endcount);
+                        }
+                    }
+
+                    while (!((int)s[end] >= 97 && (int)s[end] <= 122) && !((int)s[end] >= 48 && (int)s[end] <= 57))
+                    {
+                        end--;
+                        if (start >= end)
+                        {
+                            return CheckStatus(start, end, startcount, endcount);
+                        }
+                    }
+
+                    if (start >= end)
+                    {
+                        return CheckStatus(start,end,startcount,endcount);
+                    }
+
+                    if (s[start] != s[end])
+                    {
+                        //不是回文就失敗
+                        return false;
+                    }
+
+                    startcount++;
+                    endcount++;
+                    start++;
+                    end--;
+                }
+
+                return true;
+            }
+
+            public bool CheckStatus(int start,int end,int startcount, int endcount)
+            {
+                if (startcount != endcount)//若前面核對數量相同時出現start >= end只會有兩種情況 1.start和end都到中點 2.比完了所以超過中線 -> true
+                {
+                    return false;//數量不同時就錯誤，好像不會發生ㄟ，因為我startcount++、endcount++是放一起的...好像平白增加會變true的錯誤...
+                }
+                return true;
+            }
+        }
+        //速度還行，但看過別人的和檢討後能加強的地方很多
+        //其他
+        //這方法跟我一樣值得注意1)char.IsLetterOrDigit方便的方法2)char.ToLower原本以為只有string有，另外他放tolower的地方也很不錯3)讓我知道不用做checkstatus
+        //不過IsLetterOrDigit的方法判斷應該跟我用的方法很像，所以速度其實也差不多
+        //https://leetcode.com/problems/valid-palindrome/discuss/287186/C-while
+        //這個人是相反用toupper，toupper放的地方也還能接受，然後他面好像有詳細說明IsLetterOrDigit，速度差不多
+        //https://leetcode.com/problems/valid-palindrome/discuss/129580/My-C-code-beats-99.5
+        //這做法都一樣，不過寫法最簡潔，速度差不多
+        //https://leetcode.com/problems/valid-palindrome/discuss/376336/A-simple-O(n)-C-solution
+    }
+}

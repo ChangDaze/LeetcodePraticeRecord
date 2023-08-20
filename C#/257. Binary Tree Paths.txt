@@ -1,0 +1,86 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {            
+            Solution solution = new Solution();
+
+            TreeNode root = new TreeNode(1,
+                new TreeNode(2,null,new TreeNode(5)),
+                new TreeNode(3)
+                );
+
+            List<string> result = solution.BinaryTreePaths(root).ToList();
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class TreeNode
+        {
+            public int val;
+            public TreeNode left;
+            public TreeNode right;
+            public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+            {
+                this.val = val;
+                this.left = left;
+                this.right = right;
+            }
+        }
+
+        public class Solution
+        {
+            public IList<string> BinaryTreePaths(TreeNode root)
+            {
+                string temp = "";
+                List<string> list = new List<string>();
+                return recursive(temp,list,root);
+            }
+
+            public List<string> recursive(string temp,List<string> lst, TreeNode root)
+            {
+                temp = temp  + root.val + "->";
+
+                if(root.left != null)
+                {
+                    lst = recursive(temp,lst,root.left);
+                }
+
+                if(root.right != null)
+                {
+                    lst = recursive(temp,lst,root.right);
+                }
+
+                if(root.left == null && root.right == null)
+                {
+                    //temp = temp.TrimStart('-', '>');//因為有負的數，->放在開頭會被一起去掉
+                    temp = temp.TrimEnd('-', '>');
+                    lst.Add(temp);
+                }
+
+                return lst;
+            }
+
+
+        }
+        //可能是網路因素，竟然有95%
+        //其他
+        //這個用void的recursive可能可以參考(但原理差不多)，然後他放->的位置讓他可以不用trim
+        //不過我trim也沒幾次差距應該不大，但他會因此比我多幾層stack加上用stringbuilder和計算沒用到的len，他反而比我慢不少
+        //https://leetcode.com/problems/binary-tree-paths/discuss/68305/C-solution
+        //這個人第一種方法跟我也差不多不過他用list來記錄path，另外她還有點多餘的用了list remove，但她也是void，比我在return lst好多了，但這方法也不快
+        //這個人第二種方法是透過queue來達成BFS，因為BFS所以就會導致程式碼看起來一次處理較多node(也就寫清楚2個啦一次還是處理1個但就是比較亂，但就不用recursive)，但速度也不差
+        //同時他也為BFS寫清楚2個node多做了node和path的class，速度還不錯
+        //https://leetcode.com/problems/binary-tree-paths/discuss/1671291/C-Solution-with-Backtracking-and-BFS
+        //這個人寫法跟第一個人差不多，但比較簡潔，但可能因為簡化程式碼的關係，他反而還比第一個人慢
+        //https://leetcode.com/problems/binary-tree-paths/discuss/868976/c
+    }
+}

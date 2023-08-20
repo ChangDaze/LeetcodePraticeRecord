@@ -1,0 +1,84 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {            
+            Solution solution = new Solution();                       
+
+            TreeNode root1 = new TreeNode(3, null, new TreeNode(2, new TreeNode(1)));
+            IList<int> list = solution.PreorderTraversal(root1);
+
+            for(int i = 0; i < list.Count; i++)
+            {
+                Console.WriteLine(list[i].ToString());
+            }
+
+            Console.ReadKey();
+
+        }
+
+        
+          
+        public class TreeNode {
+            public int val;
+            public TreeNode left;
+            public TreeNode right;
+            public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+                this.val = val;
+                this.left = left;
+                this.right = right;
+            }
+        }
+
+        public class Solution
+        {
+            public IList<int> PreorderTraversal(TreeNode root)
+            {
+                if(root == null)
+                {
+                    return new List<int>();
+                }
+
+                Stack<TreeNode> stack1 = new Stack<TreeNode>();                    
+                List<int> result = new List<int>();
+                stack1.Push(root);
+
+                while (stack1.Any())
+                {
+                    TreeNode tempp = stack1.Pop();
+                    result.Add(tempp.val);
+
+                    if(tempp.right!=null)//because stack is first in last out ，we want left side be dealed first so we push it late
+                    {
+                        stack1.Push(tempp.right);
+                    }
+
+                    if (tempp.left != null)
+                    {
+                        stack1.Push(tempp.left);
+                    }
+
+                }
+
+                return result;
+            }
+        }
+        //其他
+        //方法一樣
+        //https://leetcode.com/problems/binary-tree-preorder-traversal/discuss/290357/C-stack
+        //這個人第一個recusive很棒，第二個意思差不多，不過是用只有一個element的list串接而成
+        //https://leetcode.com/problems/binary-tree-preorder-traversal/discuss/533636/C-Iterative-and-Recursive-solutions
+        //這個蠻特別的，是只有右邊的會存進stack，每次都會直接先把左邊全走完，速度好像會快一些
+        //https://leetcode.com/problems/binary-tree-preorder-traversal/discuss/390979/C-solution
+
+
+    }
+}

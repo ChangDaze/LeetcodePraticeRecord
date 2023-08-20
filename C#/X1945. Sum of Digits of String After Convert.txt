@@ -1,0 +1,89 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+using System.Reflection;
+using System.Security.AccessControl;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string s = "leetcode";
+            int k = 2;
+            Solution solution = new Solution();
+            var result = solution.GetLucky(s,k);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+
+        public class Solution
+        {
+            public int GetLucky(string s, int k)
+            {
+                int result = 0;
+
+                foreach(char c in s)
+                {
+                    int temp = (c - 'a' + 1);
+                    while(temp > 0)
+                    {
+                        result += temp%10;
+                        temp /= 10;
+                    }                    
+                }                                    
+                k --;//最初順便做一次
+                int tempResult;
+                for(int i = 0; i < k; i++)
+                {
+
+                    tempResult = result;
+                    result = 0;
+                    while(tempResult > 0)
+                    {
+                        result += tempResult % 10;
+                        tempResult /= 10;
+                    }
+                }
+
+                return result;
+            }
+            //就是普通的模擬題，速度慢，可以看看別人的
+            //C# 100% 的放在下面，蠻有趣的，就完全照hint也把數字便char來處理，不向我用除的，說不定比較快?
+
+            //public class Solution
+            //{
+            //    public int GetLucky(string s, int k)
+            //    {
+            //        string temp = "";
+            //        for (int i = 0; i < s.Length; i++)
+            //        {
+            //            temp += s[i] - 'a' + 1;
+            //        }
+            //        int result = 0;
+            //        int count = 0;
+            //        while (count < k)
+            //        {
+            //            result = 0;
+            //            for (int j = 0; j < temp.Length; j++)
+            //            {
+            //                result += temp[j] - '0';
+            //            }
+            //            temp = result.ToString();
+            //            count++;
+            //        }
+            //        return result;
+            //    }
+            //}
+        }
+    }
+}

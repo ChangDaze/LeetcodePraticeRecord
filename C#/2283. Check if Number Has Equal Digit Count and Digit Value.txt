@@ -1,0 +1,65 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string num = "1210";          
+            Solution solution = new Solution();
+            var result = solution.DigitCount(num);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+        public class Solution
+        {
+            public bool DigitCount(string num)
+            {
+                int[] target = new int[num.Length];
+                int[] record = new int[10];//因為每位數只有0~9，同時用dictionary還是有要求目標出現0次的問題，會找不到key(應該可以先加入每位數index的key或要求0時直接跳過來規避)
+                //因為題目有限制會在10位數內，超過10位數就是另外處理(因為出過10位，出現次數必為0，應該可以直接跳過)
+                for(int i = 0;i<num.Length ;i++)
+                {
+                    int digit = Convert.ToInt32(num[i].ToString()); //digit代表這次出現的數
+                    target[i] = digit; // index代表目標 num[index]代表目標要出現的次數
+                    record[digit]++;    
+                }
+
+                for(int i = 0;i<target.Length; i++)
+                {
+                    if (record[i] != target[i])//題目要求的是目標要出現的次數相等於特定出現的數的次數
+                        return false;
+                }
+
+                return true;
+            }
+        }
+        //簡單作法，速度偏慢
+        //其他
+        //這位C++有兩解
+        //1. 方法一樣，但不用特別統計target，因為index本身就隱含要看哪裡了
+        //2. One-Liner數學解，因為範圍很小，就是用手算出可能會true的，好像又叫autobiographical numbers
+        //https://leetcode.com/problems/check-if-number-has-equal-digit-count-and-digit-value/solutions/2083839/brute-force-and-one-liner/
+        //這位C++有兩解
+        //1. hashmap，方法基本一樣
+        //2. 每位數檢查整個數所有位數裡面特定值的出現次數
+        //https://leetcode.com/problems/check-if-number-has-equal-digit-count-and-digit-value/solutions/2083791/confusing-yet-simple-hashmap-solution-c/
+        //這位java的方法差不多
+        //https://leetcode.com/problems/check-if-number-has-equal-digit-count-and-digit-value/solutions/2084196/java-using-freq-array-easy-straightforward-solution/
+        //這位C#的方法一樣
+        //https://leetcode.com/problems/check-if-number-has-equal-digit-count-and-digit-value/solutions/2084695/c-solution/
+        //這些人告訴我char直譯int不用轉型，用c-'0'就好，學到了，另外還有index本身就隱含target也是每個人都沒另外統計target
+    }
+}

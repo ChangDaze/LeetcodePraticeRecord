@@ -1,0 +1,51 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] nums = new int[] { 7, 52, 2, 4 };
+            Solution solution = new Solution();
+            var result = solution.FindTheArrayConcVal(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public long FindTheArrayConcVal(int[] nums)
+            {
+                long sum = 0;//long就是int64的樣子
+                int x = 0;
+                int y = nums.Length - 1;
+                while (x <= y)
+                {
+                    if (x == y)
+                    {
+                        sum += nums[x];
+                        x += 1;
+                    }
+                    else
+                    {
+                        sum += Convert.ToInt64(nums[x].ToString() + nums[y].ToString());
+                        x+= 1;y-=1;
+                    }                                            
+                }
+                return sum;
+                //這題就很簡單，我原本要找有沒有找出幾位數的功能，避免一直轉型，後來一般的方法就是用while一直除10，好像也沒比較好
+            }
+        }
+    }
+}

@@ -1,0 +1,107 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //Solution solution = new Solution();
+            //string s = "ymbgaraibkfmvocpizdydugvalagaivdbfsfbepeyccqfepzvtpyxtbadkhmwmoswrcxnargtlswqemafandgkmydtimuzvjwxvlfwlhvkrgcsithaqlcvrihrwqkpjdhgfgreqoxzfvhjzojhghfwbvpfzectwwhexthbsndovxejsntmjihchaotbgcysfdaojkjldprwyrnischrgmtvjcorypvopfmegizfkvudubnejzfqffvgdoxohuinkyygbdzmshvyqyhsozwvlhevfepdvafgkqpkmcsikfyxczcovrmwqxxbnhfzcjjcpgzjjfateajnnvlbwhyppdleahgaypxidkpwmfqwqyofwdqgxhjaxvyrzupfwesmxbjszolgwqvfiozofncbohduqgiswuiyddmwlwubetyaummenkdfptjczxemryuotrrymrfdxtrebpbjtpnuhsbnovhectpjhfhahbqrfbyxggobsweefcwxpqsspyssrmdhuelkkvyjxswjwofngpwfxvknkjviiavorwyfzlnktmfwxkvwkrwdcxjfzikdyswsuxegmhtnxjraqrdchaauazfhtklxsksbhwgjphgbasfnlwqwukprgvihntsyymdrfovaszjywuqygpvjtvlsvvqbvzsmgweiayhlubnbsitvfxawhfmfiatxvqrcwjshvovxknnxnyyfexqycrlyksderlqarqhkxyaqwlwoqcribumrqjtelhwdvaiysgjlvksrfvjlcaiwrirtkkxbwgicyhvakxgdjwnwmubkiazdjkfmotglclqndqjxethoutvjchjbkoasnnfbgrnycucfpeovruguzumgmgddqwjgdvaujhyqsqtoexmnfuluaqbxoofvotvfoiexbnprrxptchmlctzgqtkivsilwgwgvpidpvasurraqfkcmxhdapjrlrnkbklwkrvoaziznlpor";
+            //string t = "qhxepbshlrhoecdaodgpousbzfcqjxulatciapuftffahhlmxbufgjuxstfjvljybfxnenlacmjqoymvamphpxnolwijwcecgwbcjhgdybfffwoygikvoecdggplfohemfypxfsvdrseyhmvkoovxhdvoavsqqbrsqrkqhbtmgwaurgisloqjixfwfvwtszcxwktkwesaxsmhsvlitegrlzkvfqoiiwxbzskzoewbkxtphapavbyvhzvgrrfriddnsrftfowhdanvhjvurhljmpxvpddxmzfgwwpkjrfgqptrmumoemhfpojnxzwlrxkcafvbhlwrapubhveattfifsmiounhqusvhywnxhwrgamgnesxmzliyzisqrwvkiyderyotxhwspqrrkeczjysfujvovsfcfouykcqyjoobfdgnlswfzjmyucaxuaslzwfnetekymrwbvponiaojdqnbmboldvvitamntwnyaeppjaohwkrisrlrgwcjqqgxeqerjrbapfzurcwxhcwzugcgnirkkrxdthtbmdqgvqxilllrsbwjhwqszrjtzyetwubdrlyakzxcveufvhqugyawvkivwonvmrgnchkzdysngqdibhkyboyftxcvvjoggecjsajbuqkjjxfvynrjsnvtfvgpgveycxidhhfauvjovmnbqgoxsafknluyimkczykwdgvqwlvvgdmufxdypwnajkncoynqticfetcdafvtqszuwfmrdggifokwmkgzuxnhncmnsstffqpqbplypapctctfhqpihavligbrutxmmygiyaklqtakdidvnvrjfteazeqmbgklrgrorudayokxptswwkcircwuhcavhdparjfkjypkyxhbgwxbkvpvrtzjaetahmxevmkhdfyidhrdeejapfbafwmdqjqszwnwzgclitdhlnkaiyldwkwwzvhyorgbysyjbxsspnjdewjxbhpsvj";
+            //char result = solution.FindTheDifference(s,t);           
+
+            var a = 12^9;//但XOR是true時我也不知道這個int返回的規律
+            var b = 9 ^ 1^1^9;//當XOR false時會返回0
+            //XOR運算子(範例是只給布林啦)
+            //https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/operators/boolean-logical-operators
+            //所有運算子
+            //https://docs.microsoft.com/zh-tw/dotnet/csharp/language-reference/operators/
+            //Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public char FindTheDifference(string s, string t)
+            {
+                if(s.Length == 0)//s長度為0時處理
+                {
+                    return t[0];
+                }
+                char[] sarray = s.ToCharArray();
+                char[] tarray = t.ToCharArray();
+                QuickSort1(sarray, 0, sarray.Length - 1);//先用QuickSort排好(利用char和int能互換的方式來比大小 -> 會排出abc等英文順序)
+                QuickSort1(tarray, 0, tarray.Length - 1);
+                char result = tarray[tarray.Length-1];//如果中途都沒比對出來就是最後是多出來的
+                for(int i = 0; i < sarray.Length; i++)
+                {
+                    if(sarray[i] != tarray[i])//有差異的時候t[i]就是多的
+                    {
+                        result = tarray[i];
+                        break;
+                    }
+                }
+
+                return result;
+            }
+
+            //因為較複雜，可以複習影片
+            //https://www.youtube.com/watch?v=AsQW27DT82I 快速排序
+            //https://www.youtube.com/watch?v=XSw6Knd3dcg 氣泡排序
+            public void QuickSort1(char[] array, int left, int right)
+            {
+                if (left >= 0 && right < array.Length && right - left >= 1)//原本是right - left > 1，結果好像會少排序，
+                                                                           //仔細想想left和right也有互換的可能，所以改這可能比較合理，也通過了
+                {
+                    int i = left;//一般是頭
+                    int j = right;//一般是尾
+                    char standard = array[left];//一般standard為[0]
+
+                    while (i != j)
+                    {
+                        while (array[j] >= standard && i < j) { j--; }//看條件跟standard決定互換點，重點i<j要是條件，不然i=j時可能不會觸發standard互換分組
+                        while (array[i] <= standard && i < j) { i++; }
+                        if (i < j)//左右未相遇時i和j找到互換點就先互換
+                        {
+                            char temp = array[j];
+                            array[j] = array[i];
+                            array[i] = temp;
+                        }
+                    }
+
+                    array[left] = array[i];//standard和相遇點互換
+                    array[i] = standard;
+
+                    //i=j=相遇的點 -> 分兩組 
+                    QuickSort1(array, left, i - 1);//相遇點左半邊
+                    QuickSort1(array, i + 1, right);//相遇點右半邊
+                }
+                else
+                {
+                    return;
+                }
+            }
+        }
+        //速度普通，畢竟走了3次
+        //其他
+        //這個人用了XOR只要同樣的有出現兩次計算後就是0，因此最後剩下的就是多出的，很有效率，這也提醒我只要，(t變成int全加起來)-(s變int全加起來)=剩下多出的
+        //XOR的運算子雖然被用在int,但這邊我只看得出相同的就為false(0)，一般還是用在bool比較多的樣子，我放在main裡
+        //效率很好，也超簡潔
+        //https://leetcode.com/problems/find-the-difference/discuss/177091/C-using-XOR
+        //這個人用dictionary計算s中字元出現次數再用t字元來減去，答案會是dic中value為-1的，道理很簡單，他有統一將檢查t時出現s未出現字直接在dic設為-1為覺得不錯(就是有想，值不值得參考再說)
+        //效率也很不錯
+        //https://leetcode.com/problems/find-the-difference/discuss/138013/C-Solution-Beats-100-of-the-C-solutions
+        //這個人方法跟第二個人差不多，用int[26]來記錄出現次數，容量因此小很多，但可能他都用(字元-'a')這種計算方式(其他人基本只有計算次數)或是dic的檢索較快
+        //所以速度慢一些，但容量確實有省
+        //https://leetcode.com/problems/find-the-difference/discuss/86955/Constant-space-O(1)-C-solution
+
+
+
+    }
+}

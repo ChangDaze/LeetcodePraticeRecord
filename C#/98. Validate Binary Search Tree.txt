@@ -1,0 +1,145 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //TreeNode root = new TreeNode(2, new TreeNode(1), new TreeNode(3));
+            TreeNode root = new TreeNode(6 , new TreeNode(5), new TreeNode(10000, new TreeNode(4), new TreeNode(10001)));
+            //TreeNode root = new TreeNode(7, new TreeNode(5, new TreeNode(3), new TreeNode(6, new TreeNode(4), new TreeNode(8))), new TreeNode(8, new TreeNode(7), new TreeNode(10)));
+            Solution solution = new Solution();
+
+
+
+
+            Console.WriteLine(solution.IsValidBST(root));
+
+
+            Console.ReadKey();
+
+        }
+
+        public class TreeNode
+        {
+            public int val;
+            public TreeNode left;
+            public TreeNode right;
+            public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+            {
+                this.val = val;
+                this.left = left;
+                this.right = right;
+            }
+        }
+
+        //public class Solution
+        //{
+        //    public bool IsValidBST(TreeNode root)
+        //    {
+        //        string signal = "1";//紀錄標記
+        //        Queue<(string, TreeNode)> orderNode = new Queue<(string, TreeNode)>();//有點濫用tuple這種了，紀錄處理順序
+        //        orderNode.Enqueue((signal, root));//加入第一個處理
+        //        Dictionary<string, TreeNode> record = new Dictionary<string, TreeNode>();//把每一街對應的標記紀錄起來，應該可以只記val就好
+        //        record.Add(signal, root);//加入第一個紀錄
+
+        //        while (orderNode.Count > 0)
+        //        {
+        //            var (i, j) = orderNode.Dequeue();
+
+        //            if (j == null)
+        //            {
+        //                continue;
+        //            }
+
+        //            for (int k = 1; k < i.Length; k++)//依照標記跟前面的節點比較
+        //            {
+        //                if (i[k] == 'r')//把以前的節點拿出來走，ex:1lrr這點 -> 這個節點要比1小(1l)、比1l大(1lr)，比1lr大(1lrr) -> 把以前節點的符合的條件，這點也要符合
+        //                {
+        //                    if (!(j.val > record[i.Substring(0, k)].val))//從以前節點拿出紀錄和這點比對
+        //                    {
+        //                        return false;//比對失敗就false
+        //                    }
+        //                }
+        //                else//i[k] == 'l' -> 小於前一個節點
+        //                {
+        //                    if (!(j.val < record[i.Substring(0, k)].val))//i[k] == '1'也會走到這裡，但因為是j.val == record[i.Substring(0, k)].val所以不會false
+        //                    {
+        //                        return false;
+        //                    }
+        //                }
+        //            }
+
+        //            if (j != null)//這是兩邊都一起處理所以是BFS
+        //            {
+        //                orderNode.Enqueue((i + "l", j.left));//標記加l(左邊)，加入處理
+        //                record.Add(i + "l", j.left);//將子項加入紀錄(null也沒關西，因為null會跳過不處理)
+        //                orderNode.Enqueue((i + "r", j.right));//標記加r(右邊)，加入處理
+        //                record.Add(i + "r", j.right);
+        //            }
+
+
+        //        }
+
+        //        return true;
+
+        //    }
+        //}
+
+        //public class Solution
+        //{
+        //    private int? prev = null;
+
+        //    public bool IsValidBST(TreeNode root)
+        //    {
+        //        return DFS(root);
+        //    }
+
+        //    private bool DFS(TreeNode node)
+        //    {
+        //        if (node == null)
+        //            return true;
+
+        //        if (!DFS(node.left))
+        //            return false;
+
+        //        if (prev != null && node.val <= prev)
+        //            return false;
+
+        //        prev = node.val;
+
+        //        return DFS(node.right);
+        //    }
+        //}
+
+        public class Solution
+        {
+            public bool IsValidBST(TreeNode root)
+            {
+                return DFS(root, long.MinValue, long.MaxValue);
+            }
+
+            private bool DFS(TreeNode root, long min, long max)
+            {
+                if (root == null) return true;
+                if (min < root.val && root.val < max)
+                {
+                    var leftResult = DFS(root.left, min, root.val);
+                    var rightResult = DFS(root.right, root.val, max);
+
+                    if (leftResult && rightResult)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        }
+    }
+}

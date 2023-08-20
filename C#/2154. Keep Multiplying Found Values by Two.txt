@@ -1,0 +1,50 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] nums = new int[] { 5, 3, 6, 1, 12 };
+            int original = 3;
+            Solution solution = new Solution();
+            var result = solution.FindFinalValue(nums,original);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+        public class Solution
+        {
+            public int FindFinalValue(int[] nums, int original)
+            {
+                Array.Sort(nums);
+                for(int i = 0;i< nums.Length;i++)
+                {
+                    if (nums[i] == original)
+                        original *= 2;
+                }
+                return original;
+            }
+        }
+        //就是簡單的由小比到大，超慢，不過看統計，C#寫得快的人方法都更爛ㄟ...，還是我太小看他們了
+        //其他
+        //這個C++是用int[]來代替hashset，主要應該是避免if判斷，所以能不if就不if比較好嗎?實際方法其實差不多
+        //不過他下面的題外話還蠻好玩的，可以看看Sorting has little advantage over set. Array has little advantage over map. This advantage grows as size of input grows.   
+        //https://leetcode.com/problems/keep-multiplying-found-values-by-two/solutions/1730223/easy-c-hash-3-lines-o-n/
+        //這個C++跟第一位差不多，不過又說到set另一個好處，也是不用if就能定位
+        //https://leetcode.com/problems/keep-multiplying-found-values-by-two/solutions/1730224/boolean-array-vs-set/
+        //這個是每次執行完就全部nums再重找一遍，他的n好像只是記錄執行次數，沒特別用意，就感覺不怎麼厲害
+        //https://leetcode.com/problems/keep-multiplying-found-values-by-two/solutions/1748678/easy-c-find-func-3-lines-o-n-logn-fast/
+    }
+}

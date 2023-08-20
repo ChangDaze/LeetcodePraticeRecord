@@ -1,0 +1,73 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var nums = new int[] { 1, 2, 3, 4 };
+            var result = solution.MaximumProduct(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        //Queue找大小..(就感覺挺帥的，但應該沒比較快)
+        //public class Solution
+        //{
+        //    public int MaximumProduct(int[] nums)
+        //    {
+        //        Queue<int> queue = new Queue<int>();
+
+        //        queue.Enqueue(-1001);
+        //        queue.Enqueue(-1001);
+        //        queue.Enqueue(-1001);
+        //        foreach (int num in nums)
+        //        {
+        //            if (queue.ElementAt(queue.Count - 1) < num)
+        //            {
+        //                queue.Enqueue(num);
+        //                queue.Dequeue();
+        //            }
+
+        //        }
+
+        //        return queue.Sum();
+        //    }
+        //}
+
+        public class Solution
+        {
+            public int MaximumProduct(int[] nums)
+            {
+                Array.Sort(nums);
+                if (nums.Length == 3)
+                    return nums[0] * nums[1] * nums[2];
+                else if (nums[0] >= 0 || nums[nums.Length - 1] <= 0)
+                    return nums[nums.Length - 1] * nums[nums.Length - 2] * nums[nums.Length - 3];
+                else
+                    return nums[0] * nums[1] * nums[nums.Length - 1] > nums[nums.Length - 1] * nums[nums.Length - 2] * nums[nums.Length - 3] ? nums[0] * nums[1] * nums[nums.Length - 1] : nums[nums.Length - 1] * nums[nums.Length - 2] * nums[nums.Length - 3];
+            }
+            //1.只有3個值 -> 3個值 
+            //2.有正有負 -> max3 或 max1+min2
+            //3.只有負數 或 只有正數 -> max3
+            //其實我原本不想用sort，但條件想清楚了卻不夠清晰，下面第一位的第一個方法就是我不用sort的實現
+            //方法一不用sort，速度快，方法二用sort，速度還行 => 核心概念都是找出3個condition，但她方法一找max和min的方法也能學一下(或是用我的queue方法也能試一下)
+            //還有一點，他沒有特別把哪個condition用哪個答案，最後都是Math.Max(nums[nums.Length - 1] * nums[nums.Length - 2] * nums[nums.Length - 3], nums[nums.Length - 1] * nums[0] * nums[1])直接比大小，所以可能會拖一丁點速度
+            //https://leetcode.com/problems/maximum-product-of-three-numbers/solutions/553271/c-solutions-w-explaination/
+            //這個人是用第一位的方法一，不過她有點不夠清晰所以最後多做(minX != int.MaxValue) && (minY != int.MaxValue)判斷 -> 可以不用，速度快
+            //https://leetcode.com/problems/maximum-product-of-three-numbers/solutions/419900/c/
+            //這個人是用第一位的方法二(就是跟我一樣用sort)，但她也是直接Math.Max兩個比答案，不向我特地手動挑答案出來(我的方式感覺也比較傻，code也醜，他的就精簡很多)，速度還行
+            //https://leetcode.com/problems/maximum-product-of-three-numbers/solutions/170051/c-newbie-to-share-my-practice/
+        }
+
+
+    }
+}

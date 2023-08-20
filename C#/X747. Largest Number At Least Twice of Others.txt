@@ -1,0 +1,55 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] nums = new int[]{ 0, 0, 3, 2 };
+            int k = 6;
+            Solution solution = new Solution();
+            var result = solution.DominantIndex(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+        public class Solution
+        {
+            public int DominantIndex(int[] nums)
+            {
+                int max = -1;
+                int maxIndex = -1;
+                int second = -1;
+
+                for(int i = 0; i < nums.Length; i++)
+                {
+                    if (nums[i] > max)
+                    {
+                        int temp = max;
+                        max = nums[i];
+                        maxIndex = i;
+                        second = temp;
+                    }
+                    else if (nums[i] > second)
+                    {
+                        second= nums[i];
+                    }
+                }
+
+                if (max >= 2 * second)
+                    return maxIndex;
+                return -1;
+            }
+        }
+    }
+}

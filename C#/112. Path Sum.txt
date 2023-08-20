@@ -1,0 +1,86 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //TreeNode root = new TreeNode(5,
+            //    new TreeNode(4,
+            //        new TreeNode(11,
+            //            new TreeNode(7),
+            //            new TreeNode(2))),
+            //    new TreeNode(8,
+            //        new TreeNode(13),
+            //        new TreeNode(4,
+            //            null,
+            //            new TreeNode(1))));
+            TreeNode root = new TreeNode(1, new TreeNode(2));
+            Solution solution = new Solution();
+
+            Console.WriteLine(solution.HasPathSum(root, 1));
+            Console.ReadKey();
+
+        }
+
+
+        public class TreeNode
+        {
+            public int val;
+            public TreeNode left;
+            public TreeNode right;
+            public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+            {
+                this.val = val;
+                this.left = left;
+                this.right = right;
+            }
+        }
+
+        public class Solution
+        {
+            public bool HasPathSum(TreeNode root, int targetSum)
+            {
+                if (root == null)//if tree is null return false
+                {
+                    return false;
+                }
+                List<int> record = recursive(root, new List<int>(), 0);
+                return record.Contains(targetSum);//if record list contain the target return true
+
+            }
+
+            public List<int> recursive(TreeNode _root, List<int> _record, int sum)
+            {
+                sum = sum + _root.val;//every stack of recursive have not null node,so add the val represent the sum to this node
+
+                if (_root.left != null)
+                    _record = recursive(_root.left, _record, sum);//path the "current node's" sum down，this is dfs method
+                if (_root.right != null)
+                    _record = recursive(_root.right, _record, sum);
+
+                if (_root.left == null & _root.right == null)//if left and right node is null means we arrive leaf
+                {
+                    _record.Add(sum);//record the leaf sum
+                    return _record;
+                }
+
+                return _record;
+
+            }
+        }
+        //其他
+        //這個也是recursive，不過是邏輯清晰版也是會全跑過一次不過只有true和false在傳遞可能因此就比較快，or 和 == 的recursive方法也很精彩，我的是list在傳遞
+        //https://leetcode.com/problems/path-sum/discuss/36389/c
+        //方法跟上面的一樣，不過他套用為精簡的三元運算子而已，反而沒比較快?
+        //https://leetcode.com/problems/path-sum/discuss/36568/A-C-recursive-version
+        //方法跟第一個一樣，好像真的比較快
+        //https://leetcode.com/problems/path-sum/discuss/286472/C-DFS
+
+    }
+}

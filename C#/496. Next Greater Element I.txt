@@ -1,0 +1,105 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var nums1 = new int[]{ 4,1,2
+                        };
+            var nums2 = new int[]{ 2,1,3,4
+                        };
+            var result = solution.NextGreaterElement(nums1, nums2);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public int[] NextGreaterElement(int[] nums1, int[] nums2)
+            {
+                Dictionary<int, int> record = new Dictionary<int, int>();//紀錄給nums1定位用的值和greter的值
+                int rmax = nums2[nums2.Length - 1];
+                record[nums2[nums2.Length - 1]] = -1;//最右邊的一定-1
+                for (int i = nums2.Length - 2; i >= 0; i--)//從尾到頭
+                {
+                    //if (rmax > nums2[i])//如果不用找最近比他大的值，直接用最大值會快不少
+                    //    record.Add(nums2[i], rmax);                       
+                    if (rmax > nums2[i])
+                    {
+                        int j = i + 1;
+                        while (j < nums2.Length)//直到找到右邊最近比他大的值就退出
+                        {
+                            if (nums2[j] > nums2[i])
+                            {
+                                record.Add(nums2[i], nums2[j]);
+                                break;
+                            }
+                            j++;
+                        }
+
+                    }
+                    else//因為element unique所以不是greater就是smaller
+                    {
+                        //rmax < nums2[i]，比最大值還大一定是-1
+                        rmax = nums2[i];//紀錄目前位大值
+                        record.Add(nums2[i], -1);
+                    }
+
+                }
+
+                for (int i = 0; i < nums1.Length; i++)
+                {
+                    nums1[i] = record[nums1[i]];
+                }
+
+                return nums1;
+            }
+            //這題只要處理nums2就好，因為有nums2就一定能處理num1，但想不到用遍歷之外的方法去找最近的較大值，有點頭疼，速度還行，這題唯一有用的是用dic和倒過來和先比max3個可以稍微加速
+            //其他
+            //這有點猛，雖然不知道為啥叫monotonic stack(不用stack也行，不過比較不柔順)，但過程的概念很值得學
+            //簡單就是從頭開始跑，往右走若沒遇到比較大的就打包進stack，若遇到比較大(用peek，因為會留在stack，都一定比peek到的大才會被打包)
+            //就用while和dic開始記錄開始pop掉(這樣下次就不用比已經有答案的了)
+            //最後用dic搭配nums返回答案(我只做到這步，前面一步確定慘敗)，速度不錯
+            //https://leetcode.com/problems/next-greater-element-i/solutions/1243857/c-monotonic-stack-solution/
+            //這為方法跟上一位差不多，不過他寫的比較精簡且最後是用nums1.Select(x => dict.GetValueOrDefault(x, -1)).ToArray();可以參考一下，速度不錯
+            //https://leetcode.com/problems/next-greater-element-i/solutions/1528964/c-concise-o-n/
+            //速度普通，這個就是用暴力解，頂多先找到對應位置再暴力解(雖然我差不多啦)，不過值得學的是他把select變函式(多行)來用，select出的array整個大變樣
+            //https://leetcode.com/problems/next-greater-element-i/solutions/371197/c-clear-solution/
+
+        }
+
+        //public class Solution
+        //{
+        //    public int[] NextGreaterElement(int[] nums1, int[] nums2)
+        //    {
+
+        //        Dictionary<int, int> dic = new Dictionary<int, int>();
+        //        Stack<int> stack = new Stack<int>();
+        //        foreach (var num in nums2)
+        //        {
+        //            while (stack.Count > 0 && num > stack.Peek())
+        //                dic.Add(stack.Pop(), num);
+
+        //            stack.Push(num);
+        //        }
+
+        //        int[] res = new int[nums1.Length];
+        //        for (int i = 0; i < nums1.Length; i++)
+        //            res[i] = dic.ContainsKey(nums1[i]) ? dic[nums1[i]] : -1;
+
+        //        return res;
+        //    }
+        //}
+
+    }
+}

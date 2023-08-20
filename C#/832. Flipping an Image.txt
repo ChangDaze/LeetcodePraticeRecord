@@ -1,0 +1,53 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var image = new int[][] { new int[] { 1, 1, 0 }, new int[] { 1, 0, 1 }, new int[] { 0, 0, 0 } };
+            var result = solution.FlipAndInvertImage(image);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int[][] FlipAndInvertImage(int[][] image)
+            {
+                int[] temp = new int[image.Length];
+                
+                for(int i = 0 ; i < image.Length; i++)
+                {
+                    Array.Copy(image[i],temp, image[i].Length);//每row就把原本的array複製一份對照用
+                    for(int j = 0;j<temp.Length;j++)
+                    {
+                        if (temp[j] == 1)//注意要用不變的temp來做判斷，用image[i]會錯，因為if else後會改變
+                            image[i][temp.Length -j - 1] = 0;//temp的頭對應image[i]的尾
+                        else
+                            image[i][temp.Length - j - 1] = 1;
+                    }
+                }
+
+                return image;
+            }
+            //速度還行
+            //其他
+            //這方法差不多，也是每個遍歷，不過他是只用int我用int[]，另外他用來invert的是用XOR(int 用 XOR 好像蠻常見的，比竟是用來處裡重複值，剛好裡面也只有0和1)，速度不錯
+            //https://leetcode.com/problems/flipping-an-image/solutions/166521/c-readable-code/
+            //這是直接用Reverse+XOR的oneliner，就是reverse可能效率普普，速度普通
+            //https://leetcode.com/problems/flipping-an-image/solutions/136893/1-line-c/
+            //這個也是遍歷每個element，不一樣一點的是他reverse是用中間對半切那種頭尾一次處理(以前我也常用，也沒說比較快啦)，他invert的方式也有點不同，他用除法，對我來說有點多餘，速度普通
+            //https://leetcode.com/problems/flipping-an-image/solutions/1706486/c-easy-solution/
+        }
+    }
+}

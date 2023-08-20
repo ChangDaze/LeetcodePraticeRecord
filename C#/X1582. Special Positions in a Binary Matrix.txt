@@ -1,0 +1,54 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Diagnostics.Contracts;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[][] mat = new int[][] { new int[] { 1,0,0 },
+                new int[] { 0,0,1 },
+                new int[] { 1,0,0 }};
+            Solution solution = new Solution();
+            var result = solution.NumSpecial(mat);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int NumSpecial(int[][] mat)
+            {
+                int result = 0;
+                int[] rRecord = new int[mat.Length];
+                int[] cRecord = new int[mat[0].Length];
+                for(int i = 0;i<mat.Length; i++)
+                    for (int j = 0; j < mat[0].Length; j++)
+                        if (mat[i][j] == 1)
+                        {
+                            rRecord[i]++;
+                            cRecord[j]++;
+                        }
+
+                for (int i = 0; i < rRecord.Length; i++)
+                    for (int j = 0; j < cRecord.Length; j++)
+                        if (rRecord[i] == 1 && cRecord[j] == 1)
+                        {
+                            if (mat[i][j]==1)//就算row和col計數都是1，但不一定就是這格有值(有點抽象)
+                                result++;
+                        }
+                            
+
+                return result;
+            }
+        }
+    }
+}

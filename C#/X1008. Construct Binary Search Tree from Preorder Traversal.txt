@@ -1,0 +1,108 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] preorder = new int[] { 8, 5, 1, 7, 10, 12 };
+            Solution solution = new Solution();
+            var result = solution.BstFromPreorder(preorder);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+        public class TreeNode
+        {
+            public int val;
+            public TreeNode left;
+            public TreeNode right;
+            public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+            {
+                this.val = val;
+                this.left = left;
+                this.right = right;
+            }
+        }
+        //2023.0809.2126
+        public class Solution
+        {
+            int[] preorder;
+            public TreeNode BstFromPreorder(int[] preorder)
+            {
+                this.preorder= preorder;
+                return Revursive(0, preorder.Length - 1);
+            }
+
+            private TreeNode Revursive(int start, int end)
+            {
+                if(start > end) return null;
+                //進來就是preorder順序 中->左->右
+
+                TreeNode node = new TreeNode(preorder[start]);
+                int i;//這樣宣告是為了讓i可以拿出來loop外用
+                for (i = start; i <= end; i++)//不用while可以避免無限迴圈
+                    if (preorder[i] > node.val) //如果 i == start就一定會推進，i至少start+1
+                        //因為題目限制node.val unique所以可以少考慮重複
+                        //基本上就是 index < i 的preorder都是小於目前node
+                        //都沒有則是left = null
+                        break;
+                //左
+                node.left = Revursive(start + 1, i - 1);//且確保index會一直推進
+                //右
+                node.right = Revursive(i, end);//i就一定是val比較大，所以只能在右
+                return node;
+            }
+        }
+        //抄這位的，這就是很傳統 recursive + BST + preorder，就稍微容易看懂
+        //https://leetcode.com/problems/construct-binary-search-tree-from-preorder-traversal/submissions/
+
+        //2023.0809.2106
+        //public class Solution
+        //{
+        //    public TreeNode BstFromPreorder(int[] preorder)
+        //    {
+        //        if (preorder.Length == 0 || preorder == null) return null;
+
+        //        Stack<TreeNode> stack = new Stack<TreeNode>();
+        //        TreeNode root = new TreeNode(preorder[0]);//根
+        //        stack.Push(root);
+        //        for(int i = 1;i< preorder.Length;i++)//從1開始
+        //        {
+        //            TreeNode node = new TreeNode(preorder[i]);//要放入的node
+        //            //preorder是中->左->右 和大前提 BST(沒有的話位置就可以亂跳)
+        //            //進來前的stack peek是中
+        //            if (preorder[i] < stack.Peek().val)//左
+        //                stack.Peek().left= node;
+        //                //這裡有個有趣的點，peek後能直接left、right指定，跟記憶體位置可能有關
+        //            else
+        //            {
+        //                TreeNode parent = stack.Peek();
+        //                while (stack.Count() > 0 && preorder[i] > stack.Peek().val)//右
+        //                    //要注意stack.Count() > 0，若沒了就是直接放目前的右邊
+        //                    parent = stack.Pop();//左、右確認完不會再有新的可放就可以不存了
+        //                    //左一定沒了，右就是要嘛現在的node，要嘛沒了
+        //                parent.right= node;
+        //            }
+
+        //            stack.Push(node);//新的點預設為中
+        //        }
+
+        //        return root;
+        //    }
+        //}
+        //抄這位的，應該就是stack的正解，說真的我沒想到用treenode做stack，然後裡面的流程邏輯就是用preorder+BST來處理，仔細看看就能看出，也不用特地處理null，而是照順序順順處理，第一次看稍複雜，要稍微看一下
+        //https://leetcode.com/problems/construct-binary-search-tree-from-preorder-traversal/submissions/
+    }
+}

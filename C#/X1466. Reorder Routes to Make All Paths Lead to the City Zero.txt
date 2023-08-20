@@ -1,0 +1,58 @@
+public class Solution {
+    public int MinReorder(int n, int[][] connections) {
+        
+        if(connections == null || connections.Length < 2)
+            throw new ArgumentException("Invalid Input");   
+        
+        // build the graph and store the paths
+        List<int>[] graph = new List<int>[n];
+        Dictionary<int,HashSet<int>> paths = new Dictionary<int,HashSet<int>>();
+        
+        foreach(var connection in connections)
+        {
+            if(!paths.ContainsKey(connection[0]))
+                paths.Add(connection[0], new HashSet<int>());
+            paths[connection[0]].Add(connection[1]);
+            
+            if(graph[connection[0]] == null)
+                graph[connection[0]] = new List<int>();
+            graph[connection[0]].Add(connection[1]);
+            
+            if(graph[connection[1]] == null)
+                graph[connection[1]] = new List<int>();
+            graph[connection[1]].Add(connection[0]);
+        }
+        
+        // traverse the graph by using DFS
+        int cnt = 0;
+        HashSet<int> visited = new HashSet<int>();
+        dfs(graph, 0, paths, visited, ref cnt);
+        
+        return cnt;
+    }
+    
+    private void dfs(List<int>[] graph, int u, Dictionary<int,HashSet<int>> paths, HashSet<int> visited, ref int cnt)
+    {
+        visited.Add(u);
+        
+        if(graph[u] != null)
+        {
+            foreach(var v in graph[u])
+            {
+                if(!visited.Contains(v))
+                {
+                    // when encoutering a forward path, reverse it
+                    if(paths.ContainsKey(u) && paths[u].Contains(v))
+                        cnt++;
+                    
+                    dfs(graph, v, paths, visited, ref cnt);
+                }
+            }
+        }
+    }
+}
+
+//影片
+//https://www.youtube.com/watch?v=m17yOR5_PpI&ab_channel=NeetCode
+//參考
+//https://leetcode.com/problems/reorder-routes-to-make-all-paths-lead-to-the-city-zero/solutions/1870769/c-solution-dfs/

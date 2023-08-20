@@ -1,0 +1,94 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var grid = new int[][] { new int[] {1,2 },
+                new int[] {3,4 },};
+            Solution solution = new Solution();
+            var result = solution.SurfaceArea(grid);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+        //失敗
+        //public class Solution
+        //{
+        //    public int SurfaceArea(int[][] grid)
+        //    {
+        //        //1.find each row max
+        //        //2.find each column max
+        //        //3.find top and down surface
+        //        //4.find grid[i][j] equal 0, at row middle +2, at column middle +2
+
+        //        int xy = grid.Length * grid[0].Length;
+        //        int zydelta = 0;
+
+        //        int[] rowsmax = new int[grid.Length];
+        //        int[] columnsmax = new int[grid[0].Length];
+
+        //        for(int i = 0; i < grid.Length; i++)
+        //        {
+        //            int rowmax = 0;
+        //            for (int j = 0; j < grid[0].Length; j++)
+        //            {
+        //                //&&是and also(照順序判斷遇到不行就直接跳出)，&是and(全過才行，一個沒過就會出例外) <- and also就是為了防例外導致程式掛掉
+        //                if (i != 0 && grid[i][j] != grid[i - 1][j] )
+        //                    zydelta += Math.Abs(grid[i][j] - grid[i - 1][j]);
+        //                if (j != 0 && grid[i][j] != grid[i][j - 1] )
+        //                    zydelta += Math.Abs(grid[i][j] - grid[i][j - 1]);
+
+        //                if (grid[i][j] != 0)
+        //                {
+        //                    if (grid[i][j] > rowmax)
+        //                        rowmax = grid[i][j];
+        //                    if (grid[i][j] > columnsmax[j])
+        //                        columnsmax[j] = grid[i][j];
+        //                }
+        //                else
+        //                    xy--;
+
+        //            }
+        //            rowsmax[i] = rowmax;
+        //        }
+
+        //        return xy*2+rowsmax.Sum()*2+columnsmax.Sum()*2+zydelta;
+        //    }
+        //}
+
+        
+        public class Solution
+        {
+            public int SurfaceArea(int[][] grid)
+            {
+                int result = 0;
+
+                for(int i =0;i<grid.Length ;i++)
+                {
+                    //扣去相接的面積
+                    for (int j = 0; j < grid[0].Length; j++)
+                    {
+                        int surface = grid[i][j] * 4 + 2;
+                        if(grid[i][j]!=0)//如高=0，連上下兩面都沒有
+                            result += surface;
+                        if (i != 0)//基本上就是0沒有往前的相接面，其他都有
+                            result -= Math.Min(grid[i][j], grid[i - 1][j])*2;//兩個cell都失去相接的面
+                        if(j!=0)
+                            result -= Math.Min(grid[i][j], grid[i][j-1])*2;
+                        
+                    }
+                }
+                return result;
+            }
+        }
+    }
+}

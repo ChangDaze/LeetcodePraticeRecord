@@ -1,0 +1,68 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var root = new TreeNode(1, new TreeNode(2, new TreeNode(3, new TreeNode(4), new TreeNode(4)), new TreeNode(3)), new TreeNode(2));
+            Solution solution = new Solution();
+            var result = solution.IsBalanced(root);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class TreeNode
+        {
+            public int val;
+            public TreeNode left;
+            public TreeNode right;
+            public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+            {
+                this.val = val;
+                this.left = left;
+                this.right = right;
+            }
+        }
+
+
+        public class Solution
+        {
+            bool stop = false;
+            public bool IsBalanced(TreeNode root)
+            {
+                Recurive(root);
+                if(stop) return false;
+                return true;
+                //用跟543一樣的方法由下往上數，重點是確認每個node都沒事基本就沒事了
+            }
+
+            public int Recurive(TreeNode node)
+            {
+                if(node == null||stop==true) return 0;//有那種最小都最佳總體就會最佳的感覺，greedy?
+                int leftDepth = Recurive(node.left);
+                int rightDepth = Recurive(node.right);
+                if(Math.Abs(leftDepth-rightDepth)>1)
+                    stop= true;
+                return Math.Max(leftDepth, rightDepth)+1;//要返回最深的，跟另一棵subtree比深度差
+                //然後還幸好題目的解釋比較寬鬆，只要每個node深度差不超過1就好，所以畸形樹還是能存在
+                //不然如果要平衡樹，下面這個case應該過不了，不過應該還是有判斷完美bst的方法?
+                //[1,2,2,3,3,null,3,4,4]
+                //A height-balanced binary tree is a binary tree
+                //in which the depth of the two subtrees of every node
+                //never differs by more than one.
+            }
+        }
+
+    }
+}

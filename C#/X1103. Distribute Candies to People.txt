@@ -1,0 +1,89 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+using System.Reflection;
+using System.Security.AccessControl;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int candies = 60;
+            int num_people = 4;
+            Solution solution = new Solution();
+            var result = solution.DistributeCandies(candies,num_people);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+
+        public class Solution
+        {
+            public int[] DistributeCandies(int candies, int num_people)
+            {
+                int turnSum = (1 + num_people) * num_people / 2;//好像是正整數就能能整除?(從實際數數上能正面驗證)
+                int turns = -1;//第一輪成功走完 turns = 0
+                int sum = 0;
+                while(candies > sum + turnSum)//計算完全可以走完的趟數
+                {
+                    sum = sum + turnSum;
+                    turnSum += num_people* num_people; //每輪增加的總額是num_people* num_people
+                    turns++;
+                }
+                
+                int less = candies - sum; //完整趟數之外的剩餘數
+                int[] result = new int[num_people];
+                int loopPlus = (1 + (turns + 1) * num_people);//(turns + 1)是此次加上要計算的等差比例(還未加上)
+                int loopBasic = (1 + (1 + turns * num_people)) * (turns + 1) / 2;//用等差公式算出已走完趟數下此位置的值
+                //因為第一輪成功走完 turns = 0，所以等差實際加的個數量為(turns + 1)
+
+                result[0] = loopBasic;//已走完趟數下此位置的值
+
+                if (less >= loopPlus)//是否足夠此次加上要計算的等差比例
+                {
+                    result[0] += loopPlus;
+                    less -= loopPlus;
+                }
+                else//不夠就剩餘都加上，less=0也同理
+                {
+                    result[0] += less;
+                    less = 0;
+                }
+                
+                for(int i = 1; i < result.Length; i++)//(1)開始迴圈，不從0開始是怕因為實際等差沒有position = 0算起始值，怕起始值算錯 (2)用等差來跑迴圈優勢是，比較不會被繞暈頭
+                {
+                    loopPlus ++;//此次加上要計算的值，等差都是1
+                    loopBasic += (turns + 1);//已走完趟數下此位置的值，會依趟數來計算等差
+
+                    result[i] = loopBasic;
+
+                    if(less >= loopPlus)
+                    {
+                        result[i] += loopPlus;
+                        less -= loopPlus;
+                    }
+                    else
+                    {
+                        result[i] += less;
+                        less = 0;
+                    }                        
+                }
+                
+                return result;
+            }
+
+        }
+        //速度慢，但好像想得太複雜了，可以參考一下別人，hint的方法看來跟我差不多
+        //100%就單純照著Simulation一輪輪做ㄟ，反而比較快?我直接幹來跑，目前看是更慢啦，看來還是有點用...
+        //https://leetcode.com/problems/distribute-candies-to-people/submissions/979176725/
+    }
+}

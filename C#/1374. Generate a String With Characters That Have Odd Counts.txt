@@ -1,0 +1,56 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            int n = 4;
+            string result = solution.GenerateTheString(n);
+            Console.WriteLine(result);
+
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public string GenerateTheString(int n)
+            {
+                //這題我覺得其實有點太爛了，我就如果位置有奇數個就放同樣的字，若偶數就補一個不同的字而已，看其他人怎麼樣吧
+                string result = "";
+                if (n % 2 == 0)
+                {
+                    result += 'b';
+                    for (int i = 0; i < n - 1; i++)
+                    {
+                        result += 'a';
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < n; i++)
+                    {
+                        result += 'a';
+                    }
+                }
+                return result;
+                //應該沒有比速度的必要..
+                //其他
+                //這個人用了repeat，如果是減少code可以用用，其他跟我差不多但code就比我少不少
+                //https://leetcode.com/problems/generate-a-string-with-characters-that-have-odd-counts/discuss/532691/C-Solution
+                //讚喔，這個人用建構式就用一行屌打我的code了哈哈
+                //https://leetcode.com/problems/generate-a-string-with-characters-that-have-odd-counts/discuss/533665/C-one-line-solution
+                //這個人是也是用建構式，代表說我可以學string建構式或repeat來有效減少code行數(也可用三元運算式)
+                //https://leetcode.com/problems/generate-a-string-with-characters-that-have-odd-counts/discuss/532551/C-solution%3A-Odd-%2B-Even-odd
+            }
+        }
+    }
+}

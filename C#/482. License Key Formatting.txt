@@ -1,0 +1,94 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string s = "2-4A0r7-4k";
+            int k = 3;
+
+            string result = solution.LicenseKeyFormatting(s,k);           
+
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public string LicenseKeyFormatting(string s, int k)
+            {
+                s=s.ToUpper();
+                StringBuilder sb = new StringBuilder();
+                string[] splitarry = s.Split('-');
+                int prefixnumber = (s.Length - splitarry.Length + 1 ) % k;//題目描述不太明確:意思是如果能依k個就盡量k個，如果有少的都用第一組排其他都排完整            
+                if (prefixnumber == 0)
+                {
+                    Reformat(0, sb, s, k);
+                }
+                else
+                {
+                    Reformat(GetPrefixString(sb, s, prefixnumber), sb, s, k);
+                }
+                
+                return sb.ToString().TrimEnd('-');//防止結尾有-
+            }
+
+            public void Reformat(int _beginindex,StringBuilder sb,string s,int k)
+            {
+                //i記index，accumulatenumer記字串處理進度
+                int accumulatenumer = 0;
+                for (int i = _beginindex; i < s.Length; i++)
+                {
+                    if (s[i] == '-')
+                    {
+                        continue;
+                    }
+                    accumulatenumer++;
+                    sb.Append(s[i]);
+                    if (accumulatenumer % k == 0)
+                    {
+                        sb.Append('-');//數量了就補'-'
+                    }
+                }
+            }
+
+            public int GetPrefixString(StringBuilder sb, string s, int targetnumber)
+            {
+                int accumulatenumber = 0;
+                for (int i = 0; i < s.Length; i++)
+                {
+                    if (s[i] == '-')
+                    {
+                        continue;
+                    }
+                    accumulatenumber++;
+                    sb.Append(s[i]);
+                    if(accumulatenumber == targetnumber)//取得足夠數量
+                    {
+                        sb.Append('-');//補'-'
+                        return i+1;//傳回剩下要處理的beginindex
+                    }
+                }
+
+                return 0;
+            }
+        }
+        //速度意外的快
+        //這邊用linq處理'-'很不錯，for迴圈部分跟我差不多但他把我prefix和reformat的方法混在一起，比較精煉但容易看錯，最後也有處理尾巴的'-'
+        //速度不錯快
+        //https://leetcode.com/problems/license-key-formatting/discuss/350451/C-for
+        //這個起頭用的replace處理'-'也很棒，梗厲害的是後面他從尾巴一入insert substring 在首端，達成尾巴會圓滿，不圓滿的排到首端的規則，並且用 i-=K來推進度
+        //意外的算慢，可能跟insert有關?
+        //https://leetcode.com/problems/license-key-formatting/discuss/204806/C
+
+
+    }
+}

@@ -1,0 +1,43 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int num = 2932;
+            Solution solution = new Solution();
+            var result = solution.MinimumSum(num);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int MinimumSum(int num)
+            {
+                //就是暴力解，沒啥好說的，速度不慢，可能沒特別好研究的地方
+                var nums = num.ToString().ToArray();
+                Array.Sort(nums);
+                return Convert.ToInt32(nums[0].ToString() + nums[2].ToString()) + Convert.ToInt32(nums[1].ToString() + nums[3].ToString());
+            }
+            //這個用%和/=10，可以避免轉型看起來很白癡，或是超過4個字以上應該這樣做也比較好，但速度不快..(我是覺得沒差)
+            //https://leetcode.com/problems/minimum-sum-of-four-digit-number-after-splitting-digits/solutions/1749305/c-solution/
+            //這是Swift的，也是用/=10
+            //https://leetcode.com/problems/minimum-sum-of-four-digit-number-after-splitting-digits/solutions/2207567/swift-greedy/
+            //這用C寫的，用了for /= 10 做迴圈 + sort + 10 * (d[0] + d[1]) + d[2] + d[3]，感覺就很炫
+            //https://leetcode.com/problems/minimum-sum-of-four-digit-number-after-splitting-digits/solutions/1747007/c-sorting-greedy/
+            //這裡的greedy好像就是用兩個最小值當排頭
+        }
+    }
+}

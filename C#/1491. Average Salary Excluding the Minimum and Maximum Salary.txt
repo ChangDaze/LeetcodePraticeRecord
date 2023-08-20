@@ -1,0 +1,54 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] salary = new int[] { 1000, 2000, 3000 };
+            Solution solution = new Solution();
+            var result = solution.Average(salary);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+        public class Solution
+        {
+            public double Average(int[] salary)
+            {
+                int max = -1;
+                int min = Int32.MaxValue;
+                double sum = 0;
+                foreach(int money in salary)
+                {
+                    sum += money;
+                    if(money > max)
+                        max = money;
+
+                    if(money < min)//不能用else if，因為可能全都是遞增，倒置都沒有觸發min
+                        min = money;
+                }
+
+                return (sum-max-min)/(salary.Length-2);
+            }
+        }
+        //就跟 hint 一樣解法，速度偏慢，不過我看統計，速度最快的人方法也一樣
+        //其他
+        //這位用 one line，但他方法是用類似LINQ sum - max -min，感覺不算好
+        //https://leetcode.com/problems/average-salary-excluding-the-minimum-and-maximum-salary/solutions/708061/c-one-liner/
+        //這方法一樣
+        //https://leetcode.com/problems/average-salary-excluding-the-minimum-and-maximum-salary/solutions/708240/java-python-3-2-methods-one-pass-and-short-codes-w-analysis/
+        //這方法一樣
+        //https://leetcode.com/problems/average-salary-excluding-the-minimum-and-maximum-salary/solutions/708543/java-simple-one-loop-o-n/
+    }
+}

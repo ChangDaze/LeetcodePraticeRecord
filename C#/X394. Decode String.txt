@@ -1,0 +1,171 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Globalization;
+using System.Runtime.Remoting.Messaging;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var s = "sd2[f2[e]g]i";
+            var result = solution.DecodeString(s);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        //2023.0804.0305， 無說明原版
+        //public class Solution
+        //{
+        //    Stack<char> stack = new Stack<char>();
+        //    bool flag = false;
+        //    string s = "";
+        //    int index = 0;
+        //    public string DecodeString(string s)
+        //    {
+        //        this.s = s;
+        //        string result = "";
+
+        //        while (index < s.Length)
+        //            result += MultiBracketsDeal("");
+
+        //        string temp = "";
+        //        while (stack.Count() > 0)
+        //            temp = stack.Pop() + temp;
+
+        //        return result + temp;
+        //    }
+
+        //    public string MultiBracketsDeal(string content)
+        //    {                
+        //        while(index < s.Length)
+        //        {
+        //            if (s[index] == ']')
+        //            {
+        //                index++;
+        //                if (flag)
+        //                    return content = BracketsDeal(content);
+
+        //                flag = true;
+        //                return content += BracketsDeal("");
+
+        //            }
+
+        //            stack.Push(s[index]);                    
+
+        //            if (s[index] == '[')
+        //            {
+        //                flag = false;
+        //                index++;
+        //                content += MultiBracketsDeal("");
+        //                continue;
+        //            }
+
+        //            index++;
+
+        //        }                
+
+        //        return content;
+        //    }
+
+        //    public string BracketsDeal(string content)
+        //    {
+        //        string temp = "";
+        //        while (stack.Peek() != '[')
+        //            temp = stack.Pop() + temp;
+
+        //        content += temp;
+
+        //        stack.Pop();
+
+        //        string repeat = "";
+        //        while (stack.Count() > 0 && stack.Peek() >= 48 && stack.Peek() <= 57)
+        //            repeat = stack.Pop() + repeat;
+
+        //        content = string.Join("", Enumerable.Repeat(content, Convert.ToInt32(repeat)));
+
+        //        while (stack.Count() > 0 && stack.Peek() >= 97 && stack.Peek() <= 122)
+        //            content = stack.Pop() + content;
+
+        //        return content;
+        //    }
+        //}
+
+        //2023.0804.0358 ， 補上說明+小調版本
+        public class Solution
+        {
+            Stack<char> stack = new Stack<char>();
+            bool flag = false;
+            string s = "";
+            int index = 0;
+            public string DecodeString(string s)
+            {
+                this.s = s;
+                string result = MultiBracketsDeal("");
+
+                string temp = "";//將最後尾部未處理的同層處理完，一般尾部同層會因為']'的計算處理掉，但s的尾部不一定是']'
+                while (stack.Count() > 0)
+                    temp = stack.Pop() + temp;
+
+                return result + temp;
+            }
+
+            public string MultiBracketsDeal(string content)
+            {
+                while (index < s.Length)//還沒走完就會繼續
+                {                    
+                    stack.Push(s[index]);
+                    index++;//stack變化，代表此字元已納入考慮
+
+                    if (stack.Peek() == '[')//遇到'['時代表遇到同層，要相加
+                    {
+                        flag = false;//標註非連續']'
+                        content += MultiBracketsDeal("");//遇到同層只加結果，同層內容單獨計算
+                    }
+                    else if (stack.Peek() == ']')
+                    {
+                        stack.Pop();//']'作為判斷標的已使用完
+                        flag = true;//標註連續']'
+                        if (flag) return content = BracketsDeal(content);//【連續】遇到']'時，代表此層【已沒再遇到同層】，整層結果相加後進行計算返回
+                        return BracketsDeal("");//【正常】遇到']'時，簡單計算返回
+                    }
+                }
+
+                return content;
+            }
+
+            public string BracketsDeal(string content)
+            {
+                string temp = "";
+                while (stack.Peek() != '[')
+                    temp = stack.Pop() + temp;//stack要先進後出，所以stack計算的值也要先出排後
+
+                content += temp;//【已沒再遇到同層】的計算才會content有值，同層要放前面
+
+                stack.Pop();//'['作為判斷標的已使用完
+
+                string repeat = "";//遇到數字的處理
+                while (stack.Count() > 0 && stack.Peek() >= 48 && stack.Peek() <= 57)
+                    repeat = stack.Pop() + repeat;//同stack計算
+
+                //計算處理
+                content = string.Join("", Enumerable.Repeat(content, Convert.ToInt32(repeat)));
+
+                //將同層且沒被納入過計算的值一並處理 ex: aa2[bb] 的 aa
+                while (stack.Count() > 0 && stack.Peek() >= 97 && stack.Peek() <= 122)
+                    content = stack.Pop() + content;
+
+                //返回計算結果
+                return content;
+            }
+        }
+    }
+}

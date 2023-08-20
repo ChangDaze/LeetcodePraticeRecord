@@ -1,0 +1,29 @@
+public class WordDictionary {
+    private readonly WordNode root = new WordNode();
+
+    public void AddWord(string word) {
+        word.Aggregate(root, (node, letter) => node.Next[letter - 'a'] ??= new WordNode())
+            .IsWord = true;
+    }
+
+    public bool Search(string word) => Search(word, 0, root);
+
+    private bool Search(string word, int index, WordNode node) {
+        if (word.Length == index)
+            return node.IsWord;
+
+        return word[index] == '.'
+            ? node.Next.Where(n => n != null).Any(n => Search(word, index + 1, n))
+            : node.Next[word[index] - 'a'] != null
+                && Search(word, index + 1, node.Next[word[index] - 'a']);
+    }
+
+    private class WordNode {
+        public WordNode[] Next { get; } = new WordNode[26];
+        public bool IsWord { get; set; }
+    }
+}
+//影片
+//https://www.youtube.com/watch?v=BTf05gs_8iU&ab_channel=NeetCode
+//參考
+//https://leetcode.com/problems/design-add-and-search-words-data-structure/solutions/661118/c-compact-solution/

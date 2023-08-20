@@ -1,0 +1,49 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string s = "abacaba";
+            Solution solution = new Solution();
+            var result = solution.PartitionString(s);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+        public class Solution
+        {
+            public int PartitionString(string s)
+            {
+                HashSet<char> chars = new HashSet<char>();
+                int result = 0;
+                foreach (char c in s)
+                {
+                    if(chars.Contains(c))//因為是hash才這樣用?
+                    {
+                        result++;
+                        chars.Clear();
+                        chars.Add(c);
+                        continue;
+                    }
+
+                    chars.Add(c);
+                }
+                //題目長度一定大於1
+                return result +1;//+1是因為走完的尾巴一定還沒處理到result
+            }
+        }
+    }
+}

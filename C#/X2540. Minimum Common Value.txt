@@ -1,0 +1,48 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.ComponentModel;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var nums1 = new int[]{ 1, 2, 3 };
+            var nums2 = new int[] { 2, 4 };
+            Solution solution = new Solution();
+            var result = solution.GetCommon(nums1,nums2);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int GetCommon(int[] nums1, int[] nums2)
+            {
+                foreach(int num in nums1)
+                {
+                    int left = 0;
+                    int right = nums2.Length-1;
+                    while(left <=right)
+                    {
+                        int mid = (left+right)/2;
+                        if (nums2[mid] < num)
+                            left = mid + 1;
+                        else if (nums2[mid] > num)
+                            right = mid - 1;
+                        else
+                            return num;
+                    }                    
+                }
+                return -1;
+            }
+        }
+    }
+}

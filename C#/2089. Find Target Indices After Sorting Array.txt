@@ -1,0 +1,75 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var nums = new int[] { 1 };
+            var target = 2;
+            Solution solution = new Solution();
+            var result = solution.TargetIndices(nums, target);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public IList<int> TargetIndices(int[] nums, int target)
+            {
+                Array.Sort(nums);
+
+                int left = 0;
+                int right = nums.Length - 1;
+                while (left <= right)
+                {
+                    int mid = (left + right) / 2;
+                    if (nums[mid] < target)
+                    {
+                        left = mid + 1;//left指到>=target的第一個(這題要找等於)
+                    }
+                    else
+                    {
+                        right = mid - 1;//right指到<target的第一個
+                    }
+                }
+
+                List<int> result = new List<int>();
+
+                if (left < nums.Length && nums[left] == target)//當找不到值(1.全都小於 2.沒有等於)
+                //if (left < nums.Length && right > -1 && nums[left] == target)//不能這樣
+                {
+                    for (int i = left; i <= nums.Length - 1; i++)
+                    {
+                        if (nums[i] == target)//只找等於就好
+                            result.Add(i);
+                        else
+                            break;
+                    }
+                }
+
+                return result;
+            }
+        }
+        //參考Q1315的方式(binary search)，速度不錯
+        //其他
+        //這是不用sort的方法，簡單來說就是紀錄比較小的值數量，和紀錄target數量，基本上就能算index和答案了，速度還行
+        //我覺得其實蠻厲害的，不過作者說這會花更多時間跑?我以為時間複雜度上這比較小(可能作者是說不知為啥submit跑比較長?)
+        //https://leetcode.com/problems/find-target-indices-after-sorting-array/solutions/2357223/c-without-sorting/
+        //這個人有3個方法
+        //1.sort的方法，不過後續他沒特別用binary search，寫起來精簡不少，但理論上速度應該沒我快，速度還行
+        //2.方法二核心跟方法三一樣，不過整個過程感覺多此一舉不少..
+        //3.跟第一位一樣
+        //https://leetcode.com/problems/find-target-indices-after-sorting-array/solutions/1602304/c-solutions/
+        //跟第二位的方法一，一樣，速度偏慢
+        //https://leetcode.com/problems/find-target-indices-after-sorting-array/solutions/1976193/c/
+    }
+}

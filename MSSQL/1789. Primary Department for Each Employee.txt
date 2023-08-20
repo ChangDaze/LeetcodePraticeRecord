@@ -1,0 +1,40 @@
+Create table #Employee (employee_id int, department_id int, primary_flag varchar)
+insert into #Employee (employee_id, department_id, primary_flag) values ('1', '1', 'N')
+insert into #Employee (employee_id, department_id, primary_flag) values ('2', '1', 'Y')
+insert into #Employee (employee_id, department_id, primary_flag) values ('2', '2', 'N')
+insert into #Employee (employee_id, department_id, primary_flag) values ('3', '3', 'N')
+insert into #Employee (employee_id, department_id, primary_flag) values ('4', '2', 'N')
+insert into #Employee (employee_id, department_id, primary_flag) values ('4', '3', 'Y')
+insert into #Employee (employee_id, department_id, primary_flag) values ('4', '4', 'N')
+select * from #Employee 
+
+select 
+	employee_id,
+	max(department_id) department_id
+from #Employee
+group by employee_id
+having count(1) = 1
+
+union
+
+select 
+	employee_id,
+	department_id
+from #Employee
+where primary_flag = 'Y'
+
+--第一位的用法，就是強制只留存一個值，過程中會有一些轉換，但說不定很快，速度還行ㄟ
+select employee_id,
+       coalesce(max(case when primary_flag='Y' then department_id else null end),max(department_id)) department_id
+  from #employee t
+  group by employee_id
+  
+--以下幾位的想法我都想過，但感覺太複雜，在資料多時反而可能拖累就沒多用，就只用最純粹的union -> 結果第一第二位方法都不錯..
+--其他
+--這位說明如上方所述，沒子查詢、沒union可能是比較快的方法
+--https://leetcode.com/problems/primary-department-for-each-employee/solutions/1284359/no-join-no-union-no-window-function-no-cte/
+--這有點特別ㄟ，他用partition排列count,選出只有count()=1,其他就選flag=Y，也是沒子查詢、沒union，說不定也是個好方法?速度也還行ㄟ
+--https://leetcode.com/problems/primary-department-for-each-employee/solutions/1107898/using-window-function-count/
+--這用in，我不太喜歡這方法，底層判斷可能很多次
+--https://leetcode.com/problems/primary-department-for-each-employee/solutions/1116740/no-union-no-cte-just-or/
+drop table #Employee

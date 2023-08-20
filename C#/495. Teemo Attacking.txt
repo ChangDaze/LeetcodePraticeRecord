@@ -1,0 +1,50 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var timeSeries = new int[]{1,2};
+            var duration = 2;
+            var result = solution.FindPoisonedDuration(timeSeries, duration);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public int FindPoisonedDuration(int[] timeSeries, int duration)
+            {
+                int count = 0;
+                for(int i = 1; i < timeSeries.Length; i++)//i從1開始
+                {
+                    if (timeSeries[i] - timeSeries[i - 1] > duration)
+                        count += duration;
+                    else
+                        count += timeSeries[i] - timeSeries[i - 1];
+                }
+                count += duration;//最後要加上最終持續時間
+                return count;
+            }
+            //原本想用1~timeSeries[len]，每秒計算，但發現直接計算間距就好，速度不錯
+            //其他
+            //這方法跟我一樣，不過我得比較精簡，速度很快
+            //https://leetcode.com/problems/teemo-attacking/solutions/266464/c-simple-solution/
+            //這方法跟我的在比大小上相同，不過他的方法比較像題目那樣(如果要詳細記錄中毒時間變化，這樣可能會多一點訊息)，有做poison的reset，但速度應該是會被影響，速度還是很快
+            //https://leetcode.com/problems/teemo-attacking/solutions/97479/c-solution-o-n-time/
+            //這位的解法跟第二位很像，不過她處理中毒時間比較細一點(maxEnd = cur + duration - 1)，不過這位和上一位都把最後的中讀時間挪到i=0時先加上的樣子，速度不錯
+            //https://leetcode.com/problems/teemo-attacking/solutions/353642/c-for-interval/
+        }
+
+    }
+}

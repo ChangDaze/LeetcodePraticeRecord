@@ -1,0 +1,63 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string s = "aaabb";
+            Solution solution = new Solution();
+            var result = solution.AreOccurrencesEqual(s);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public bool AreOccurrencesEqual(string s)
+            {
+                Dictionary<char,int> record = new Dictionary<char,int>();
+
+                foreach(char c in s)
+                {
+                    if(record.Keys.Contains(c))
+                        record[c] += 1;
+                    else
+                        record[c] = 1;
+                }
+
+                int check = -1;
+                foreach(char key in record.Keys)
+                {
+                    if(check == -1)
+                        check = record[key];
+                    else if(check != record[key])
+                        return false;
+                }
+
+                return true;
+            }
+
+            //目前最直接的我是只想到數完然後比較而已，速度不錯
+            //其他
+            //這個用ALL來做最後each的判斷，寫得很漂亮但，可能不適合效能?速度普通
+            //https://leetcode.com/problems/check-if-all-characters-have-equal-number-of-occurrences/solutions/1362084/c-100-soln/
+            //這是用26長度陣列來記錄，他是加上要求大於零才能比較，這樣可能比較好?畢竟字也不多，if >0也還好，速度很快
+            //https://leetcode.com/problems/check-if-all-characters-have-equal-number-of-occurrences/solutions/1363174/c-solution/
+            //這個很多人投的java也跟第二位一樣方法，小差異他是用if  !=0
+            //https://leetcode.com/problems/check-if-all-characters-have-equal-number-of-occurrences/solutions/1359946/commented-java-solution-100-faster-time-o-n-space-o-1/
+        }
+    }
+}

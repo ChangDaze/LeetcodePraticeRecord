@@ -1,0 +1,133 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string s = "rat";
+            string result = solution.SortString(s);
+            Console.WriteLine(result);
+
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public string SortString(string s)
+            {
+                //題目是把給的數字由小到大再由大到小一直來回排直到字用完
+                int[] record = new int[26];//用來記錄數字大小和數量
+                string result = "";
+
+                foreach (char c in s)//記錄題目
+                {
+                    record[c - 'a'] += 1;
+                }
+
+                int direction = 0;//由大到小或由小到大的方向
+                while (record.Sum(x => x) > 0)//當記錄裡面還有數字就繼續循環
+                {
+                    if (direction == 0)//小到大
+                    {
+                        for (int i = 0; i < record.Length; i++)
+                        {
+                            if (record[i] != 0)//沿路檢查有數字就填入
+                            {
+                                record[i]--;
+                                result += Convert.ToChar('a' + i);
+                            }
+                            else
+                            {
+                                continue;
+                            }
+                        }
+                        direction = 1;//填完一輪換方向
+                    }
+                    else//大到小
+                    {
+                        //原理跟小到大一樣
+                        for (int i = record.Length - 1; i >= 0; i--)
+                        {
+                            if (record[i] != 0)
+                            {
+                                record[i]--;
+                                result += Convert.ToChar('a' + i);
+                            }
+                            else
+                            {
+                                continue;
+                            }
+                        }
+                        direction = 0;
+                    }
+                }
+
+                return result;
+            }
+            //速度忽快忽慢，但就原理來說簡單易懂
+            //其他
+            //這方法原理跟我一樣是由小到大和由大到小一直來回，速度照理講應差不多，比較特別的是
+            //1.他用char[]來記錄 2.他小到大和大到小是一次做完，我是做完一個就判斷一次 3.他最後是用result和s的長度比大小判斷要不要繼續做
+            //https://leetcode.com/problems/increasing-decreasing-string/discuss/628673/Simple-solution-with-single-loop-in-c
+            //這個人轉向的技巧有點華麗，一樣是小大一直輪迴，不過他做到每做完一字就判斷一次能否退出，這對很常但累積不多的應該算好用
+            //轉向的方法是0~25 -> 25~0，遇到26和0就轉向，用累加移動位置direction=1或-1，不過他也是用result和s的長度比大小判斷
+            //https://leetcode.com/problems/increasing-decreasing-string/discuss/531831/Easy-C-Solution-(Straightforward)
+            //這方法就跟我非常像了，不過也是用result和s的長度比大小判斷，但他是另外用count記，這幾種方法除了資料結構外速度應差不多
+            //https://leetcode.com/problems/increasing-decreasing-string/discuss/531836/C-Simple-char-count-solution
+
+
+        }
+
+        #region 第一種方法排版後
+        //public class Solution
+        //{
+        //    public string SortString(string s)
+        //    {
+        //        if (s.Length == 1)
+        //        {
+        //            return s;
+        //        }
+        //        char[] chars = new char[26];
+        //        for (var i = 0; i < chars.Length; i++)
+        //        {
+        //            chars[i] = '0';
+        //        }
+        //        foreach (var item in s)
+        //        {
+        //            chars[item - 97]++;
+        //        }
+        //        var result = "";
+        //        while (result.Length < s.Length)
+        //        {
+        //            for (var i = 0; i <= 25; i++)
+        //            {
+        //                if (chars[i] != '0')
+        //                {
+        //                    chars[i]--;
+        //                    result += (char)(97 + i);
+        //                }
+        //            }
+        //            for (var i = 25; i >= 0; i--)
+        //            {
+        //                if (chars[i] != '0')
+        //                {
+        //                    chars[i]--;
+        //                    result += (char)(97 + i);
+        //                }
+        //            }
+        //        }
+        //        return result;
+        //    }
+        //}
+        #endregion
+    }
+}

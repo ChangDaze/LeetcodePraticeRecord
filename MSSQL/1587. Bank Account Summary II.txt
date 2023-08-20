@@ -1,0 +1,41 @@
+Create table #Users (account int, name varchar(20))
+Create table #Transactions (trans_id int, account int, amount int, transacted_on date)
+insert into #Users (account, name) values ('900001', 'Alice')
+insert into #Users (account, name) values ('900002', 'Bob')
+insert into #Users (account, name) values ('900003', 'Charlie')
+insert into #Transactions (trans_id, account, amount, transacted_on) values ('1', '900001', '7000', '2020-08-01')
+insert into #Transactions (trans_id, account, amount, transacted_on) values ('2', '900001', '7000', '2020-09-01')
+insert into #Transactions (trans_id, account, amount, transacted_on) values ('3', '900001', '-3000', '2020-09-02')
+insert into #Transactions (trans_id, account, amount, transacted_on) values ('4', '900002', '1000', '2020-09-12')
+insert into #Transactions (trans_id, account, amount, transacted_on) values ('5', '900003', '6000', '2020-08-07')
+insert into #Transactions (trans_id, account, amount, transacted_on) values ('6', '900003', '6000', '2020-09-07')
+insert into #Transactions (trans_id, account, amount, transacted_on) values ('7', '900003', '-4000', '2020-09-11')
+
+select * from #Users 
+select * from #Transactions 
+
+select 
+	A.name, B.balance
+from #Users A
+join(
+	select 
+	account, sum(amount) balance 
+	from #Transactions
+	group by account
+	--having balance > 10000 -> 不行
+	--HAVING SUM(amount) >= 10000; -> 可以，用了就不用 B.balance >= 10000，參考最後一位的
+	) B
+on A.account = B.account and B.balance >= 10000
+
+--這對我來說是蠻新的想法，確實在資料數不多時用case when能做出相當多變化，另外也學到group 後仍能用case when + sum 的靈活做法，速度普通
+--其他
+--這是mysql的，他們的可以sum後直接用having，還有using之類的用法，不過MSSQL好像不行..
+--https://leetcode.com/problems/bank-account-summary-ii/solutions/851440/straight-forward-mysql-solution/
+--https://leetcode.com/problems/bank-account-summary-ii/solutions/851938/mysql-faster-than-100/
+--https://leetcode.com/problems/bank-account-summary-ii/solutions/2520664/mysql-beginner-level-easy-to-understand-simple-short-solution/
+--這是mssql的，這有教怎麼sum後having，值得參考
+--is invalid in the HAVING clause because it is not contained in either an aggregate function or the GROUP BY clause
+--原來這邊的aggregate function是指having要直接在這些function上
+--https://leetcode.com/problems/bank-account-summary-ii/solutions/1149051/ms-sql-join-having/?q=MS&orderBy=most_votes
+drop table #Users
+drop table #Transactions

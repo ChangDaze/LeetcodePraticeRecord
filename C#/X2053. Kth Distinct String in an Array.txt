@@ -1,0 +1,57 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string[] arr = new string[] { "d", "b", "c", "b", "c", "a" };
+            int k = 2;
+            Solution solution = new Solution();
+            var result = solution.KthDistinct(arr,k);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public string KthDistinct(string[] arr, int k)
+            {
+                //SortedDictionary<string,int> record = new SortedDictionary<string,int>(); //這個sort不是用進入順序sort是用型態sort
+                Dictionary<string, int> record = new Dictionary<string, int>(); //原本以為會有index問題，目前看來沒有，有個話也能另建array來mapping先後順序
+                foreach (string s in arr)
+                {
+                    if (record.Keys.Contains(s))
+                        record[s] += 1;
+                    else
+                        record[s] = 1;
+                }
+
+                int count = 0;
+                foreach(string key in record.Keys)
+                {
+                    if (record[key] == 1)
+                    {
+                        count += 1;
+                        if (count == k)
+                            return key;
+                    }
+                }
+
+                return "";
+            }
+        }
+    }
+}

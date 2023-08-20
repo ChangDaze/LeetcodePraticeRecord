@@ -1,0 +1,43 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string s = "abccbaacz";
+            Solution solution = new Solution();
+            var result = solution.RepeatedCharacter(s);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public char RepeatedCharacter(string s)
+            {
+                bool[] flags = new bool[26];
+
+                foreach(char c in s)
+                {
+                    if (flags[c - 'a'])
+                        return c;
+                    flags[c - 'a'] = true;
+                }
+                return ' ';
+            }
+        }
+    }
+}

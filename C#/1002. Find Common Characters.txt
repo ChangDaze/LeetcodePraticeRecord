@@ -1,0 +1,80 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string[] words = new string[] { "cool", "lock", "cook" };
+            IList<string> result = solution.CommonChars(words);
+            Console.WriteLine(result);
+
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public IList<string> CommonChars(string[] words)
+            {
+                List<string> result = new List<string>();
+                List<char> rule = words[0].ToList();//因為會重複出現在全部的char，隨便抓一個裡面一定都包含所以抓[0]來用
+                                                    //rule當判定標準
+                for (int i = 0; i < words.Length; i++)//一個個word檢查
+                {
+                    for (int j = 0; j < rule.Count; j++)//用rule當標準
+                    {
+                        if (words[i].Contains(rule[j]))//rule的char有在word裡(string.contain(char))
+                        {
+                            words[i] = words[i].Remove(words[i].IndexOf(rule[j]), 1);//word移除通過rule的第一個字，避免rule有重複字但都被一個字擋掉
+                            //這也是我用for不用foreach的原因之一因為比較好數位置(1)
+                        }
+                        else//rule的char沒在word裡
+                        {
+                            rule.RemoveAt(j);//從rule移除
+                            j--;//--抵銷remove rule的char，這也是我用for不用foreach的原因之一因為比較好數位置(2)
+                            continue;
+                        }
+                    }
+                }
+
+                foreach (char c in rule)//剩餘下來的rule就是都出現過的
+                {
+                    result.Add(c.ToString());
+                }
+
+
+                return result;
+
+                //過程相對繁瑣一點，但還算能懂，比較希望能簡化過程，速度也很慢
+                //其他
+                //這個人linq用的有點魔性，1.先透過group做出list<dic<char,count>>，不快
+                //2.透過第一步的變數SelectMany+tolist+distinct找出全部char和用where+ALL在words比對找出，全部word都出現過的char
+                //3.透過第二步找到的char和第一步的變數找出這些char的最小共同出現次數(用select彈出自訂class)
+                //4.把第三步的class轉為string[]，中間透過repeat來呈現最小共同出現次數
+                //https://leetcode.com/problems/find-common-characters/discuss/449550/C
+                //這個人也是linq有點魔性，他比上一個人流程順一點，所以變成one line，但最小要跑26次(但最高也是26，所以不好說)，不快
+                //1.a~z用range跑一次檢查(這裡用char轉int方便range跑)
+                //2.在words中select最小共同出現次數(如果有沒有的就會是0)
+                //3.檢查有沒有>0
+                //4.用range和tostring把char依最小共同出現次數做成string(然後進入下個迴圈字母檢查)
+                //https://leetcode.com/problems/find-common-characters/discuss/442487/c-linq-solution-(5-lines)
+                //這個人判斷標準跟我一樣，就是隨便抓一個當rule，但她處理比較細膩
+                //1.他skip被抓來當標準的word
+                //2.他在比對時把對到的word也變成dic方便比對，因此也能用foreach，不像我用for i 在數
+                //3.他把做dic的方法獨立出來了
+                //4.他用Math.Min來找最小共同出現次數(就感覺上比我用remove indexof好多了)
+                //5.他也用linq+repeat來做string
+                //總體來說我的方法也算特別，但我比較喜歡這位的處理流程，他速度快一丁點，但容量也耗不少
+                //https://leetcode.com/problems/find-common-characters/discuss/1470635/c-solution
+            }
+        }
+    }
+}

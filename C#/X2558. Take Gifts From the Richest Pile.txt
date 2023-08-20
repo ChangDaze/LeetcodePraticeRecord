@@ -1,0 +1,72 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+using System.Reflection;
+using System.Security.AccessControl;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] gifts = new int[] { 13, 25, 16, 26, 39, 36, 24, 13, 61, 51, 11, 3, 36, 58, 15, 33, 18, 67, 45, 15, 20, 36, 3, 6, 6, 27, 34, 72, 41, 47, 73, 6, 64, 59 };
+            int k = 41;
+            Solution solution = new Solution();
+            var result = solution.PickGifts(gifts,k);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+
+        public class Solution
+        {
+            List<long> lst;//因為題目是return long，所以用long，因為sum時返回值是list型別，會爆掉
+            public long PickGifts(int[] gifts, int k)
+            {
+                lst = new List<long>();
+                //SortedList<long, long> keyValuePairs= new SortedList<int, int>();     //原本這個應該可以，但會要求key唯一    
+                foreach (int gift in gifts)                
+                    lst.Add(gift);
+
+                lst = lst.OrderByDescending(gift => gift).ToList();
+
+                for(int i = 0; i < k; i++)
+                {
+                    long temp = lst[0];
+                    lst.RemoveAt(0);
+                    //AddToList(Convert.ToInt32(Math.Sqrt(temp)));//用convert會四捨五入
+                    AddToList((long)Math.Pow(temp,0.5));//用強制轉換會無條件捨去
+                    //Math.Pow(temp,0.5)和Math.Sqrt(temp)，結果一樣
+                }
+                return lst.Sum();
+            }
+
+            public void AddToList(long num)
+            {
+                int left = 0;
+                int right = lst.Count- 1;
+
+                while(left <= right)//不能left == right
+                {
+                    if(num> (lst[(left+right) / 2] ))           //記得是   lst[(left+right) / 2] 不是 (lst[left] + lst[right])/2，我們是要拿中間index的值出來比
+                        right = (left + right) / 2 - 1;
+                    else
+                        left = (left + right) / 2 +1;
+                }
+                //此二分搜尋做完一定是lst[right] > lst[left]，因為只要<=就會往後移
+
+                lst.Insert(left,num); //insert會把原本index之後包含自己，往後推，所以num一定要大於lst[index]，所以當lst[right] > num >= lst[left]時，一定要放在left
+            }
+        }
+        //基本上就是因為C# priority queue，所以變成我每次自己排序，可能會輸在最佳化上?速度普通
+        //我看hint有提到開根號有有效率的方法?可能其他人也會有?
+    }
+}

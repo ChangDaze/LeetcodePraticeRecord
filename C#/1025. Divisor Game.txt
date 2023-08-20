@@ -1,0 +1,47 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //拿到奇數 -> 0 < x < n 只能選1 ~ n-1，且n%x = 0, 且n=n-x
+            //奇數只能被奇數整除 -> 所以拿到奇數別人拿到的的一定是偶數(奇數-奇數=偶數)
+            //拿到偶數的必贏，因為可以除1讓對方拿到奇數，控制自己最後拿到2(要輸只有故意用偶數整除偶富讓對方拿到偶數)
+            //拿到2一定贏(對方拿到1就沒有0 < x < 了)
+            //結論，拿到偶數必贏
+            bool result = DivisorGame(2);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+            //別人講解
+            //https://www.cnblogs.com/grandyang/p/14397707.html
+        }
+
+        //沒用static就要new才能用函式
+        //有用static就不用new可直接用函式
+        //差別應是沒static沒new時函式未被構建起來(new起來)
+        //直接用static則容易造成函式混亂
+        public static bool DivisorGame(int n)
+        {
+            if (n % 2 == 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+    }
+
+
+}

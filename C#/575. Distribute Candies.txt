@@ -1,0 +1,47 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var candyType = new int[] { 1, 1, 2, 3 };
+            var result = solution.DistributeCandies(candyType);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+            //HashSet<int> test = new HashSet<int>();
+            //test.Add(1);
+            //test.Add(2);
+            //test.Add(1);
+            //Console.ReadKey();
+        }
+
+
+        public class Solution
+        {
+            public int DistributeCandies(int[] candyType)
+            {
+                HashSet<int> types = new HashSet<int>();
+                foreach (int candy in candyType) types.Add(candy);
+                return Math.Min(types.Count,candyType.Length/2);
+            }
+            //用hastset就可以不自己做contain了ㄟ，速度還不錯
+            //其他
+            //這方法一樣，不過他用dic，速度普通
+            //https://leetcode.com/problems/distribute-candies/solutions/102948/c-solution-dictionary/
+            //這用LINQ Distinct().Count()，速度還蠻快的ㄟ，真的可能可以找一下LINQ的源碼來看一下他怎麼遍歷的(sort、count)
+            //https://leetcode.com/problems/distribute-candies/solutions/240940/c-one-line-linq/
+            //這蠻屌的ㄟ，原來hastset的constructor是吃陣列的(這可以學一下)，然後他是用手動比較不是用math.min，速度意外的普通
+            //https://leetcode.com/problems/distribute-candies/solutions/301880/no-loops-c-solution/
+        }
+
+    }
+}

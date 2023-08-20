@@ -1,0 +1,69 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string key = "the quick brown fox jumps over the lazy dog";
+            string message = "vkbs bs t suepuv";
+            Solution solution = new Solution();
+            var result = solution.DecodeMessage(key, message);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+        public class Solution
+        {
+            public string DecodeMessage(string key, string message)
+            {
+                bool[] record = new bool[26];
+                char[] map = new char[26];
+                int check = 0;
+
+                foreach (char c in key)
+                {
+                    if (c == ' ' || record[c - 'a'] == true) continue;//因為key會重複和只有文字要轉換，所以要有跳過機制
+
+                    record[c - 'a'] = true;//標註已找到
+                    map[c - 'a'] = Convert.ToChar(check + 'a');//map是字母對應要轉換的，key要轉換成 -> 目標字母(從A開始) -> 當message和key有相同時轉換成目標字母
+                    check++;
+
+                    if (check >= 26) break;//26個字母都找到就可以提前退出
+                }
+
+                //有個重點，他有確保26 <= key.length <= 2000，所以一定有26個字可用，不然線面轉換可能失敗(不過用record輔助有沒有轉換好像就可以了)
+
+                string result = "";//組字串應該改用string combiner之類的了
+                //接下來就是一般的轉換了
+                foreach (char c in message)
+                {
+                    if (c == ' ')
+                        result += c;
+                    else
+                        result += map[c - 'a'];
+                }
+                return result;
+            }
+            //速度普通
+            //其他
+            //這就是很直接的dictionary互換，他有用StringBuilder()和.Append，快學一下，
+            //另外for可以用兩變數ㄟfor (int i = 0, j = 0; i < key.Length; i++)我之前怎麼沒成功?然後用j+'a'輔助轉換，速度還行ㄟ
+            //https://leetcode.com/problems/decode-the-message/solutions/2268835/c-solution/
+            //這是java的，裡面也有幾個小技巧，
+            //他將key = key.replaceAll(" ", "");雖然不一定快，
+            //另外他用char original = 'a';letters.put(key.charAt(i),original++);的方式來做map，也能學學
+            //https://leetcode.com/problems/decode-the-message/solutions/2230056/java-solution-using-hashmap/
+            //這方法說實在有點土，沒用ascii反而自己建a~b，然後做map也是用自組的index，但他確實跑起來了，跟他的圖一樣，推還蠻多..
+            //https://leetcode.com/problems/decode-the-message/solutions/2230586/explained-c-python/
+        }
+    }
+}

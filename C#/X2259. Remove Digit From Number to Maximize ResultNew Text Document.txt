@@ -1,0 +1,50 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string number = "123";
+            char digit = '3';
+            Solution solution = new Solution();
+            var result = solution.RemoveDigit(number, digit);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public string RemoveDigit(string number, char digit)
+            {
+                char[] nums = number.ToCharArray();
+                int pointer = -1;
+                for(int i = 0; i < nums.Length-1; i++)
+                {
+                    if (nums[i] == digit)
+                    {
+                        pointer = i;
+                        if (nums[i] < nums[i + 1])//當nums[i] < nums[i + 1]時，越大位數的效果越好
+                            return number.Substring(0, pointer) + number.Substring(pointer + 1, nums.Length - (pointer + 1));
+                    }                        
+                }
+
+                if (nums[nums.Length - 1] == digit)//當沒有nums[i] < nums[i + 1]時，越小位數的效果越好
+                    pointer = nums.Length - 1;
+
+                return number.Substring(0,pointer) + number.Substring(pointer+1, nums.Length-(pointer+1));
+            }
+        }
+    }
+}

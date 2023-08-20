@@ -1,0 +1,73 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] nums = new int[] {  6,  12, 20,  17, 11,  4 };
+            Solution solution = new Solution();
+            var result = solution.DivideArray(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+        //public class Solution
+        //{
+        //    public bool DivideArray(int[] nums)
+        //    {
+        //        int check = 0;
+        //        foreach (int num in nums)
+        //            check = check ^ num;
+        //        return check == 0;
+        //    }
+        //}
+        //XOR找非重複有較強的限制，因為它是用bit在找，比如單一出現的數字只能有一個，其他都要雙雙成對
+        //https://leetcode.com/problems/divide-array-into-equal-pairs/solutions/1864127/why-is-this-xor-method-is-not-working/
+        //https://leetcode.com/problems/divide-array-into-equal-pairs/solutions/2105016/why-xoring-does-not-work/
+        //https://leetcode.com/problems/divide-array-into-equal-pairs/solutions/2491426/c-easy-to-understand-why-wrong-with-xor/
+
+        public class Solution
+        {
+            public bool DivideArray(int[] nums)
+            {
+                int result = 0;
+                bool[] record = new bool[501];
+
+                foreach(int num in nums)
+                {
+                    record[num] = !(record[num]);
+                    if (record[num])
+                        result++;
+                    else
+                        result--;
+                }
+                return result == 0;
+                
+            }
+        }
+        //速度普通
+        //其他
+        //這有兩個方法
+        //1. 用sort，然後一次檢查兩個(因為雙雙成對，排列後一次檢查兩個一定要相同)，仔細想想應該算好方法，只有sort+o(n)
+        //2. hash map然後檢查每個為偶數
+        //https://leetcode.com/problems/divide-array-into-equal-pairs/solutions/1864351/c-easy-o-n-solution-2-approaches/
+        //主要是三種方法
+        //1.一樣用array[501]
+        //2.hashset
+        //3.好像是set+xor，不知道為啥python的可以通，速度也還好
+        //https://leetcode.com/problems/divide-array-into-equal-pairs/solutions/1863995/java-python-3-4-1-liner-o-n-code/
+        //一樣用array[501]
+        //https://leetcode.com/problems/divide-array-into-equal-pairs/solutions/1864011/java-easy/
+    }
+}

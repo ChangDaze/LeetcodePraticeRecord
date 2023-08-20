@@ -1,0 +1,41 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string s = "())";
+            Solution solution = new Solution();
+            var result = solution.MinAddToMakeValid(s);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int MinAddToMakeValid(string s)
+            {
+                Stack<int> stack = new Stack<int>();
+                foreach(char c in s)
+                {
+                    if(c==')' && stack.Count > 0 && stack.Peek()=='(')
+                        stack.Pop();
+                    else
+                        stack.Push(c);
+                }
+
+                return stack.Count; //我原本以為殘留下來的值會有配對問題，但有通過ㄟ，可能看看別人怎麼解
+            }
+        }
+    }
+}

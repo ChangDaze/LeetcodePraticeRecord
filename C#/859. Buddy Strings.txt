@@ -1,0 +1,76 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var s = "ab";
+            var goal = "ab";
+            var result = solution.BuddyStrings(s,goal);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public bool BuddyStrings(string s, string goal)
+            {
+                //一定要交換一次，一次只能交換兩個地方
+                //1. s.Length != goal.Length
+                if (s.Length != goal.Length)
+                    return false;
+
+                //2. s == goal，一定要有兩處相等的地方，交換後才不會不同
+                if (s == goal)
+                {
+                    HashSet<char> hash = new HashSet<char>();
+                    foreach(char c in s)
+                    {
+                        if (hash.Contains(c))
+                            return true;
+                        else//第2次出現代表成了
+                            hash.Add(c);
+                    }
+                    return false;
+                }
+
+
+                //3.s != goal，只能有兩處不同，且s兩處和goal兩處值要一樣
+                List<int> dif = new List<int>();
+
+                for(int i = 0; i < s.Length; i++)
+                {
+                    if(goal[i] != s[i])
+                        dif.Add(i);
+                }
+
+                if(dif.Count != 2)//超過兩次就廢了
+                    return false;
+
+                if(s[dif[0]] == goal[dif[1]] & s[dif[1]] == goal[dif[0]])//其實直接驗證交換後字串相等也行
+                    return true;
+
+                return false;
+            }
+            //還算可以，把條件都清楚列出來了，但感覺沒有好好融合一起，或是拆分成funtion可能比較好?
+            //其他
+            //這解法跟我差不多 2.的地方他用英文陣列來存，但感覺差一些 3.是隨便用兩個變數，當兩個變數都有後還有差異就out，感覺這個簡單直接一點，也不錯。 速度不錯
+            //https://leetcode.com/problems/buddy-strings/solutions/199375/c/
+            //這個也是遵循著三點，不過他的規則有點混合一起，所以不是那麼分明，速度也不錯
+            //https://leetcode.com/problems/buddy-strings/solutions/210444/c/
+            //這個也是三個規則，不過他第三點是用while表現，所以表現手法略有不同，見仁見智，速度不錯
+            //https://leetcode.com/problems/buddy-strings/solutions/159290/c-code-with-description/
+        }
+
+    }
+}

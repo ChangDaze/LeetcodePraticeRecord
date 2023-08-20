@@ -1,0 +1,64 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string s = s = "(1)+((2))+(((3)))";
+            int result = solution.MaxDepth(s);
+            Console.WriteLine(result);
+
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int MaxDepth(string s)
+            {
+                //其實題目有給一個有趣的解法，我沒用到就是任何字母的最大括號數是字母前的所有左括號數-右括號數
+                //題目的解法和我的解法其實都是建立在string都被完整合法的括號包住
+                int maxdepth = 0;
+                Stack<char> stack = new Stack<char>();
+                foreach (char c in s)
+                {
+                    if (c == '(')//我這方法本質跟題目的差不多，就是遇到抵銷的括號就排除，然後計算在跑完前最大的左括號數
+                    {
+                        stack.Push(c);
+                        if (stack.Count > maxdepth)
+                        {
+                            maxdepth = stack.Count;
+                        }
+                    }
+                    else if (c == ')')
+                    {
+                        stack.Pop();
+                    }
+                }
+
+                return maxdepth;
+                //速度應該算平均，但理解後簡單易懂
+                //乾不只速度，記憶體也會隨網路亂跳...
+                //其他
+                //這個方法應該就是題目那種，好處是他沒另外用stack存，不過也要一直++--，單純這樣看應該比我精簡一點，但網路就是不穩定..
+                //另外他有點多用var和toarray感覺可能可以不用會更快
+                //https://leetcode.com/problems/maximum-nesting-depth-of-the-parentheses/discuss/1357188/C-solution
+                //這個人跟上個人方法一樣，不過留言的人想法跟我差不多
+                //意外發現只要左括號時再比對max，可少比對一般char和右括號，我原本就有用但我忘了，還在想上個人速度為啥總是比我慢(重試確實可能快些)
+                //https://leetcode.com/problems/maximum-nesting-depth-of-the-parentheses/discuss/889512/c-simple-solution
+                //這個人就基本跟我一樣用stack了，但他們比對max都不是用><ㄟ都是用math.max，雖然比對都只有兩個數字
+                //https://leetcode.com/problems/maximum-nesting-depth-of-the-parentheses/discuss/947939/C-Simple-Solution
+
+
+            }
+        }
+    }
+}

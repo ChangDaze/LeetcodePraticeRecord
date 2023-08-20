@@ -1,0 +1,59 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            ListNode headA = new ListNode(4);
+            ListNode headB = new ListNode(5);
+            ListNode test = new ListNode(5);
+            headB.next = test;
+            headA.next = test;
+            Solution solution = new Solution();
+            var result = solution.GetIntersectionNode(headA, headB);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class ListNode
+        {
+            public int val;
+            public ListNode next;
+            public ListNode(int x) { val = x; }
+        }
+
+        public class Solution
+        {
+            public ListNode GetIntersectionNode(ListNode headA, ListNode headB)
+            {
+                //這題有個two pointer很重要的觀念，就是確認有沒有循環點，
+                //(1)同個list上有x和y，x移動的速度是1，y移動的速度是2，若有循環點，x和y總有天會相遇(x被y追上)
+                //(2)兩個list上有x和y，x和y有會合點，因會合點後的list長度相同，所以若走 x(走完) + y(會合點前) = x(會合點前) + y(走完) = 會合點，
+                //  若沒有會合點會單純 x+y=x+y=null(走到盡頭，兩pointer還是會相等但=null)
+                ListNode APointer = headA;
+                ListNode BPointer = headB;
+                while (APointer != BPointer)
+                {
+                    if(APointer == null) APointer = headB;
+                    else APointer = APointer.next;
+                    if (BPointer == null) BPointer = headA;
+                    else BPointer = BPointer.next;
+                }
+                return APointer;
+            }
+            //主要參考來源
+            //https://leetcode.com/problems/intersection-of-two-linked-lists/solutions/3178244/two-two-pointer-solutions-python/
+        }
+    }
+}

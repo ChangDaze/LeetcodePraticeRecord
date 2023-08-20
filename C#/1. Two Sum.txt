@@ -1,0 +1,67 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] nums = { 2, 7, 11, 15 };
+            Solution solution = new Solution();
+            int[] result = solution.TwoSum(nums, 9);
+
+
+
+
+            Console.WriteLine(result[0]);
+            Console.WriteLine(result[1]);
+
+
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int[] TwoSum(int[] nums, int target)
+            {
+                List<int> record = new List<int>();//紀錄對應答案
+
+                for (int i = 0; i < nums.Length; i++)
+                {
+                    record.Add(target - nums[i]);
+                }
+
+                for(int i = 0; i < nums.Length; i++)
+                {
+                    if (record.Contains(nums[i]))//對答案
+                    {
+                        int another = record.IndexOf(nums[i]);
+                        if(another == i)//如果同一位置的重複使用就跳過
+                        {
+                            continue;
+                        }
+                        int [] result = new int[2];
+                        result[0] = i;
+                        result[1] = another;
+                        return result;
+                    }
+                }
+
+                return null;
+            }
+        }
+        //其他
+        //這個適用dictionary邊紀錄邊找，可是不知為啥比我的慢，可能是dictionary的原因，但看起來比我順得多，
+        //他避免重複選同一個的方法是先找完再加入可能也是這樣每次都要到比較後面才能找完?所以跑比較久
+        //https://leetcode.com/problems/two-sum/discuss/578502/C-O(n)-solution
+
+
+
+
+    }
+}

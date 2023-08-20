@@ -1,0 +1,146 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+
+            ListNode list1 = new ListNode()
+            {
+                val = 1,
+                next = new ListNode()
+                {
+                    val =2,
+                    next = new ListNode()
+                    {
+                        val=4
+                    }
+                }
+            };
+
+            ListNode list2 = new ListNode()
+            {
+                val = 1,
+                next = new ListNode()
+                {
+                    val = 3,
+                    next = new ListNode()
+                    {
+                        val = 4
+                    }
+                }
+            };
+
+            ListNode result = solution.MergeTwoLists(list1,list2);
+
+            Console.ReadKey();
+
+            
+
+        }
+
+        public class ListNode
+        {
+            public int val;
+            public ListNode next;
+            public ListNode(int val = 0, ListNode next = null)
+            {
+                 this.val = val;
+                this.next = next;
+            }
+        }
+
+        //public class Solution
+        //{
+        //    //遞迴
+        //    public ListNode MergeTwoLists(ListNode list1, ListNode list2)
+        //    {
+        //        //一邊沒值就返回另一邊的剩餘所有list(因為是sorted的前端比完大小就足夠了)
+        //        if(list1 == null)
+        //        {
+        //            return list2;
+        //        }else if(list2 == null)
+        //        {
+        //            return list1;
+        //        }
+
+        //        //位移的準備
+        //        var temp1 = list1.next;
+        //        var temp2 = list2.next;
+
+        //        if(list1.val < list2.val)
+        //        {
+        //            //比較小的值放前面
+        //            //小值(list1.val保留)得next(出現位移找後面比大小)和大值的原list比(因為可能list1連續出現小值)
+        //            list1.next = MergeTwoLists(temp1,list2);
+        //            //返回這層排好的list(小值帶頭，後面是排好的混合list1、2)
+        //            return list1;
+        //        }
+        //        else
+        //        {
+        //            //同理
+        //            list2.next = MergeTwoLists(temp2, list1);
+        //            return list2;
+        //        }
+
+        //        //來源https://leetcode.com/problems/merge-two-sorted-lists/discuss/188108/C-recursive-solution
+        //    }
+        //}
+
+        public class Solution
+        {
+            public ListNode MergeTwoLists(ListNode l1, ListNode l2)
+            {
+                //這直接另外重組listnode
+                if (l1 == null)
+                    return l2;
+                else if (l2 == null)
+                    return l1;
+
+                //class是參考型別，一開始cur會影響到d
+                ListNode d = new ListNode(),
+                         cur = d;
+
+                //一邊null就會跳出迴圈
+                while (l1 != null && l2 != null)
+                {
+                    if (l1.val < l2.val)
+                    {
+                        //cur取小值
+                        cur.next = l1;
+                        //l1往後推
+                        l1 = l1.next;
+                    }
+                    else
+                    {
+                        cur.next = l2;
+                        l2 = l2.next;
+                    }
+
+                    cur = cur.next;//cur往後移(影響到d的後面)
+                }
+
+                //找到另一邊還沒null的接上
+                if (l1 != null)
+                    cur.next = l1;
+
+                if (l2 != null)
+                    cur.next = l2;
+
+                return d.next;//回到前頭返回，不含最前頭0
+            }
+        }
+        //參考https://leetcode.com/problems/merge-two-sorted-lists/discuss/723383/c
+        //差不多用法https://leetcode.com/problems/merge-two-sorted-lists/discuss/693127/C-using-dummy-head-time-O(m%2Bn).-Faster-than-98.72-of-C-online-submissions
+    }
+
+
+}

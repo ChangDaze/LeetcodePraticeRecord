@@ -1,0 +1,60 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var s = "10#11#12";
+            var result = solution.FreqAlphabets(s);
+            Console.WriteLine(result);
+            
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {           
+            //1 -> 49、 a -> 97
+            public string FreqAlphabets(string s)
+            {
+                string result = "";
+
+                for(int i = 0; i < s.Length; i++)
+                {
+                    if(i + 2 < s.Length)
+                    {
+                        if (s[i + 2] == '#')
+                        {
+                            result += (char)(96 + Convert.ToInt32(s[i].ToString() + s[i + 1].ToString()));
+                            i = i + 2;
+                            continue;
+                        }
+                    }
+                                                            
+                    result += (char)(s[i] + 48);
+                }
+
+
+                return result;
+            }
+            //這個花我比較多時間的是找不會溢位的方法(可用從後到前)和組3個字轉INT(可用substring)的方法，不過下面的答案可能都有方法解決，速度普通
+            //其他
+            //這個稍微暴力一點用dic但說不定某方面也是一勞永逸，畢竟過程不會需要計算(雖然不知道有沒有比較快)，但有一點蠻有趣的，就是他判斷#的方式是從後面往前，且判斷第一個遇到的值就好，還有substring也可學
+            //所以不用像我一樣怕溢位，速度應該是普通，不過忽快忽慢
+            //https://leetcode.com/problems/decrypt-string-from-alphabet-to-integer-mapping/solutions/532389/c-solution/
+            //這個方法就跟我差不多了，不過他有用substring，然後也有特別的點，他算char的方式不像我用固定用49和97，他直接用'a'和'0'定位，第一眼看見更易懂一些，速度普通
+            //https://leetcode.com/problems/decrypt-string-from-alphabet-to-integer-mapping/solutions/471013/c-solution/
+            //乾，這也是很猛，他用呵我一開始想用的方法，就是遇到#再倒退嚕檢查，但他用的更漂亮，他用stack，遇到#再pop兩次，push組回
+            //細節是pop組回的順序要注意，因為stack的特性最後要一起轉回字串時會需要reverse，然後他最後是用select統一處理，所以就可以oneline不用像寫function，速度普通
+            //https://leetcode.com/problems/decrypt-string-from-alphabet-to-integer-mapping/solutions/471596/c-stack-based/
+        }
+    }
+}

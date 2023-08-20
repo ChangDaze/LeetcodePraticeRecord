@@ -1,0 +1,33 @@
+Create table #Employee (empId int, name varchar(255), supervisor int, salary int)
+Create table #Bonus (empId int, bonus int)
+insert into #Employee (empId, name, supervisor, salary) values ('3', 'Brad', null, '4000')
+insert into #Employee (empId, name, supervisor, salary) values ('1', 'John', '3', '1000')
+insert into #Employee (empId, name, supervisor, salary) values ('2', 'Dan', '3', '2000')
+insert into #Employee (empId, name, supervisor, salary) values ('4', 'Thomas', '3', '4000')
+insert into #Bonus (empId, bonus) values ('2', '500')
+insert into #Bonus (empId, bonus) values ('4', '2000')
+select * from #Employee
+select * from #Bonus 
+
+--就是簡單的outer join
+select name, bonus
+from #Employee A
+left join #Bonus B
+on A.empId = B.empId
+where B.bonus < 1000 or b.bonus is null
+
+--這是下面第一位改來的的，速度也是很慢，MSSQL484受歧視
+SELECT name, bonus
+FROM #Employee A LEFT JOIN #Bonus B on A.empId = B.empId
+WHERE COALESCE(bonus, 0) < 1000; 
+
+--速度鬼一般的慢
+--其他
+--方法差不多，不過他告訴我where可以用COALESCE，跟having感覺很像
+--https://leetcode.com/problems/employee-bonus/solutions/425697/mysql-solution-left-join/
+--這位方法差不多，不過他也寫了COALESCE和isnull
+--https://leetcode.com/problems/employee-bonus/solutions/1848034/clean-and-simple-multiple-solutions-mysql-ms-sql-server-oracle/function/
+--方法一樣
+--https://leetcode.com/problems/employee-bonus/solutions/3405910/single-select-solution-using-sql-server/
+drop table #Employee
+drop table #Bonus

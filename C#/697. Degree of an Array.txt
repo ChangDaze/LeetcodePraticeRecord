@@ -1,0 +1,80 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var nums = new int[] { 1, 2, 2, 3, 1 };
+            var result = solution.FindShortestSubArray(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int FindShortestSubArray(int[] nums)
+            {
+                Dictionary<int, int[]> record = new Dictionary<int, int[]>();
+
+                for (int i = 0; i < nums.Length; i++)
+                {
+                    if (record.ContainsKey(nums[i]))
+                    {
+                        record[nums[i]][0]++;
+                        record[nums[i]][2] = i;
+                    }
+                    else
+                    {
+                        record.Add(nums[i], new int[3] { 1, i, i });//[0] = 出現次數、[1] = 最初出現位置、[2] = 最後出現位置
+                    }
+                }
+
+                int max = -1;
+                List<int> targets = new List<int>();
+                foreach (int key in record.Keys)
+                {
+                    if (record[key][0] > max)//找到max
+                    {
+                        max = record[key][0];
+                        targets.Clear();
+                        targets.Add(key);
+                    }
+                    else if (record[key][0] == max)//可能會有不只一個max
+                    {
+                        targets.Add(key);
+                    }
+                }
+
+                int shortest = 50001;//單純因為長度最大50000
+                foreach (int target in targets)
+                {
+                    if (record[target][2] - record[target][1] < shortest)//從所有max中找出，最終-最初的最短距離的
+                    {
+                        shortest = record[target][2] - record[target][1];
+                    }
+                }
+
+                return shortest + 1;//因為是index(0開始)所以要+1
+            }
+        }
+        //迴圈有點多，速度普通
+        //其他
+        //這個是直接用3個dic來記錄，方法理念跟我一樣，不過他有個東西我可以參考一下，就是他max、minlength是動態的(每次都if)，但有沒有比較好不清楚，在我的語法上是可以少寫一迴圈，速度普通偏慢
+        //https://leetcode.com/problems/degree-of-an-array/solutions/404411/c-explanation/
+        //這個方法算是我的方法和第一位的方法融合後更直接的版本，他也是max、minlength動態的，不過他省略存start、last position，全部濃縮在一個迴圈內，速度不錯，但要複用就要重寫
+        //https://leetcode.com/problems/degree-of-an-array/solutions/526278/c-one-pass-solution/
+        //這是全用LINQ的，過程中跑了不知幾次迴圈，速度慢，但code很好看(理念也很清晰)，主要是groupby todic 找 max，再用value = max 和 arraystartindex、arraylastindex 找 minlength
+        //https://leetcode.com/problems/degree-of-an-array/solutions/486104/c-linq-solution/
+
+    }
+}

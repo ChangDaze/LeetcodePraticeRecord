@@ -1,0 +1,64 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Diagnostics.Contracts;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[][] matrix = new int[][] { new int[] { 1,2,3,4 },
+                new int[] { 5,1,2,3 },
+                new int[] { 9,5,1,2 }};
+            Solution solution = new Solution();
+            var result = solution.IsToeplitzMatrix(matrix);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public bool IsToeplitzMatrix(int[][] matrix)
+            {
+                //第一排row
+                for(int i = 0; i < matrix[0].Length-1 ;i++)//i < matrix[0].Length-1是因為最後一個cell只有一格所以不用比(小動作，不要用比較容易懂)
+                {
+                    int temp = matrix[0][i];
+                    int row = 0+1;
+                    int col = i+1;
+                    while (row < matrix.Length && col < matrix[0].Length)
+                    {
+                        if (temp != matrix[row][col])
+                            return false;
+                        row++;
+                        col++;
+                    }
+                }
+
+                //第一排col
+                for (int i = 1; i < matrix.Length-1; i++)//從一開始是因為跟第一排row的有重疊可以不做(小動作，不要用比較容易懂)
+                {
+                    int temp = matrix[i][0];
+                    int row = i + 1;
+                    int col = 0 + 1;
+                    while (row < matrix.Length && col < matrix[0].Length)
+                    {
+                        if (temp != matrix[row][col])
+                            return false;
+                        row++;
+                        col++;
+                    }
+                }
+
+                return true;
+            }
+        }
+    }
+}

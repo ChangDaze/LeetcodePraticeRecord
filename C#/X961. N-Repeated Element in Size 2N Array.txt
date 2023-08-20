@@ -1,0 +1,53 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] nums = new int[] { 1, 2, 3, 3 };
+            Solution solution = new Solution();
+            var result = solution.RepeatedNTimes(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int RepeatedNTimes(int[] nums)
+            {
+                //恩...這題用了最簡單的解法，但不知道其他條件有沒有特殊用意，或者是其他人有更高級的解法
+                int result = -1;
+                Dictionary<int,int> record = new Dictionary<int,int>();
+                foreach (int num in nums)
+                {
+                    if (record.Keys.Contains(num))                    
+                        record[num] += 1;
+                    else
+                        record[num] = 1;
+                }
+
+                foreach(int key in record.Keys)
+                {
+                    if (record[key] == record.Keys.Count - 1)
+                    {
+                        result = key; break;
+                    }                        
+                }
+                return result;
+            }
+        }
+    }
+}

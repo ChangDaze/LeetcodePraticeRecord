@@ -1,0 +1,61 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //leetcode好像評分也不穩定，會上下起伏
+            int n = 5;
+            List<string> result = new List<string>(n);//(n)可以限定記憶體?好像沒差多少
+
+            for(int i = 1, fizz = 0, buzz = 0; i <=n;i++)
+            {
+                fizz++;
+                buzz++;
+                //不去做計算而是回歸最原始的方法
+                if(fizz==3 & buzz == 5)
+                {
+                    fizz = 0;
+                    buzz = 0;
+                    result.Add("FizzBuzz");
+                }
+                else if (fizz == 3)
+                {
+                    fizz = 0;
+                    result.Add("Fizz");
+                }
+                else if ( buzz == 5)
+                {
+                    buzz = 0;
+                    result.Add("Buzz");
+                }
+                else
+                {
+                    result.Add(i.ToString());
+                }
+            }
+
+
+
+            for(int j = 0;j<result.Count; j++)
+            {
+                Console.WriteLine(result[j]);
+            }
+
+            Console.WriteLine();
+            Console.ReadKey();
+
+        }
+
+
+    }   
+    
+
+}

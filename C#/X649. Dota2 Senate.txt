@@ -1,0 +1,71 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string senate = "RD";
+            var solution = new Solution();       
+            var result = solution.PredictPartyVictory(senate);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public string PredictPartyVictory(string senate)
+            {
+                Queue<char> queue = new Queue<char>();
+
+                //R : R剩餘數量 、banR : R剩餘要ban數量
+                int R = 0, D = 0,banR = 0, banD = 0;
+                //第一輪先統計和準備好queue
+                foreach (char c in senate)
+                {
+                    queue.Enqueue(c);
+                    if (c == 'R')R++;
+                    else D++;
+                }
+
+                while(true)//loop終究要return
+                {
+                    char c = queue.Dequeue();
+                    //感覺上要先做判斷，應該影響不大
+                    if (R == 0) return "Dire";
+                    else if (D == 0) return "Radiant";
+
+                    if (c == 'R')
+                    {
+                        if(banR > 0)//確認此人有無被ban
+                        {
+                            banR--; R--; continue;//被ban就剃除且不能做事
+                        }
+                        banD++; queue.Enqueue(c); continue;//沒被ban就開始ban對手，並加入下一輪
+                    }
+
+                    //同理，只是換成D party來做
+                    if (banD > 0)
+                    {
+                        banD--; D--; continue;
+                    }
+                    banR++; queue.Enqueue(c);
+                }
+
+                //return null; //compiler會自斷判斷while(true)、else、continur等，後面可以不用return
+            }
+        }
+    }
+}

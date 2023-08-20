@@ -1,0 +1,123 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var paragraph = "Bob hit a ball, the hit BALL flew far after it was hit.";
+            var banned = new string[] {"hit"};
+            var result = solution.MostCommonWord(paragraph, banned);
+            Console.WriteLine(result);
+            
+            Console.ReadKey();
+
+        }
+        //放棄
+        //public class Solution
+        //{
+        //    public string MostCommonWord(string paragraph, string[] banned)
+        //    {                
+        //        Dictionary<string,int> record = new Dictionary<string,int>();
+
+        //        paragraph = paragraph.ToLower();
+
+        //        string[] words = paragraph.Split(' ');
+        //        char[] trimstandard = new char[] { '!', '?', '\'', ';', '.', ',' };
+        //        foreach (string word in words)
+        //        {
+        //            string temp = word.Trim(trimstandard);//"a, a, a, a, b,b,b,c, c"
+        //            if (banned.Contains(temp))
+        //                continue;
+        //            if (record.ContainsKey(temp))
+        //            {
+        //                record[temp] = record[temp] + 1;
+        //            }
+        //            else
+        //            {
+        //                record.Add(temp, 1);
+        //            }
+        //        }
+
+        //        return record.Keys.Where(x=>record[x] == record.Values.Max()).ToList()[0];
+
+        //    }
+        //}
+
+        public class Solution
+        {
+            public string MostCommonWord(string paragraph, string[] banned)
+            {
+                Dictionary<string, int> records = new Dictionary<string, int>();
+
+                paragraph = paragraph.ToLower();
+                char[] jumpstandard = new char[] { '!', '?', '\'', ';', '.', ',',' '};
+                int startindex = 0;
+                int count = 0;
+                string temp = null;
+                for (int i =0;i<paragraph.Length ;i++)
+                {                    
+                    if(jumpstandard.Contains(paragraph[i]))
+                    {                        
+                        if(count > 0)
+                        {
+                            temp = paragraph.Substring(startindex, count);
+                            Record(ref records,temp, banned);
+                        }
+                        count = 0;
+                        startindex = i+1;
+                        continue;
+                    }
+                    count++;
+                }
+
+                if(startindex < paragraph.Length)
+                {
+                    temp = paragraph.Substring(startindex, count);
+                    Record(ref records, temp, banned);
+                }
+                
+
+                return records.Keys.Where(x => records[x] == records.Values.Max()).ToList()[0];
+            }
+
+            //拆出來方便複用時不會太長
+            public void Record(ref Dictionary<string, int> _record,string _temp, string[] banned)
+            {
+                if (banned.Contains(_temp))
+                {
+                    return;
+                }                    
+                if (_record.ContainsKey(_temp))
+                {
+                    _record[_temp] = _record[_temp] + 1;
+                }
+                else
+                {
+                    _record.Add(_temp, 1);
+                }
+            }
+            //應該相對好懂，jumpstandard不知怎麼縮減用法，失敗案例也可參考一些內容，速度應該算還行
+            //官方的解法，其實還不錯ㄟ，至少說明寫得很詳細，我的方法偏向第二種，我迴圈出來後再跑一次funtion，他是直接用i == paragraph.Length-1 這種方法過的，簡短上可以用，速度上感覺還好
+            //對了他有用isletter就不用像我在那邊jumpstandard.Contains了!!
+            //然後有個地方我可以學，就是maxcount的地方官方是每做完一次就檢查一次最大和目前的，就不用像我最後全部又遍歷一遍了
+            //https://leetcode.com/problems/most-common-word/solutions/735003/most-common-word/?orderBy=most_relevant
+            //這應該是以前的解法了吧，現在不能通，不過他 .GroupBy(x => x)+.OrderByDescending(x => x.Count())+.Select(x => x.Key)找max這種SQL式思考可以學一下
+            //https://leetcode.com/problems/most-common-word/solutions/575644/c-solution/
+            //這是用replace+regex產生出剩下空白+letter的字串ㄟ，頗猛，regex本身好像也是用asci圖表來定範圍，之後看多了可以學一下，因為有空白取word，後面其實只有做我function做的事了
+            //他max是notBanned.OrderByDescending(x => x.Value)?.FirstOrDefault().Key這樣取，跟上一位差不多
+            //不過他有偷吃步一個地方 paragraph.Replace(',', ' ');，把逗點變空白，如國不是題型正好這樣，他可能不會過，我猜，不過用regex replace速度好像不錯，因為一次就replace完了?
+            //https://leetcode.com/problems/most-common-word/solutions/574367/c-dictionary-regex/
+            //這個超很，就把題目給的標示全都replace成空白，然後一路做下去...，不過目前速度還行，字串很長可能就會出事(但特長長字串應該通常少見)
+            //https://leetcode.com/problems/most-common-word/solutions/383201/c-solution/
+        }
+
+    }
+}

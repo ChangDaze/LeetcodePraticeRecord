@@ -1,0 +1,52 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string word = "abcdefd";
+            char ch = 'd';
+            Solution solution = new Solution();
+            var result = solution.ReversePrefix(word, ch);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public string ReversePrefix(string word, char ch)
+            {
+                string result = "";//分要reverse和不用reverse的segment組合
+                int target = -1;//判斷點
+                for(int i =0;i<word.Length; i++)
+                {
+                    if (word[i]==ch)
+                    {
+                        target= i;
+                        break;
+                    }
+                }
+
+                for(int i = 0;i<=target ;i++)//要reverse的segment，因為inclusive所以<=
+                    result += word[target - i];
+
+                for (int i = target+1; i < word.Length; i++)//後續的segment，因為inclusive和可能沒有target所以target+1
+                    result += word[i];
+
+                return result;
+		//乾突然想起來應該用two pointer
+            }
+        }
+    }
+}

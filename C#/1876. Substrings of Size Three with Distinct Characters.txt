@@ -1,0 +1,114 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string s = "xyzzaz";
+            Solution solution = new Solution();
+            var result = solution.CountGoodSubstrings(s);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        //public class Solution
+        //{
+        //    public int CountGoodSubstrings(string s)
+        //    {
+        //        if(s.Length < 3) return 0;//保證至少有3個
+        //        int result = 0;
+        //        HashSet<char> record = new HashSet<char>();                
+
+        //        for (int i = 0; i<s.Length ;i++)
+        //        {
+        //            record.Add(s[i]);
+        //            if (record.Count >= 3)//我的計畫是因為不能判斷當小於3個時進出時要移除誰，所以當大於3個時就全部重檢查
+        //            {
+        //                record.Clear();
+        //                for (int j = i-2; j <= i; j++)
+        //                    record.Add(s[j]);
+        //            }
+
+        //            if (record.Count == 3)
+        //                result += 1;
+        //        }
+        //        return result;
+        //        //速度超慢，計畫好像落空了
+        //        //其他
+        //        //這是用C++，他有兩個方法，一個是暴力解，一個是sliding window，這位的sliding window說的比較仔細
+        //        //https://leetcode.com/problems/substrings-of-size-three-with-distinct-characters/solutions/1399854/c-never-under-estimate-an-easy-qn-it-can-teach-you-many-things/
+        //        //這位Java就暴力解，不過很精簡
+        //        //https://leetcode.com/problems/substrings-of-size-three-with-distinct-characters/solutions/1238665/easy-solution-o-n-approach/
+        //        //這位用C#，也有用sliding window，不過沒有那麼仔細，下面幾點建議
+        //        //1. counter 就是目前substring 有重複的字的數量，只會>=0
+        //        //2. dictionary可改用跟第1為一樣的array
+        //        //3. right left 可考慮換調，因為長度固定
+        //        //速度確實快很多
+        //        //https://leetcode.com/problems/substrings-of-size-three-with-distinct-characters/solutions/1240074/c-sliding-window-solutions/
+
+        //        //看了上面的，要用暴力解乾脆不用set速度還比較快
+        //    }
+        //}
+        //可參考的 slode windows解說
+        //https://haogroot.com/2020/09/16/sliding-window-leetcode/
+
+        //參照第二位的，速度慢，可能因為變數很多
+        //public class Solution
+        //{
+        //    public int CountGoodSubstrings(string s)
+        //    {
+        //        if (s.Length < 3) return 0;
+        //        int[] record = new int[26];
+
+        //        int result = 0;  int right = 0; int left = 0; int dup = 0;
+        //        while(right < s.Length)
+        //        {
+        //            if (++record[s[right] - 'a'] == 2) dup++;
+        //            right++;
+        //            if (right - left < 3) continue;
+        //            if (dup == 0) result++;
+        //            if (--record[s[left] - 'a'] == 1) dup--;
+        //            left++;
+
+
+        //        }
+
+        //        return result;
+        //    }
+        //}
+
+        //參照第一位的，速度還行，不用特地right left
+        public class Solution
+        {
+            public int CountGoodSubstrings(string s)
+            {
+                if (s.Length < 3) return 0;
+                int[] record = new int[26];
+
+                int result = 0; int dup = 0;//duplicate
+                for (int i = 0; i < s.Length; i++)
+                {
+                    if (++record[s[i] - 'a'] == 2) dup++;
+                    if (i < 2) continue;
+                    if (dup == 0) result++;//因為跑完上面的substring長度剛好 = 3 所以先判斷result
+                    if (--record[s[i - 2] - 'a'] == 1) dup--;//跑完長度 = 3 
+                }
+
+                return result;
+            }
+        }
+    }
+}

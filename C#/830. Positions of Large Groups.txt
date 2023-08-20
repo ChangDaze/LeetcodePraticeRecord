@@ -1,0 +1,73 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();            
+            string s = "abcdddeeeeaabbbcd";            
+            var result = solution.LargeGroupPositions(s);
+            Console.WriteLine(result);
+
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public IList<IList<int>> LargeGroupPositions(string s)
+            {
+                IList<IList<int>> result = new List<IList<int>>();
+                char store = ' ';
+                int count = 1;
+                Stack<int> stack = new Stack<int>();
+                for (int i = 0; i < s.Length; i++)
+                {
+                    if(s[i] != store)
+                    {
+                        store = s[i];
+                        count = 1;//注意初始是1
+                        if(stack.Count > 0)//檢查有沒有符合條件
+                        {
+                            result.Add(new List<int>() {stack.Pop(),i-1 });
+                        }
+                    }
+                    else
+                    {
+                        count++;
+                    }
+
+                    if(count == 3)//只有達到特定數才push
+                    {
+                        stack.Push(i-2);//放入1的位置
+                    }
+                }
+
+                if (stack.Count > 0)//最後一個若是還沒pop要單獨處理，因為他不會遇到不一樣的
+                {
+                    result.Add(new List<int>() { stack.Pop(), s.Length - 1 });
+                }
+
+                return result;
+            }
+            //這方法比較直接，但感覺還行ㄟ，速度也是普通
+            //其他
+            //這個方法也是蠻有趣，他是留s當作初始點，當字元變換同時更新初始點並記錄結束點(有點像two pointer)，比較需要注意的是她用i跟i+1比，速度慢一點
+            //https://leetcode.com/problems/positions-of-large-groups/discuss/204190/C
+            //這個也很像two pointer，但這用while、i、j比較明顯，i初始點，然後特別的是她用continue來做篩選當文字有差異
+            //且用i、j一起存index因此不用數count，最後是他把結尾的處理融合在while迴圈中，比我高明不少，速度偏快
+            //https://leetcode.com/problems/positions-of-large-groups/discuss/521878/Simple-C-Sliding-Window-Solution
+            //這個跟第二個人方法一樣，不過他用了兩個while上面的人用continue，感覺這個略輸一籌
+            //https://leetcode.com/problems/positions-of-large-groups/discuss/257899/C-two-pointer-O(N)
+
+
+        }
+    }
+}

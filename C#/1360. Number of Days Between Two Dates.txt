@@ -1,0 +1,42 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var date1 = "2019-06-29";
+            var date2 = "2019-06-30";
+            var result = solution.DaysBetweenDates(date1, date2);
+            Console.WriteLine(result);
+            
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int DaysBetweenDates(string date1, string date2)
+            {                             
+                return Math.Abs((Convert.ToDateTime(date2) - Convert.ToDateTime(date1)).Days);
+            }
+            //不想考慮閏年、年月差異，所以直接用datetime
+            //其他
+            //這方法基本一樣，我過我是 oneline，不過他是DateTime.ParseExact，是轉化特定格式日期在用的，可以學一下，不過不知道會不會比較快，這位是比我快啦
+            //https://leetcode.com/problems/number-of-days-between-two-dates/solutions/517970/c-solution/
+            //這位是個狠人，把上面我說的條件都寫了一遍，速度還不慢
+            //https://leetcode.com/problems/number-of-days-between-two-dates/solutions/1210862/c/
+            //回覆是說Amazon不能用timespan，不知是不是連DateTime都不能，還是其實這位的答案就行
+            //他是直接用比大小(先確認大小邊)的方式把天數AddDays(1)一天一天加到同樣大，速度其實比較快!?他98%(Why...這樣應該加很多次吧)
+            //https://leetcode.com/problems/number-of-days-between-two-dates/solutions/707419/c-understandable/
+        }
+
+    }
+}

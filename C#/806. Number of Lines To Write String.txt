@@ -1,0 +1,57 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            int[] widths = new int[] { 4, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 };
+            string s = "bbbcccdddaaa";
+            int[] result = solution.NumberOfLines(widths, s);
+            Console.WriteLine(result[0]);
+            Console.WriteLine(result[1]);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int[] NumberOfLines(int[] widths, string s)
+            {
+                int lineNumber = 1;//寫幾行
+                int numberInLine = 0;
+                foreach(char c in s)
+                {
+                    numberInLine += widths[c - 'a'];
+                    if(numberInLine > 100)//超過100行重新計算
+                    {
+                        lineNumber++;
+                        numberInLine = 0;
+                        numberInLine += widths[c - 'a'];
+                    }
+                }
+
+                return new int[] { lineNumber, numberInLine };
+            }
+        }
+        //速度普通
+        //其他
+        //速度比較快，可能是他比我少存一些變數，和用於數取char，但方法原理一樣，實際測過好像真的就是這樣...,不過看起來也可能是網路問題
+        //https://leetcode.com/problems/number-of-lines-to-write-string/discuss/1149003/C-O(n)-224-ms-(beats-98)
+        //這方法一樣，不過是遇到超過100就倒退嚕一下重新處理，速度普通
+        //https://leetcode.com/problems/number-of-lines-to-write-string/discuss/241281/C-Faster-than-99.1
+        //這個方法也相同不過他用char[]
+        //https://leetcode.com/problems/number-of-lines-to-write-string/discuss/134531/C-solution
+
+
+
+
+    }
+}

@@ -1,0 +1,50 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string[] names = new string[] { "Mary", "John", "Emma" };
+            int[] heights = new int[] { 180, 165, 170 };
+            Solution solution = new Solution();
+            var result = solution.SortPeople(names, heights);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+        public class Solution
+        {
+            public string[] SortPeople(string[] names, int[] heights)
+            {
+
+                return heights.AsEnumerable()
+                                        .Select((x, Index) => new { Index = Index, height = x, name = names[Index] })
+                                        .OrderByDescending(x => x.height)
+                                        .Select(x => x.name).ToArray();
+            }
+        }
+        //就是先給index並併入names再最後只select names，速度還行ㄟ
+        //其他
+        //這是C++，有三種類型，四種方法，乾，看完才知道C++也是好多好用的型態
+        //第一類，就跟我方法一樣，給index後排序，就是第一二種方法
+        //第二類，是Priority Queue，因為 C++ Priority Queue進去後就有排序，所以取出來照順序排好就好
+        //第三類，是map，跟Priority Queue C++ map有排序，，所以取出來照順序排好就好 (map也有排序...) ，評語:Using Map only. No sorting is required as the map stores key: value pair in sorted form.
+        //https://leetcode.com/problems/sort-the-people/solutions/2620605/c-4-solutions-pairs-comparator/
+        //這是java的，用hashmap然後排序
+        //https://leetcode.com/problems/sort-the-people/solutions/2620498/java-hashmap-solution/
+        //這是python的，就是用list組合 names 和 heights，排序後只丟回names
+        //https://leetcode.com/problems/sort-the-people/solutions/2620653/python3-sort-o-n-log-n-beginner-friendly/
+        //這是C#的，有個方法震驚我了Array.Sort(heights, names); 原來可以兩個array一起排??然後不會單獨變一個變數ㄟ，然後他就丟回reverse names就結束了!
+        //https://leetcode.com/problems/sort-the-people/solutions/3152874/array-sort/
+        //看完這麼多方法，本質上還都是names和heights組合後排序，不過我多加index好像多此一舉..
+    }
+}

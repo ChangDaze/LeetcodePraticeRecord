@@ -1,0 +1,43 @@
+public class Solution {
+    public int MakeConnected(int n, int[][] connections) {
+        if (connections.Length < n-1) {
+            return -1;
+        }
+
+       var dsu = new UnionFindSet(n);
+        int numberOfConnectedComponents = n;
+        foreach (int[] connection in connections) {
+            if (dsu.Find(connection[0]) != dsu.Find(connection[1])) {
+                numberOfConnectedComponents--;
+                dsu.Union(connection[0], connection[1]);
+            }
+        }
+
+        return numberOfConnectedComponents - 1;        
+    }
+
+    public class UnionFindSet {
+        private int[] parent;
+
+        public UnionFindSet(int size) {
+            parent = new int[size];
+            for (int i = 0; i < parent.Length; ++i) {
+                parent[i] = i;
+            }
+        }
+        public void Union(int x, int y) {
+            parent[Find(x)] = parent[Find(y)];
+        }
+        public int Find(int x) {
+            if (parent[x] != x) {
+                parent[x] = Find(parent[x]);
+            }
+            return parent[x];
+        }
+    }    
+}
+//影片
+//https://www.youtube.com/watch?v=8d8vfU3LYHM&ab_channel=HuaHua
+//參考
+//https://leetcode.com/problems/number-of-operations-to-make-network-connected/solutions/1511712/c-simple-dfs-solution/
+//https://leetcode.com/problems/number-of-operations-to-make-network-connected/solutions/3331273/implementation-using-c/

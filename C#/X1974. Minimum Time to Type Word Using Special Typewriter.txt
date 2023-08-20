@@ -1,0 +1,43 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string word = "bza";
+            Solution solution = new Solution();
+            var result = solution.MinTimeToType(word);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int MinTimeToType(string word)
+            {
+                char pointer = 'a';
+                int result = 0;
+                foreach(char c in word)
+                {
+                    result += (Math.Min(Math.Abs(c - pointer),
+                                        26 - Math.Abs(c - pointer)) 
+                              + 1);
+                    pointer= c;
+                }
+                return result;
+                //這邊的greedy就是找出兩字差距，和用反方向走誰小就用誰，記得打字本身也要1秒
+            }
+        }
+    }
+}

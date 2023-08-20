@@ -1,0 +1,49 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string answerKey = "FFFTTFTTFT";
+            int k = 3;
+            Solution solution = new Solution();
+            var result = solution.MaxConsecutiveAnswers(answerKey, k);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int MaxConsecutiveAnswers(string answerKey, int k)
+            {
+                int tk = k;
+                int fk = k;
+                int i, j,x,y;
+                
+                for (i=0,j=0,x=0,y=0;j<answerKey.Length ;j++,y++)
+                {
+                    //測連續T
+                    if (answerKey[j] == 'F') tk--;
+                    if (tk < 0 && answerKey[i++] == 'F') tk++;//這是整個窗體(曾發生過的最長)移動，但移動過程【當下】不一定符合條件
+                    //測連續F
+                    if (answerKey[y] == 'T') fk--;
+                    if (fk < 0 && answerKey[x++] == 'T') fk++;
+                }                
+
+                return (j-i)>(y-x)? (j - i): (y - x);
+            }
+        }
+        //基本照 1004 題的解法做兩次就好，可能有濃縮判斷的方法
+        //https://leetcode.com/problems/max-consecutive-ones-iii/solutions/247564/java-c-python-sliding-window/?envType=study-plan-v2&envId=leetcode-75
+    }
+}

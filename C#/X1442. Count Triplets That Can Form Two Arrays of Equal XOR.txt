@@ -1,0 +1,49 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] arr = new int[] { 2, 3, 1, 6, 7 };
+            Solution solution = new Solution();
+            var result = solution.CountTriplets(arr);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int CountTriplets(int[] arr)
+            {
+                int result = 0;
+                for(int i = 0;i< arr.Length;i++)
+                {
+                    int xor = arr[i];
+                    for(int j = i + 1; j < arr.Length; j++)
+                    {
+                        xor ^= arr[j];
+                        if (xor == 0)
+                            result += (j - i);//這邊j代表k，i~k間所有切下的j都滿足條件
+                    }
+                }
+                return result;
+            }
+        }
+        //題目比較難懂，基本上就是3個點切出2 arr，分別 a[i~j-1] 和 b[j~k]，然後 a和b都是xor的集合體，所以兩者相等就是 a^b == 0
+        //基本超這位的，這位的說明很清楚，最多google翻譯一下，然後下面的回覆弄懂題目在看比較好
+        //https://leetcode.com/problems/count-triplets-that-can-form-two-arrays-of-equal-xor/solutions/623754/java-use-the-trick-of-xor-operation/
+    }
+}

@@ -1,0 +1,70 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string s = "ababcbacadefegdehijhklij";
+
+            Solution solution = new Solution();
+            var result = solution.PartitionLabels(s);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public IList<int> PartitionLabels(string s)
+            {
+                //題目一開始有點難懂，就是連續字串中，將字串分段，越多越好，但要保證每個相同字元只出現在相同一段
+                //ex1: aabb -> aabb
+                //ex2: abab -> abab (因為如果分兩段再怎麼分原本和另一段都有a或都有b，更不用說更多段)
+                Dictionary<char,int> record = new Dictionary<char,int>();
+
+                //紀錄每個字最後出現的index
+                for(int i = s.Length-1;i>=0;i--)
+                {
+                    if (record.ContainsKey(s[i]))
+                        continue;
+                    record[s[i]] = i;
+                }
+
+                List<int> result = new List<int>();
+                int previousMax = -1;//仔細想想就知道，如果第一段出現在0，就是0-(-1)=1的長度
+                int currentMax = 0;//如果previousMax=8，currentMax=10，就是10-8=2的長度(9、10)
+                for (int i = 0; i < s.Length; i++)
+                {
+                    //在這段出現的字中更新出他們當中出現的文字的最後點
+                    //如果只出現一次，record[s[i]就直接 = i，後面會直接刷掉
+                    //重點是出現兩次以上，會協助拓展寬度，且保證到這段尾吧(競爭出的最大currentMax)前出現的字，一定只會出現在currentMax前
+                    if (record[s[i]] > currentMax)
+                        currentMax = record[s[i]];
+
+                    //到達這段的currentMax，代表這些字以後不會再出現，紀錄長度後 set previousMax = currentMax;
+                    if (currentMax == i)
+                    {
+                        result.Add(currentMax - previousMax);
+                        previousMax = currentMax;
+                    }                        
+                }
+
+                return result;
+            }
+        }
+        //只能說到middle的題目，有些要奇思妙想才寫得出來
+        //下次在寫試試two pinter?如果不行就這個方法變著花樣寫吧
+        //基本抄這位的
+        //https://leetcode.com/problems/partition-labels/solutions/1868842/java-c-visually-explaineddddd/
+
+    }
+
+
+}

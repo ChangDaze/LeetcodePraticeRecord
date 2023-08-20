@@ -1,0 +1,94 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var text = " practice   makes   perfect";
+            var result = solution.ReorderSpaces(text);
+            Console.WriteLine(result);
+            
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public string ReorderSpaces(string text)
+            {
+                string result = "";
+                int spacecount = 0;//累積空格
+                int lettercount =0;//累積字長度
+                int startindex = 0;//字的開頭index
+                int insertspace = 0;
+                List<string> letterlist = new List<string>();
+                
+                for(int i = 0;i<text.Length;i++)
+                {
+                    if(text[i] == ' ')
+                    {
+                        spacecount++;
+                        if(lettercount > 0)//若遇到空格且前面是文字就做文字加入處理
+                        {
+                            letterlist.Add(text.Substring(startindex,lettercount));
+                            lettercount = 0;
+                        }                        
+                    }
+                    else
+                    {
+                        if(lettercount == 0)//若遇到文字且前面是空格就記錄起始點
+                        {
+                            startindex = i;
+                        }
+                        lettercount++;
+                    }                                            
+                }
+
+                if (lettercount > 0)//避免結尾是文字
+                {
+                    letterlist.Add(text.Substring(startindex, lettercount));
+                }
+
+
+                if(letterlist.Count > 1)//若只有一文字不能做letterlist.Count - 1
+                {
+                    insertspace = spacecount / (letterlist.Count - 1);
+
+                    for (int i = 0; i < letterlist.Count - 1; i++)//最後一個字不做，後面處理
+                    {
+                        result = result + letterlist[i] + new string(' ', insertspace);
+                        spacecount = spacecount - insertspace;//記得要算殘餘空格
+                    }
+                }
+                
+                result = result + letterlist[letterlist.Count-1];//最後文字的處理
+                for(int i = 0; i < spacecount; i++)//加上殘餘空格
+                {
+                    result = result + ' ';
+                }
+
+                return result;
+            }
+            //速度不慢，但不想多說，真的寫得頗醜
+            //其他
+            //這個人就沒去追求優化甚麼，但也因此寫得很漂亮，除此之外就是要善用原生語法的附加條件，速度普通
+            //https://leetcode.com/problems/rearrange-spaces-between-words/solutions/855179/c-c-count-spaces/
+            //這個比我更生猛，就不多說了，他都用index存，但都是一個一個拔出來的，速度不慢，但跟我醜的不相上下
+            //https://leetcode.com/problems/rearrange-spaces-between-words/solutions/921120/c-solution/
+            //這個跟上一個差不多，也是一步一步來的那種，速度普通
+            //https://leetcode.com/problems/rearrange-spaces-between-words/solutions/941901/first-practice-c-mock-interview/
+            //想要優美可能就要跟第一位一樣，且可以10分鐘內解完，不過迴圈就要好幾輪，但想要加速就可能要用一步一步的方法，但想要優美就好難，不過第二、三位對於文字結尾的處理
+            //都是把判斷塞在for裡每輪都去判斷，這我可能要想一下或問其他人
+        }
+
+    }
+}

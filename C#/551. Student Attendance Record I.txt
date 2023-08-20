@@ -1,0 +1,110 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string s = "PPALLL";
+            bool result = solution.CheckRecord(s);
+            Console.WriteLine(result);           
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public bool CheckRecord(string s)
+            {
+                int absnetnumber = 0;
+                int latenumber = 0;
+                foreach(char c in s)
+                {
+                    //if(c == 'P')
+                    //{
+                    //    latenumber = 0;
+                    //    continue;
+                    //}
+
+                    if(c == 'A')
+                    {
+                        absnetnumber++;
+                        latenumber = 0;
+                        if (absnetnumber >= 2)
+                        {
+                            return false;
+                        }
+                        continue;
+                    }
+
+                    if (c == 'L')
+                    {
+                        latenumber++;
+                        if (latenumber == 3)
+                        {
+                            return false;
+                        }
+                    }
+
+                    latenumber = 0;//上面的comment'P'可用這個代替
+                }
+
+                return true;
+            }
+            //就是各自處理+continue，速度偏慢，能找出仔麼把每個case變成function就更好了，或許原本這樣就最簡潔?
+            //我也想過全部跑完最後再一起判斷，但字串超長時應該還是越早結束越好?
+            //其他
+            //這是用switch case方法跟我的差不多，也是偏慢，比較特別的是像absent這種只須看兩次的能用bool
+            //https://leetcode.com/problems/student-attendance-record-i/discuss/1886361/C-faster-than-98.60
+            //這是直接用正則表達式，意外的速度蠻慢的，可能因為要全跑完?但可以寫得很簡潔
+            //https://leetcode.com/problems/student-attendance-record-i/discuss/265918/C-2-line-solution-with-Regex
+            //這個就是最純樸的最法，可能因為變數較短讓他算平均快?
+            //https://leetcode.com/problems/student-attendance-record-i/discuss/523406/C-100-memory-95-runtime.-Commented
+        }
+
+
+        //乾網路真的差很多，這有時10%有時能100%
+        //public class Solution
+        //{
+        //    public bool CheckRecord(string s)
+        //    {
+        //        int a = 0;
+        //        int l = 0;
+        //        foreach (char c in s)
+        //        {
+        //            if (c == 'A')
+        //            {
+        //                a++;
+        //                l = 0;
+        //                if (a > 1)
+        //                {
+        //                    return false;
+        //                }
+        //                continue;
+        //            }
+
+        //            if (c == 'L')
+        //            {
+        //                l++;
+        //                if (l == 3)
+        //                {
+        //                    return false;
+        //                }
+        //                continue;
+        //            }
+
+        //            l = 0;
+        //        }
+
+        //        return true;
+        //    }
+        //}
+    }
+}

@@ -1,0 +1,18 @@
+Create table #Temp (product_id int, low_fats char(1), recyclable char(1))
+insert into #Temp (product_id, low_fats, recyclable) values ('0', 'Y', 'N')
+insert into #Temp (product_id, low_fats, recyclable) values ('1', 'Y', 'Y')
+insert into #Temp (product_id, low_fats, recyclable) values ('2', 'N', 'Y')
+insert into #Temp (product_id, low_fats, recyclable) values ('3', 'Y', 'Y')
+insert into #Temp (product_id, low_fats, recyclable) values ('4', 'N', 'N')
+select * from #Temp
+
+select product_id from #Temp
+where low_fats = 'Y' and recyclable = 'Y'
+
+drop table #Temp
+
+--乾，速度超慢ㄟ，這還有快速的方法嗎..
+--對阿，大家都一樣...
+--https://leetcode.com/problems/recyclable-and-low-fat-products/solutions/2295913/fast-sql-server/
+--https://leetcode.com/problems/recyclable-and-low-fat-products/solutions/2476778/sql-server/
+--https://leetcode.com/problems/recyclable-and-low-fat-products/solutions/3188951/sql-server-clean-easy/

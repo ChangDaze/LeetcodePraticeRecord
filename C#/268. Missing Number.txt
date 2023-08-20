@@ -1,0 +1,53 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var nums = new int[] { 9, 6, 4, 2, 3, 5, 7, 0, 1 };
+            var result = solution.MissingNumber(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public int MissingNumber(int[] nums)
+            {
+                bool[] record = new bool[nums.Length + 1];
+                foreach (int num in nums)
+                {
+                    record[num] = true;
+                }
+
+                for (int i = 0; i < record.Length; i++)
+                {
+                    if (!record[i])
+                        return i;
+                }
+
+                return -1;
+            }
+            //用之前跟hens討論的，因為我們知道最大數量是多少，所以可以用array紀錄，這樣最多O(2n)，速度不錯，只是明顯要開另一條array
+            //其他
+            //這是一般的XOR，for loop，很快，基本上就是nums和0~n兩個Array都做XOR，出現偶數次的number會被消去，剩下一個就是nums沒出現的數
+            //https://leetcode.com/problems/missing-number/solutions/607312/c-concise-solution/
+            //這是XOR，LINQ版，用Aggregate慢慢XOR上去(也該記起來Aggregate了..)，很快
+            //https://leetcode.com/problems/missing-number/solutions/465819/c-xor-solution/
+            //我覺得這個人的思維方式也很值得學習，就是用算術解決nums.Length * (nums.Length + 1) / 2 - nums.Sum()，其實題目也有提示MATH，但我沒想到是算術解，很快
+            //https://leetcode.com/problems/missing-number/solutions/2081757/one-line-c-solution-with-explanation/
+            //這題唯一會自豪的可能只是解法跟大家都不同...(但感覺也不會太差)
+        }
+
+    }
+}

@@ -1,0 +1,54 @@
+Create table #Products (product_id int, product_name varchar(40), product_category varchar(40))
+Create table #Orders (product_id int, order_date date, unit int)
+insert into #Products (product_id, product_name, product_category) values ('1', 'Leetcode Solutions', 'Book')
+insert into #Products (product_id, product_name, product_category) values ('2', 'Jewels of Stringology', 'Book')
+insert into #Products (product_id, product_name, product_category) values ('3', 'HP', 'Laptop')
+insert into #Products (product_id, product_name, product_category) values ('4', 'Lenovo', 'Laptop')
+insert into #Products (product_id, product_name, product_category) values ('5', 'Leetcode Kit', 'T-shirt')
+insert into #Orders (product_id, order_date, unit) values ('1', '2020-02-05', '60')
+insert into #Orders (product_id, order_date, unit) values ('1', '2020-02-10', '70')
+insert into #Orders (product_id, order_date, unit) values ('2', '2020-01-18', '30')
+insert into #Orders (product_id, order_date, unit) values ('2', '2020-02-11', '80')
+insert into #Orders (product_id, order_date, unit) values ('3', '2020-02-17', '2')
+insert into #Orders (product_id, order_date, unit) values ('3', '2020-02-24', '3')
+insert into #Orders (product_id, order_date, unit) values ('4', '2020-03-01', '20')
+insert into #Orders (product_id, order_date, unit) values ('4', '2020-03-04', '30')
+insert into #Orders (product_id, order_date, unit) values ('4', '2020-03-04', '60')
+insert into #Orders (product_id, order_date, unit) values ('5', '2020-02-25', '50')
+insert into #Orders (product_id, order_date, unit) values ('5', '2020-02-27', '50')
+insert into #Orders (product_id, order_date, unit) values ('5', '2020-03-01', '50')
+select * from #Products
+select * from #Orders
+
+--動作好像有點多，主要是它有給客製化目標
+select B.product_name, A.unit
+from (
+	select product_id,  sum(unit) unit
+	from #Orders
+	where order_date >= '2020-02-01' and order_date < '2020-03-01'
+	group by product_id
+	having sum(unit)>=100)A
+join #Products B
+on A.product_id = b.product_id
+
+--這是下面第一位的方法
+select p.product_name,
+sum(o.unit) as unit
+from #Products p
+join #Orders o
+on p.product_id = o.product_id
+where Left(order_date, 7) = '2020-02'
+group by p.product_name
+having sum(o.unit) >= 100
+
+--速度普通
+--其他
+--方法差不多，但他是先組合+用left取年月份，感覺比我粗糙一些
+--https://leetcode.com/problems/list-the-products-ordered-in-a-period/solutions/488995/easy-mysql-solution-100-faster/
+--這位是用Month and Year function，也是先組合，其他都差不多
+--https://leetcode.com/problems/list-the-products-ordered-in-a-period/solutions/497520/myql-using-month-and-year-function/
+--方法一樣，也是先組合
+--https://leetcode.com/problems/list-the-products-ordered-in-a-period/solutions/1519559/ms-sql/
+--我比較好奇大家都不考慮先過濾嗎?
+drop table #Products
+drop table #Orders

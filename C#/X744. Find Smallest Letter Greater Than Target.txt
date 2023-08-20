@@ -1,0 +1,50 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.ComponentModel;
+using System.Security.Cryptography;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var letters = new char[] { 'e', 'e', 'e', 'e', 'e', 'e', 'n', 'n', 'n', 'n' };
+            var target = 'e';
+            Solution solution = new Solution();
+            var result = solution.NextGreatestLetter(letters,target);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public char NextGreatestLetter(char[] letters, char target)
+            {
+                int left = 0;
+                int right = letters.Length-1;
+                while (left <= right)
+                {
+                    int mid = left + (right-left)/2;
+                    if (letters[mid] <= target)//順利的話最後是left是>的第一個，right是<=的第一個
+                        left = mid + 1;
+                    else//這種<=+>會找到唯一交會點，<、>、=這種會找到值但位置不定(所以有重複植出現時不好定位)
+                        right = mid - 1;
+                }
+                //if(left == letters.Length || right == letters.Length-1)
+                if(left == letters.Length)//left == letters.Length(target大於全部)、
+                                          //right == letters.Length-1(最大的=target，這題下是沒答案，不過因為寫法的關係，同時也會left == letters.Length，所以可以不用判斷)
+                    return letters[0];
+                else//right == -1(target小於全部)、一般
+                    return letters[left];
+
+            }
+        }
+    }
+}

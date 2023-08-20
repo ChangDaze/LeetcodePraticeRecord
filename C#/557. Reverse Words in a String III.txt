@@ -1,0 +1,49 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string s = "Let's take LeetCode contest";            
+            string result = solution.ReverseWords(s);
+            Console.WriteLine(result);           
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public string ReverseWords(string s)
+            {
+                string[] words = s.Split(' ');
+                for(int i =0; i < words.Length; i++)
+                {
+                    string temp = "";
+                    for(int j = words[i].Length - 1 ; j >=0; j--)
+                    {
+                        temp += words[i][j];
+                    }
+                    words[i] = temp;
+                }
+
+                return string.Join(" ", words);//有join也能用concat
+            }
+        }
+        //速度偏慢
+        //其他
+        //這裡是LINQ的簡潔用法，但速度一樣偏慢，原理跟我的差不多，比較特別的是回覆有人特地用concat來轉型成字串(就是有點多餘)
+        //https://leetcode.com/problems/reverse-words-in-a-string-iii/discuss/101961/C-solution-with-LINQ
+        //這個思路也蠻特別的，他用stack當反轉工具，然後組合句子時是用stringbuilder，速度也是偏慢
+        //https://leetcode.com/problems/reverse-words-in-a-string-iii/discuss/522740/C
+        //這是找出要反轉的word的start和end index，然後用左右指標來反轉，速度普通但比上面都快，一些排序和交換法可能真的比較快
+        //https://leetcode.com/problems/reverse-words-in-a-string-iii/discuss/102062/c-solution
+    }
+}

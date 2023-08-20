@@ -1,0 +1,48 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] nums = new int[] { 1, 2, 2, 1 };
+            int k = 1;
+            Solution solution = new Solution();
+            var result = solution.CountKDifference(nums,k);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int CountKDifference(int[] nums, int k)
+            {
+                //就是比較基礎的巢狀迴圈
+                int result = 0;
+                for(int i = 0;i<nums.Length-1; i++)
+                {
+                    for(int j = i+1;j<nums.Length; j++)//只要每次都只跟 i+1之後的比就能避免重複
+                    {
+                        if (Math.Abs(nums[i] - nums[j]) == k)                        
+                            result+=1;                        
+                    }
+                }
+
+                return result;
+
+            }
+        }
+    }
+}

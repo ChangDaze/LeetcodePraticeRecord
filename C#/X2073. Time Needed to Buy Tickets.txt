@@ -1,0 +1,56 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] tickets = new int[] { 84, 49, 5, 24, 70, 77, 87, 8 };
+            int k = 3;
+            Solution solution = new Solution();
+            var result = solution.TimeRequiredToBuy(tickets, k);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int TimeRequiredToBuy(int[] tickets, int k)
+            {
+                //發現了queue可以用ElementAt
+                //另外用變數紀錄目標的position，其他就模擬題目情境
+                //不過速度好像很慢
+                int result = 0;
+                Queue<int> queue = new Queue<int>(tickets);
+                while (queue.ElementAt(k) != 0)
+                {
+                    int temp = queue.Dequeue();
+                    if(temp > 0)
+                    {
+                        result += 1;
+                        temp -= 1;
+                        queue.Enqueue(temp);
+                    }
+                    
+                    if (k > 0)
+                        k--;
+                    else
+                        k = queue.Count - 1;                    
+                }
+                return result;
+            }
+        }
+    }
+}

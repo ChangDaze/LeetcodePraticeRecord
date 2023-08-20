@@ -1,0 +1,50 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string sentence = "i love eating burger";
+            string searchWord = "burg";
+            var result = solution.IsPrefixOfWord(sentence, searchWord);
+            Console.WriteLine(result);
+
+
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int IsPrefixOfWord(string sentence, string searchWord)
+            {
+                string[] words = sentence.Split(' ');
+                for(int i =0; i < words.Length; i++)
+                {
+                    if (words[i].IndexOf(searchWord) == 0)//因為要prefix，不能直接用contain
+                    {
+                        return i+1;
+                    }                    
+                }
+                return -1;
+            }
+            //這就照題目給的hint，算很簡單，然後速度普通
+            //其他
+            //我用indexof他用startwith可以學一下以後找prefix用，但速度偏慢
+            //https://leetcode.com/problems/check-if-a-word-occurs-as-a-prefix-of-any-word-in-a-sentence/discuss/1139218/C-Solution-using-Startswith
+            //這也是startwith看來用的人不少，但意外的是這個可能快一點(不確定)，差異是這位用list上面用array
+            //https://leetcode.com/problems/check-if-a-word-occurs-as-a-prefix-of-any-word-in-a-sentence/discuss/648687/C-Solution
+            //這個人approach1用startwith，approach2用for自己寫函式用for土法煉鋼，速度也不慢，雖然說較長時可能就慢了，但indexof和startwith裡面說不定也是for在跑
+            //https://leetcode.com/problems/check-if-a-word-occurs-as-a-prefix-of-any-word-in-a-sentence/discuss/1157214/C-solutions
+
+        }
+    }
+}

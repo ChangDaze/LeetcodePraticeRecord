@@ -1,0 +1,49 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.ComponentModel;
+using System.Security.Cryptography;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var n = 1;
+            Solution solution = new Solution();
+            var result = solution.ArrangeCoins(n);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int ArrangeCoins(int n)
+            {
+                //若答案是x，等比級數公式(x+1)*x/2 <- 會疊起來的階數
+                //n >= (x+1)*x/2，n是總數
+                int left = 1;
+                int right = n;
+                while (left <= right)
+                {
+                    double mid = left + (right - left) / 2;//因為證實這比較快所以這樣算，然後用int，後續mid乘法大概會溢位出現奇怪的數字
+                    if((1+mid)*mid/2 <= (double)n)//mid代表x，n轉換大概是方便比較
+                        left = (int)mid+1;//轉回int才放得進去，應該也是能一開始就double啦
+                    else
+                        right = (int)mid -1;
+                }
+                //因為答案必定存在所以不用if判斷left或right合不合理
+                return left-1;//因為答案只要小於等於，所以需要有固定範圍的方式，就是(1+mid)*mid/2 <= (double)n
+                              //若是用 < 就只能定位 < -> right開始往下 或 >= -> left開始往上，的位置，= 時答案是left但 > 時會答案會是left-1
+                              //用<= 就能定位 > -> left開始往上，所以答案固定left-1
+            }
+        }
+        //https://leetcode.com/problems/arranging-coins/solutions/258044/java-binary-search/
+    }
+}

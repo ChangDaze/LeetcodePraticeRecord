@@ -1,0 +1,44 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int number = 3;
+            //這也不算常見的2維陣列?int[[],[]]
+            int[][] mat = new int[5][] { new int[] { 1, 1, 0, 0, 0 },
+            new int[] { 1, 1, 1, 1, 0 },
+            new int[] { 1,0,0,0,0 },
+            new int[] { 1,1,0,0,0},
+            new int[] { 1,1,1,1,1}};
+
+            Dictionary<int, int> dict = new Dictionary<int, int>();
+
+            int i = 0;
+            foreach(int[] line in mat)
+            {
+                dict.Add(i++, line.Sum());
+            }
+            //先比大小由小到大，select key排順序(題目有個條件是相同大小，先出現的先排，這裡是直接排，必要時可能也要排?)
+            int[] orderList = (from entry in dict orderby entry.Value ascending select entry.Key).ToArray();
+            //ArraySegment，segment(部分)，是delimit(劃界)陣列，最後要ToArray
+            int[] result = new ArraySegment<int>(orderList, 0, number).ToArray();
+
+            Console.WriteLine(orderList[4]);
+
+            Console.ReadKey();
+
+        }
+
+
+    }
+
+
+}

@@ -1,0 +1,47 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int n = 14;
+            Solution solution = new Solution();
+            var result = solution.NumberOfMatches(n);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+        public class Solution
+        {
+            public int NumberOfMatches(int n)
+            {
+                int result = 0;
+                                
+                while (n > 1)
+                {
+                    if (n % 2 != 0)//不能除盡 ex: 14 -> 7 -> 除不盡
+                    {
+                        result --;//倒扣回來
+                        n++;//加個虛擬的match
+                    }
+                    n = n / 2;
+                    result += n;
+                }
+
+                return result;
+            }
+            //這有沒有算式不清楚，但直接模擬題目情境還蠻有趣的
+        }
+    }
+}

@@ -1,0 +1,133 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+
+            Solution solution = new Solution();            
+            Console.WriteLine(solution.LongestPalindrome("abccccdd"));
+            Console.ReadKey();
+
+        }
+
+        //public class Solution
+        //{
+        //    public int LongestPalindrome(string s)
+        //    {
+        //        if(s.Length == 1)
+        //        {
+        //            return 1;
+        //        }
+        //        Dictionary<char,int> record = new Dictionary<char,int>();
+        //        int quotient = 0;
+
+        //        foreach(char c in s)//先做好每個字的紀錄
+        //        {
+        //            if (record.ContainsKey(c))
+        //            {
+        //                record[c]++;
+        //            }
+        //            else
+        //            {
+        //                record.Add(c, 1);
+        //            }
+        //        }
+
+        //        foreach(KeyValuePair<char,int> kvp in record)//看看有幾個兩兩一組
+        //        {
+        //            quotient = quotient + kvp.Value / 2;
+        //        }
+
+        //        quotient = quotient*2;
+
+        //        if(quotient < s.Length)//如果長度不同中間可以塞一個字回文
+        //        {
+        //            return quotient+1;
+        //        }
+        //        else
+        //        {
+        //            return quotient;//如果長度相同就是全部倆兩一組，也不能多塞一個字
+        //        }
+
+
+
+
+        //    }
+        //}
+
+        //public class Solution
+        //{
+        //    //這算法很特別
+        //    public int LongestPalindrome(string s)
+        //    {
+        //        var n = s.Length;
+        //        var charAndCount = new int[256];//這是用對應ASCII code的方法紀錄，很特別，優點應該是可以不只計英文字
+        //        for (int i = 0; i < n; i++)
+        //        {
+        //            charAndCount[s[i]]++;
+        //        }
+
+        //        var hasOdd = false;//有奇數就代表回文中間都可以塞一個字讓回文長度+1
+        //        var count = 0;
+        //        foreach (var oneCount in charAndCount)
+        //        {
+        //            if (oneCount % 2 == 0)//仍被2整除的都能增加回文長度
+        //            {
+        //                count += oneCount;//通常是0啦
+        //            }
+        //            else
+        //            {
+        //                count += oneCount - 1;//奇數就-1剩的其實就都能被2整除，通常是1啦，所以最後還是+0
+        //                hasOdd = true;//然後紀錄有奇數
+        //            }
+        //        }
+
+        //        if (hasOdd)
+        //        {
+        //            count += 1;
+        //        }
+
+        //        return count;
+        //    }
+        //}
+        //很特別但合理的解法
+        //來源:https://leetcode.com/problems/longest-palindrome/discuss/328637/C-charAndCount
+        //下面這解法差不多但只考慮lowercase和uppercase還蠻好玩的
+        //https://leetcode.com/problems/longest-palindrome/discuss/177096/C-readable-code
+        //不過這樣說好像很多人知道int[]對應ascii的特性
+
+        public class Solution
+        {
+            public int LongestPalindrome(string s)
+            {
+
+                if (s == null || s.Length == 0)
+                    return 0;
+
+                int len = 0;
+                HashSet<char> set = new HashSet<char>();
+                foreach (char c in s)
+                {
+                    if (set.Contains(c))
+                    {
+                        len += 2;
+                        set.Remove(c);
+                    }
+                    else
+                        set.Add(c);
+                }
+
+                return set.Count > 0 ? len + 1 : len;
+            }
+        }
+        //這個也頗合理，就是一個個處理眼前的，最後看有沒有剩，但會多出不少次remove數字越多可能越慢(其實我的也不好，畢竟要記錄下來)
+        //來源:https://leetcode.com/problems/longest-palindrome/discuss/793851/C-HashSet-solution
+    }
+}

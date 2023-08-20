@@ -1,0 +1,88 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] height = new int[] { 1, 8, 6, 2, 5, 4, 8, 3, 7 };
+
+            Solution solution = new Solution();
+            var result = solution.MaxArea(height);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        //public class Solution
+        //{
+        //    public int MaxArea(int[] height)
+        //    {
+        //        int max = -1;
+
+        //        int left = 0;
+        //        int right = height.Length - 1;
+
+        //        while (left < right)
+        //        {
+        //            int tempMax = (right - left) *
+        //                        (height[left] < height[right] ? height[left++] : height[right--]);
+        //            max = Math.Max(max, tempMax);
+        //        }
+
+        //        return max;
+        //    }
+        //}
+        //(1)最長的兩邊開始，一定會包含答案，
+        //(2)又只有短的那邊改動，面積才有機會變大，
+        //(3)若遇到左右兩邊相同高度，匯市當下距離下最下最大面積，有更大的也只會發生在左右兩邊都移動後的結果
+        //(如果只有左移或右移，就算遇到長度更高的，也會因尾翼邊維持較短，距離又變進而面積變小)
+
+        public class Solution
+        {
+            public int MaxArea(int[] height)
+            {
+                int max = -1;
+
+                int left = 0;
+                int right = height.Length - 1;
+
+                while (left < right)
+                {
+                    int tempMax = (right - left) * (height[left] < height[right] ? 
+                        height[left] :
+                        height[right]);
+
+                    max = Math.Max(max, tempMax);
+
+                    if (height[left] < height[right])
+                        left = SkipUseLess(1,left+1,height);
+                    else
+                        right = SkipUseLess(-1,right-1, height);                    
+                }
+
+                return max;
+            }
+
+            private int SkipUseLess(int direction,int position,int[] height)
+            {
+                int standard = height[position];
+                while(height[position] < standard)       //只用小於是因為另一邊必定大於等於，要讓這個loop有停下來的機會         
+                    position += direction;
+                
+                return position;
+            }
+        }
+    }
+}

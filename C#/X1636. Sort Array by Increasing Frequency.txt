@@ -1,0 +1,59 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var a = new string[20];
+            int[] nums = new int[] { 1,1,2,2,2,3};
+            Solution solution = new Solution();
+            var result = solution.FrequencySort(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+        public class Solution
+        {
+            public int[] FrequencySort(int[] nums)
+            {
+                Dictionary<int, int> record = new Dictionary<int, int>();
+                foreach (int num in nums)
+                {
+                    if(record.Keys.Contains(num))
+                        record[num]++;
+                    else
+                        record[num] = 1;
+                }
+
+                var sortedRecord = record.OrderBy(x=>x.Value)
+                                         .ThenByDescending(x=>x.Key)
+                                         ;
+
+                int id = 0;
+                foreach(var item in sortedRecord)
+                {
+                    int count = 0;
+                    while(count < item.Value)
+                    {
+                        nums[id] = item.Key;
+                        count++;
+                        id++;
+                    }
+                }
+
+                return nums;
+            }
+        }
+    }
+}

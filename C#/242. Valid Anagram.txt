@@ -1,0 +1,57 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+
+            Solution solution = new Solution();
+            Console.WriteLine(solution.IsAnagram("anagram", "nagaram"));
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public bool IsAnagram(string s, string t)
+            {
+                List<char> result = s.ToList();
+                List<char> tool = t.ToList();
+
+                for(int i = 0; i < result.Count; i++)
+                {
+                    if (tool.Contains(result[i]))//if contain remove both site
+                    {
+                        //Console.WriteLine(tool.IndexOf(result[i]));
+                        tool.RemoveAt(tool.IndexOf(result[i]));
+                        result.RemoveAt(i);
+                        i--;//remember to i-- to avoid error cause by remove item                        
+                    }
+                }
+
+                if(result.Count == 0 & tool.Count == 0)//need both site count == 0,only one sit still false 
+                {
+                    return true;
+                }
+
+                return false;
+
+            }
+            //喔!他還有個讀unicode的進階限制可能用線面的方法比較好，另外我的方法超慢
+            //其他
+            //這也是用C#的型別工具，但他用得比我聰明且清晰很多 + sort 就不用每次用contain和remove來減慢速度，來達到用工具也能有平均速度，猛，不過他有一些錯誤可以看下面的reply來修正
+            //https://leetcode.com/problems/valid-anagram/discuss/66545/C-Solution
+            //這用dictionary跑s和t兩次迴圈意外的還比較快，dictionary統計時某些情況可能真的比較方便，另外這個任意開始判斷長度的做法還不錯，也能取代我一部份多餘的動作
+            //https://leetcode.com/problems/valid-anagram/discuss/198373/C
+            //這個人事室先建好空間用char和int代換，可能因此就再比dictionary快因為直接轉換，any的方法和<0的提前出場也很棒，下面的replay也可以參考，但我覺得reply不是全對
+            //https://leetcode.com/problems/valid-anagram/discuss/66546/C-solution%3A-dictionary
+        }
+    }
+}

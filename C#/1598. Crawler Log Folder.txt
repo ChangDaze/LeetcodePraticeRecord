@@ -1,0 +1,58 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string[] logs = new string[] { "d1/", "../", "../", "../" };
+            int result = solution.MinOperations(logs);
+            Console.WriteLine(result);
+
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int MinOperations(string[] logs)
+            {                
+                Stack<string> stack = new Stack<string>();
+                foreach(string log in logs)
+                {
+                    switch (log)
+                    {
+                        case "./":
+                            break;
+                        case "../":
+                            if(stack.Count > 0)
+                            {
+                                stack.Pop();
+                            }                            
+                            break;
+                        default:
+                            stack.Push(log);
+                            break;
+                    }
+                }
+                return stack.Count();
+            }
+            //上面其實很簡單，但有幾個很脆弱的點(1)log裡有名字的folder一定是child這邊連是不是同名folder都是child(2)就簡單三種模式不用多考慮
+            //速度好像就普通
+            //其他
+            //我還覺得我很隨便，這個更扯也是直接三種模式但直接folder都不考慮了，就depth++--，生猛，不過因此變算快了，也很容易懂
+            //https://leetcode.com/problems/crawler-log-folder/discuss/866395/C-O(n)-time-O(1)-space
+            //這個人跟上面的一樣，或許題目不要想的複雜，達成目的就好
+            //https://leetcode.com/problems/crawler-log-folder/discuss/978809/c-easy-solution-O(n)
+            //這個人啟發我用stack，不過他自己用是Stack<int>，好像沒什麼必要，程度好像不高?速度跟我差不多，但我相信我stack<string>存folder還是有好處的
+            //https://leetcode.com/problems/crawler-log-folder/discuss/2041145/C-solution
+        }
+    }
+}

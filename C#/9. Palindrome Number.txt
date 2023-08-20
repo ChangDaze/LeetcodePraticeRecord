@@ -1,0 +1,57 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();            
+
+            Console.WriteLine(solution.IsPalindrome(121));
+            Console.WriteLine((int)Math.Log10(5000));
+
+
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public bool IsPalindrome(int x)
+            {
+                if (x < 0)//有負號就不會回文
+                {
+                    return false;
+                }
+
+                string number = x.ToString();
+
+                for(int i =0; i < number.Length/2; i++)//int/2一定取一半或取一半後餘1 -> 可以少對一半
+                {
+                    if(!(number[i] == number[number.Length - 1 - i]))//字串左右逼近互比
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+        }
+        //其他
+        //這解法有點獵奇，就是用位數(最小位數乘上去，最大位數拉下來)的方式把數字reverse...@@
+        //https://leetcode.com/problems/palindrome-number/discuss/251875/C-simple-solution-without-conversion-to-string
+        //怎麼取個位數和於樹被他們用得這麼炫砲用math.logs取位數，然後依位數分左右(可以少處理一半)依位數處理出對應數字來比對
+        //https://leetcode.com/problems/palindrome-number/discuss/417477/Simple-C
+        //這是把數字一次反過來然後比對一樣用取餘數乘位數的方法
+        //https://leetcode.com/problems/palindrome-number/discuss/277579/C-reverse-number
+        //這樣看來我的方法最不數學ㄟ，可是我覺得我的比較合理
+
+
+
+    }
+}

@@ -1,0 +1,73 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.ComponentModel;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var n = 10;
+            Solution solution = new Solution();
+            var result = solution.GuessNumber(n);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        /** 
+         * Forward declaration of guess API.
+         * @param  num   your guess
+         * @return 	     -1 if num is higher than the picked number
+         *			      1 if num is lower than the picked number
+         *               otherwise return 0
+         * int guess(int num);
+         */
+        //上面這則是leetcode提供的api(可能就是GuessGame提供的吧?)
+        //這個GuessGame應該是leetcode方便管理所以用繼承
+        public class Solution : GuessGame
+        {
+            public int GuessNumber(int n)
+            {
+                int left = 1;
+                int right = n;
+
+                while(left <= right)
+                {
+                    //int mid = (left + right) / 2;
+                    int mid = left + (right - left) / 2;//這個有差ㄟ，也有比較快ㄟ，應該不是溢位影響而是位數長又有加減乘除速度就慢??
+                    int res = guess(mid);
+                    //if(guess(mid) == 1)
+                    //    left= mid+1;
+                    //else if(guess(mid) == -1)
+                    //    right= mid-1;
+                    //else
+                    //    return mid;
+                    if (res == 1)
+                        left = mid + 1;
+                    else if (res == -1)
+                        right = mid - 1;
+                    else
+                        return mid;
+                }
+
+                return -1;
+            }
+        }
+        //https://leetcode.com/problems/guess-number-higher-or-lower/solutions/1868329/binary-search-says-time-limit-exceeded/?q=Time+Limit+Exceeded&orderBy=most_relevant
+
+        public class GuessGame
+        {
+            public int guess(int num)
+            {
+                return 0;
+            }
+        }
+    }
+}

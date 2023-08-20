@@ -1,0 +1,96 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string licensePlate = "1s3 PSt";
+            string[] words = new string[]{"step", "stepsssssssssssss", "stripe", "stepple"};
+            string result = solution.ShortestCompletingWord(licensePlate, words);
+            Console.WriteLine(result);           
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public string ShortestCompletingWord(string licensePlate, string[] words)
+            {
+                //complete word
+                //ignore numbers and spaces
+                //shortest
+                //first appear
+                //guarantee exist
+
+                //target 60~90 、 97~122
+                //to lowcase
+                Dictionary<char,int> licensePlateDic = new Dictionary<char,int>();
+                licensePlate = licensePlate.ToLower();//統一
+                for(int i = 0 ; i < licensePlate.Length; i++)
+                {
+                    if((licensePlate[i] >=60 & licensePlate[i] <= 90) || (licensePlate[i] >= 97 & licensePlate[i] <= 122))//只選字母
+                    {
+                        if (licensePlateDic.ContainsKey(licensePlate[i]))
+                        {
+                            licensePlateDic[licensePlate[i]]++;
+                        }
+                        else
+                        {
+                            licensePlateDic.Add(licensePlate[i], 1);
+                        }
+                    }
+                }
+
+                return PickCompleteWord(licensePlateDic,words);
+
+            }
+
+            public string PickCompleteWord(Dictionary<char, int> licensePlateDic, string[] words)
+            {
+                string result = new String(' ', 1000);//因為是建構式所以要new，repeat char多少次
+
+                foreach(string word in words)
+                {
+                    if(word.Length >= result.Length)//長度包含等於都可以不考慮
+                    {
+                        continue;
+                    }
+                    Dictionary<char, int> temprecord = new Dictionary<char, int>(licensePlateDic);//不用new的話 建構式的方式會一直用到同一個dic
+                    for (int i = 0; i < word.Length; i++)
+                    {
+                        if (temprecord.ContainsKey(word[i]))
+                        {
+                            temprecord[word[i]]--;
+                        }
+                    }
+
+                    if(temprecord.Count(x=>x.Value<=0) == temprecord.Count())//用lambda count不用先select(反而可能會錯)
+                    {
+                        result = word;
+                    }
+                }
+
+                return result;
+            }
+            //速度普通，網路好時還能100%
+            //其他
+            //速度偏慢，不過有些有趣，他先sort過讓第一個檢查通過的必定是答案(長度重複的可能會需要再處理，也可能不用?)
+            //再來他把target長度當作標準進一步篩選，最後我是用word來數用--，他是反過來數好word用target來減，還有char提供的isletter也頗猛
+            //https://leetcode.com/problems/shortest-completing-word/discuss/112922/C-Solution
+            //速度普通，但是內容也是頗猛，用linq重組字串，用linq建立想要的dic，用linq比對word和target的數量，讚，不過這算hashmap?
+            //https://leetcode.com/problems/shortest-completing-word/discuss/2046117/C-Linq-Hashmap
+            //速度很慢但也很有趣，他是用int[26]來比對word和tagert，當int[i]target較多時就回傳false，另外他提醒了我
+            //我可以不用new String(' ', 1000)，另外存int min來比對長度即可.....
+            //https://leetcode.com/problems/shortest-completing-word/discuss/1278533/C-Naive-Approach
+
+        }
+    }
+}

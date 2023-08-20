@@ -1,0 +1,59 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var nums = new int[] { 1, 2, 2, 4 };
+            var result = solution.FindErrorNums(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int[] FindErrorNums(int[] nums)
+            {
+                bool[] record = new bool[nums.Length + 1];
+                int[] result = new int[2];
+
+                foreach (int num in nums)//第一輪紀錄flag和result[0]
+                {
+                    if (record[num] == false) record[num] = true;
+                    else result[0] = num;
+                }
+
+                //因為record[0]沒用到，所以要記得跳過(i=1開始)
+                for (int i = 1; i < record.Length; i++)//第二輪紀錄result[1]，不過感覺可以透過nums[i] = nums[i]-1之類的方法跟第一輪融合一起
+                {
+                    if (!record[i])
+                    {
+                        result[1] = i;
+                        break;
+                    }
+                }
+
+                return result;
+            }
+            //速度不錯
+            //其他
+            //這是用LINQ，速度普通但是oneline，他說明蠻清楚的，就是用group by count=2找到重複，再用range(1,n).except(nums).first找出1~n缺的數字
+            //https://leetcode.com/problems/set-mismatch/solutions/2735968/c-1-liner-linq/
+            //這方法跟我幾乎一模一樣，不過他是用int[]，但語法就能看起來順一些(不像我判斷時有點彆扭)，速度也不錯
+            //https://leetcode.com/problems/set-mismatch/solutions/2734003/c-faster-than-38-37/
+            //這也是LINQ，基本方法跟第一位一樣，不過她拆開了，且不像第一位寫的順，速度普通
+            //https://leetcode.com/problems/set-mismatch/solutions/1966708/c/
+        }
+
+    }
+}

@@ -1,0 +1,45 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string current = "02:30";
+            string correct = "04:35";
+            Solution solution = new Solution();
+            var result = solution.ConvertTime(current, correct);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int ConvertTime(string current, string correct)
+            {
+                int[] steps = new int[] {60,15,5,1};//從最大數開始
+                int deltaNum = (Convert.ToInt32(correct.Substring(0, 2)) * 60 + Convert.ToInt32(correct.Substring(3, 2))) - 
+                    (Convert.ToInt32(current.Substring(0, 2)) * 60 + Convert.ToInt32(current.Substring(3, 2)));
+                int result = 0;
+
+                foreach(int step in steps)
+                {
+                    result += deltaNum / step;
+                    deltaNum = deltaNum % step;
+                }
+                return result;
+                //蠻多地方都寫死，應該有更好的寫法
+            }
+        }
+    }
+}

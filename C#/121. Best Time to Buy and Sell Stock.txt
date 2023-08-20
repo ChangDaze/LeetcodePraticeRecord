@@ -1,0 +1,109 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+
+            Solution solution = new Solution();
+            int result = solution.MaxProfit(new int[] { 7, 1, 5, 3, 6, 4 });
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        //這是最笨的方法，直接Time out，就是找出每一點的最大獲利然後再找出其中最大值
+        //public class Solution
+        //{
+        //    public int MaxProfit(int[] prices)
+        //    {
+        //        int result = 0;
+        //        for(int i =0; i < prices.Length; i++)
+        //        {
+        //            int thisround = 0;
+        //            for(int j =0; j < i; j++)
+        //            {
+        //                int temp = prices[i] - prices[j];
+        //                if ( temp > thisround)
+        //                {
+        //                    thisround = temp;
+        //                }
+        //            }
+        //            if(thisround > result)
+        //            {
+        //                result = thisround;
+        //            }
+        //        }
+
+        //        return result;
+        //    }
+        //}
+
+        //public class Solution
+        //{
+        //    //只須找出最小的買入時機和新加入的買入時機就可算出新加入的最大profit
+        //    //跟以往的最大profit比較誰賺最多
+        //    public int MaxProfit(int[] prices)
+        //    {
+        //        int min = prices[0];
+        //        int max = prices[0];
+        //        int profit = 0;
+        //        int checkprofit;
+        //        for (int i = 1; i < prices.Length; i++)
+        //        {
+        //            if(prices[i]> max)
+        //            {                        
+        //                max = prices[i];                        
+        //            }
+        //            else if(prices[i]< min)
+        //            {
+        //                min = prices[i];//新加入的點就是最小值就可知新加入的點最大profit是0所以直接跳過後續計算
+        //                continue;
+        //            }
+
+        //            checkprofit = prices[i] - min;
+        //            if(checkprofit > profit)//將新加入點的最大profit和以往的最大profit比較
+        //            {
+        //                profit = checkprofit;
+        //            }
+
+
+        //        }
+
+        //        return profit;
+        //    }
+        //}
+
+        public class Solution
+        {
+            public int MaxProfit(int[] prices)
+            {
+                if (prices == null || prices.Length == 0)
+                    return 0;
+
+                int[] res = new int[prices.Length];//他這是把以往所有點的最大profit都有記下來，比較項Dynamic program，我上面的是只計目前能找到最小的
+                int diff = -prices[0];//這其實就是最小值
+
+                for (int i = 1; i < prices.Length; i++)//因int[]預設new出來的都為0所以不用擔心res[0]不存在
+                {
+                    res[i] = Math.Max(res[i - 1], prices[i] + diff);//比對過往的最大profit和新加入的點能有的最大profit
+                    diff = Math.Max(diff, -prices[i]);//比較新加入的找出最小值
+                }
+
+                return res[prices.Length - 1];
+            }
+        }
+        //會比我的慢(結果只漫一點點)但簡潔很多，Max很會用
+        //來源:https://leetcode.com/problems/best-time-to-buy-and-sell-stock/discuss/714636/c
+        //這方法一樣只是變數名不同，但快一些，因為沒存成陣列吧
+        //https://leetcode.com/problems/best-time-to-buy-and-sell-stock/discuss/286814/C-DP
+        //這思路比較清奇把找到新的min點先比對以往最大profit後，當作新的起點繼續往後比，但這種方法會讓我比較不懂，而且好像慢不少
+        //https://leetcode.com/problems/best-time-to-buy-and-sell-stock/discuss/39089/Simple-O(n)-C-solution
+    }
+}

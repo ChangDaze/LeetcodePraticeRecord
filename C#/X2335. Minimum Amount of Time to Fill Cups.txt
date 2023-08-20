@@ -1,0 +1,61 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] amount = new int[] { 0, 2, 2 };
+            Solution solution = new Solution();
+            var result = solution.FillCups(amount);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int FillCups(int[] amount)
+            {
+                int result = 0;
+                Array.Sort(amount);
+                int first = amount[2];
+                int second = amount[1];
+                int third = amount[0];
+                int temp = -1;
+                while(first > 0 && second > 0)
+                {
+                    result++;first--;second--;
+                    if(third > first)
+                    {
+                        temp = first;
+                        first = third;
+                        third= temp;
+                    }
+                    else if (third > second)
+                    {
+                        temp = second;
+                        second = third;
+                        third = temp;
+                    }
+                }
+
+                result = result + first + second + third;
+                return result;
+                //這題我基本把全部都寫死了(只適用3參數)，必然需要有更好的方法
+                //通關秘訣是就是【每次】都只填還有最多杯的兩種
+                //ps:原本以為是每次都【最大】+【第二大】 和 【最大】+【第三大】輪流填就可以，但這樣不行
+            }
+        }
+    }
+}

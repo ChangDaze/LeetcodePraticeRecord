@@ -1,0 +1,92 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            
+            Solution solution = new Solution();
+            string[] result = solution.FindWords(new string[] { "asdfghjkl", "qwertyuiop", "zxcvbnm" });
+            foreach(string word in result)
+            {
+                Console.WriteLine(word);
+            }
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public string[] FindWords(string[] words)
+            {
+                //因數量固定所以記錄起來(寫死)
+                List<char> list = new List<char>() { 'q','w','e','r','t', 'y','u','i','o','p'};
+                List<char> list2 = new List<char>() { 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l' };
+                List<char> list3 = new List<char>() { 'z', 'x', 'c','v', 'b', 'n', 'm'};
+                List<List<char>> biglist = new List<List<char>>() { list, list2, list3};
+
+                List<string> tempresult = new List<string>();//紀錄答案用(目前找的方法沒有要求答案順序，不過如果硬要，可以事先紀錄順序再填答案或讓找答案的方法按順序來(調整迴圈))
+                string[] tempwords = new string[words.Length];//把題目給的東西存下來
+
+                for (int l = 0; l < words.Length; l++)
+                {
+                    tempwords[l] = words[l].ToLower();//統一大小寫(當然也可以寫死的部分大小寫都放)
+                    //dic[tempwords[l]] = words[l];
+                }
+
+                for (int i = 0; i < biglist.Count; i++)//把三張寫死的list都走一遍
+                {
+                    //把題目給的word都走一遍(要把這層迴圈放到外面才能照題目順序給答案，現在沒有)
+                    //好像要把這層放在外面才對，不然每次i=-1時都會每個字全部重新檢查一遍...
+                    for (int j = 0; j < tempwords.Length; j++)
+                    {
+                        if (string.IsNullOrEmpty(tempwords[j]))
+                        {
+                            continue;//沒東西就跳過
+                        }
+                        else if (i == -1)//代表已經檢查完了,換下一個
+                        {
+                            break;
+                        }
+
+                        for (int k = 0; k< tempwords[j].Length; k++)//逐字檢查
+                        {
+                            if(i == -1)
+                            {
+                                break;//代表已經檢查完了,換下一個
+                            }
+                            if (biglist[i].Contains(tempwords[j][k]))
+                            {
+                                if (k == tempwords[j].Length -1)//當檢查完最後一個字都符合就加入答案
+                                {
+                                    tempresult.Add(words[j]);
+                                    tempwords[j] = "";//把檢查成功的字替換掉防止無限迴圈(雖然上面迴圈有正常放就不會無限迴圈...)
+                                    i = -1;//代表已經檢查完了,換下一個
+                                }
+                                continue;
+                            }
+                            break;
+                        }
+                    }
+                }
+
+                return tempresult.ToArray();
+            }
+        }
+        //總的來說我寫得很爛，我絕對不能習慣這種爛寫法
+        //其他
+        //這個人因為題目的要求能寫死所以就直接做三次contain的檢查而已@@，其他部分跟我差不多，他麼還偏快(我的不知為啥快一丁點)，是hashtable的威力嗎?
+        //https://leetcode.com/problems/keyboard-row/discuss/118298/C-Solution
+        //這個人用意點小聰明透過先檢查開頭來決定後續檢查。但可能是後面每次都要判斷屬於哪組所以導致速度變慢，收為調整一下應該就會快喔!
+        //https://leetcode.com/problems/keyboard-row/discuss/264791/c-96.79-faster
+        //這個人用switch和hashtable，不過有點奇怪，克起來用hashtable，key值不對也不會報錯?值得實驗一下
+        //https://leetcode.com/problems/keyboard-row/discuss/374515/C-hashtable
+    }
+}

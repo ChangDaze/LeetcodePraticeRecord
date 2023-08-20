@@ -1,0 +1,69 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+using System.Reflection;
+using System.Security.AccessControl;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] nums = new int[] { 2, 1, 4, 3 };
+            int income = 10;
+            Solution solution = new Solution();
+            var result = solution.SemiOrderedPermutation(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+
+        public class Solution
+        {
+            public int SemiOrderedPermutation(int[] nums)
+            {
+                //有大前提，每個數為一，且1~n
+
+                int x = -1;
+                int y = -1;
+
+                for(int i = 0;i<nums.Length;i++)
+                {
+                    if (nums[i] == 1)
+                    {
+                        x = i;
+                        continue;
+                    }
+
+                    if (nums[i] == nums.Length)
+                    {
+                        y = i;
+                        continue;
+                    }
+
+                    if(x!=-1&&y!=-1)
+                        break;
+                }
+
+
+                //x : ex:x=1，要swap 1次
+                //y : 因y的index要移到index=n-1，其他同x
+                //唯一能省次數的地方就是1和n的位置反向互換，所以當x > y才-1，且一定 x!=y
+                if (x > y)
+                    return x+(nums.Length-1-y)-1;
+                else 
+                    return x + (nums.Length - 1 - y);
+
+            }
+        }
+        //基本上就照hint做
+    }
+}

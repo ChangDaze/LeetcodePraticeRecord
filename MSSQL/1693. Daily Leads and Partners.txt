@@ -1,0 +1,40 @@
+Create table #Temp(date_id date, make_name varchar(20), lead_id int, partner_id int)
+insert into #Temp (date_id, make_name, lead_id, partner_id) values ('2020-12-8', 'toyota', '0', '1')
+insert into #Temp (date_id, make_name, lead_id, partner_id) values ('2020-12-8', 'toyota', '1', '0')
+insert into #Temp (date_id, make_name, lead_id, partner_id) values ('2020-12-8', 'toyota', '1', '2')
+insert into #Temp (date_id, make_name, lead_id, partner_id) values ('2020-12-7', 'toyota', '0', '2')
+insert into #Temp (date_id, make_name, lead_id, partner_id) values ('2020-12-7', 'toyota', '0', '1')
+insert into #Temp (date_id, make_name, lead_id, partner_id) values ('2020-12-8', 'honda', '1', '2')
+insert into #Temp (date_id, make_name, lead_id, partner_id) values ('2020-12-8', 'honda', '2', '1')
+insert into #Temp (date_id, make_name, lead_id, partner_id) values ('2020-12-7', 'honda', '0', '1')
+insert into #Temp (date_id, make_name, lead_id, partner_id) values ('2020-12-7', 'honda', '1', '2')
+insert into #Temp (date_id, make_name, lead_id, partner_id) values ('2020-12-7', 'honda', '2', '1')
+select * from #Temp
+
+--這可以通ㄟ...這是啥新式寫法?
+--這可能就是group和distinct連用，where則是被直接忽略了...
+select 
+date_id, make_name,
+(select count(distinct lead_id) where date_id = g.date_id and make_name = g.make_name) unique_leads,
+(select count(distinct partner_id) where date_id = g.date_id and make_name = g.make_name) unique_partners
+from #Temp g
+group by date_id,make_name
+--應該算一般寫法
+--值得注意的是count(distinct) 不能用在多欄位，不過多一層子查詢select來count應該能通
+select 
+date_id, make_name,
+(select count(distinct lead_id) from #Temp where date_id = g.date_id and make_name = g.make_name) unique_leads,
+(select count(distinct partner_id) from #Temp where date_id = g.date_id and make_name = g.make_name) unique_partners
+from #Temp g
+group by date_id,make_name
+
+
+drop table #Temp
+
+--不出意外用case when很慢
+--哭阿，group和distinct可以連用ㄟ，速度當然很快
+--https://leetcode.com/problems/daily-leads-and-partners/solutions/3303981/sql-server-clean-easy/
+--這跟第一位一樣
+--https://leetcode.com/problems/daily-leads-and-partners/solutions/2998650/ms-sql-server-95-6/
+--這個也一樣
+--https://leetcode.com/problems/daily-leads-and-partners/solutions/2016550/easy-peasy-sql-server/

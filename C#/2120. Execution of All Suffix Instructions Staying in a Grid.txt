@@ -1,0 +1,117 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int n = 3;
+            int[] startPos = new int[] { 0, 1 };
+            string s = "RRDDLU";
+            Solution solution = new Solution();
+            var result = solution.ExecuteInstructions(n,startPos,s);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+        public class Solution
+        {
+            public int[] ExecuteInstructions(int n, int[] startPos, string s)
+            {
+                int[] result = new int[s.Length];
+
+                for(int i = 0;i<s.Length ;i++)
+                {
+                    int row = startPos[0];
+                    int col = startPos[1];
+                    int count = 0;
+
+                    foreach(char c in s.Substring(i, s.Length-i))
+                    {
+                        if (c == 'R')
+                            col++;
+                        else if (c == 'L')
+                            col--;
+                        else if (c == 'U')
+                            row--;                        
+                        else if (c == 'D')
+                            row++;                        
+
+                        if (row >= n || row < 0 || col >= n || col < 0)
+                            break;
+                        count++;                        
+                    }
+                    result[i] = count;
+                }
+                return result;
+            }
+            
+        }
+        //暴力解，速度普通還行
+        //這人第一種方法跟下面的python應該有點像，但可能有些差距，但C++寫法讓我放棄理解
+        //第二種就是暴力解
+        //https://leetcode.com/problems/execution-of-all-suffix-instructions-staying-in-a-grid/solutions/1647526/o-m-g-vs-brute-force/
+        //這有三種方法，但他好像沒寫第二種方法
+        //第一種就是暴力解，第三種放棄理解，跟下面的python應該有點像，但也是可能有些差距
+        //https://leetcode.com/problems/execution-of-all-suffix-instructions-staying-in-a-grid/solutions/1647654/python-back-tracking-o-m-solution/
+        //C# 的寫法看起來都是暴力解，也是，我光是看懂下面的就花3小時了，更何況設計
+
+        //python的，速度很快
+        //這是比較快的方法，道理和設計都很難，所以寫下解釋，最好再搭配作者解釋
+        //https://leetcode.com/problems/execution-of-all-suffix-instructions-staying-in-a-grid/solutions/1647617/python-o-m-solution-with-detailed-explanation/
+        //class Solution(object):
+        //    def executeInstructions(self, n, startPos, s):
+        //        """
+        //        :type n: int
+        //        :type startPos: List[int]
+        //        :type s: str
+        //        :rtype: List[int]
+        //        """
+        //        m = len(s)
+        //        direc = {'U':[-1,0],'D':[1,0],'L':[0,-1],'R':[0,1]}   //單純方向
+        //    //起始點開始，往各方向的上限
+        //    upmost = startPos[0] + 1  
+        //    downmost = n - startPos[0]
+        //    leftmost = startPos[1] + 1
+        //    rightmost = n - startPos[1]
+        //    curr_row, curr_col = 0,0    //把走完的最後位置設為(0,0)
+        //    next_row,next_col = {0:m}, { 0:m}  //走下一步會在哪，但應該叫做在倒數第幾步會在相對最後點(0,0)的哪，用來在此點出界時，拿這時的步數來用
+        //    ans = []
+
+        //第三的參數是step
+        //        for i in range(m - 1, -1, -1):    //從尾部開始 EX: "RRD" -> "D" -> "RD" -> "RRD"
+        //            curr_row -= direc[s[i]][0]    //第一輪 i，檢查倒數第一步會在最後點(0,0)的哪裡
+        //            curr_col -= direc[s[i]][1]
+        //            maxstep = m - i   //第一輪 i， m - (m-1) = 1 ，倒過來檢查時，第一輪最大步數就是1，若第 m 輪， i = 0, maxstep = m
+        //            if curr_row - upmost in next_row: //第一輪，以現在的相對位置，倒扣限制數，是否出現在 next_row， 第一輪只檢查 (0,0)，因為走一步就倒最後點(0,0)，因此只需檢查走完限制步是否最後點(0,0)剛好超出限制
+        //                maxstep = min(maxstep, next_row[curr_row - upmost] - i - 1)   //若超出限制，就拿出對應步數{ 0:m}，- i - 1 = - (m-1) -1，扣完 = 0， i是前面跳過的步數，1是此步下去就出界，所以扣回(這個我猜的)
+        //            if curr_row + downmost in next_row: 
+        //                maxstep = min(maxstep, next_row[curr_row + downmost] - i - 1)
+        //            if curr_col - leftmost in next_col:
+        //                maxstep = min(maxstep, next_col[curr_col - leftmost] - i - 1)
+        //            if curr_col + rightmost in next_col:
+        //                maxstep = min(maxstep, next_col[curr_col + rightmost] - i - 1)
+        //            next_row[curr_row] = i  //紀錄curr，目前相對位置和目前(走+跳)過的步數，給後續數已走步數用
+        //            next_col[curr_col] = i  //這個用key有個特性，就是若倒數1步 和 倒數 n 步位置重疊，會用較小的(走+跳)過的步數覆蓋，所以走過兩個一樣位置時會用較小的步數提前提醒已出界
+        //同時因為會把相對位置都印出來，且一次只能走一步所以只要取剛好碰到邊界瞬間的步數的key和value出來(這有點難理解，但多想想就好)
+        //            ans.append(maxstep)   //紀錄此loop可走的maxstep
+
+        //第二輪(loop走完換下一輪)，以現在的相對位置(退兩步)，倒扣限制數，是否出現在 next_row (目前有倒退0步 = 最後點、倒退1步的位置，並記錄有他們(走+跳)過的步數)， 
+        //當出現在next_row[最後點] 時 min(m - (m -2), (m-1) - (m) - 1) = 1，代表在最後點前踏出的一步會出界，所以只能踏出一步
+        //當出現在next_row[倒數一步位置] 時 min(m - (m -2), (m-1) - (m-2) - 1) = 0，代表在倒數一步位置前踏出的一步會出界，所以只能踏出零步
+
+        //    return ans[::- 1] //然後因為是倒過來的，[::-1]會把array再倒回去
+        //想出來的雖然是將他說明的步驟實體化，但真的很扯
+    }
+}

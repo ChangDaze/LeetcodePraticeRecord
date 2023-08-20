@@ -1,0 +1,63 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var nums = new int[] { 0, 1, 2, 4, 5, 7 };
+            var result = solution.SummaryRanges(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public IList<string> SummaryRanges(int[] nums)
+            {
+                if (nums.Length == 0) return new List<string>();
+
+                List<string> result = new List<string>();
+                int start = nums[0];
+                int temp = nums[0];
+                for (int i = 1; i < nums.Length; i++)
+                {
+                    if (temp + 1 == nums[i])//若下個值是連續的就紀錄
+                    {
+                        temp = nums[i];
+                    }
+                    else//若下個值是不連續的就處理
+                    {
+                        result.Add(GetRangeElement(start, temp));
+                        start = nums[i];//重新定位start
+                        temp = nums[i];//也要記錄目前值
+                    }
+                }
+                result.Add(GetRangeElement(start, temp));//走完後還要處理一次
+                return result;
+            }
+
+            private string GetRangeElement(int start, int temp)
+            {
+                return start != temp ? start.ToString() + "->" + temp.ToString() : start.ToString();//若是相同的值就單純返回字串
+            }
+        }
+        //速度普通
+        //其他
+        //速度還行，這個蠻有趣的，方法基本差不多，但他用for和while，同時透過i來連動(可以跳過if else和start、temp重複執行)，達成語法變成非常精簡，可以參考，但方不方便拿來用不好說(感覺容易混成一團)
+        //https://leetcode.com/problems/summary-ranges/solutions/1805482/c-faster-than-76-70/
+        //這方法差不多，不過他是另外又用list來記錄通過的num，比較直接，速度意外蠻快的??
+        //https://leetcode.com/problems/summary-ranges/solutions/1986676/c/
+        //他start是用index不是值，同時他省略了temp，直接用nums[i]和nums[i-1]比較，速度意外不快
+        //https://leetcode.com/problems/summary-ranges/solutions/1807793/c/
+
+    }
+}

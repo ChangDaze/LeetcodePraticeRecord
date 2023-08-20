@@ -1,0 +1,63 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string[] garbage = new string[] { "G", "P", "GP", "GG" };
+            int[] travel = new int[] { 2, 4, 3 };
+            Solution solution = new Solution();
+            var result = solution.GarbageCollection(garbage, travel);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+        public class Solution
+        {
+            public int GarbageCollection(string[] garbage, int[] travel)
+            {
+                int[] distances = new int[garbage.Length];//這是prefix sum的做法，避免每次重算
+                int accmDistance = 0;
+                Dictionary<char, int[]> dictionary = new Dictionary<char, int[]>() { { 'M', new int[2] }, { 'G', new int[2] }, { 'P', new int[2] } };
+
+                for(int i = 0; i < garbage.Length; i++)
+                {
+                    distances[i] = accmDistance;
+                    foreach(char c in garbage[i])
+                    {
+                        dictionary[c][0]++;//紀錄回收次數
+                        dictionary[c][1] = i;//紀錄最遠距離，不過這裡會一直重複做，感覺有點呆
+                    }
+
+                    if(i < travel.Length)//避免出錯
+                        accmDistance += travel[i];//加距離
+                }
+
+                int res = 0;//把回收次數和回收距離都加起來就是答案
+                foreach(char c in dictionary.Keys)
+                {
+                    res += dictionary[c][0];
+                    res += distances[dictionary[c][1]];
+                }
+                return res;
+            }
+            //速度慢
+            //其他
+            //靠杯，這一針見血，我dictionary[c][0]不用分開算，大可以視為一類...，只要記錄最後位置就好了..，然後他prefixsum是用travel改造而來，但他多出一個loop，感覺可以省下來?
+            //https://leetcode.com/problems/minimum-amount-of-time-to-collect-garbage/solutions/2492857/using-map-count-very-easy-and-simple-to-understand/
+            //這方法跟上面一樣，不過為啥大家loop都要強制分開成garbage和travel?
+            //https://leetcode.com/problems/minimum-amount-of-time-to-collect-garbage/solutions/2492774/java-c-python-explanation-with-observations/
+            //這是C#，用queue，他做法較複雜且沒效率，但很有趣，就是把有對應garbege的house透過loop把位置和量加入對應queue，然後全部加起來，不過這樣看，其實可以不把queue分類，反正很有趣
+            //https://leetcode.com/problems/minimum-amount-of-time-to-collect-garbage/solutions/2492977/c-queue/
+        }
+    }
+}

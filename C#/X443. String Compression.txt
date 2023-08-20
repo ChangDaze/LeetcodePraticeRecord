@@ -1,0 +1,53 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+using System.Reflection;
+using System.Security.AccessControl;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            char[] chars = new char[] { 'a', 'a', 'b', 'b', 'c', 'c', 'c' };
+            Solution solution = new Solution();
+            var result = solution.Compress(chars);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+        public class Solution
+        {
+            public int Compress(char[] chars)
+            {
+                string s = "";                
+                int pointer = 0;
+
+                for(int i = 1;i< chars.Length;i++)
+                {
+                    if (chars[pointer] == chars[i])
+                        continue;
+
+                    s = s + chars[pointer] + ((i-pointer) > 1? (i - pointer).ToString():"");
+                    pointer = i;
+                }
+
+                s = s + chars[pointer] + ((chars.Length - pointer) > 1 ? (chars.Length - pointer).ToString() : "");
+
+                Array.Copy(s.ToArray(),chars,s.Length);
+
+                return s.Length;//這題會用擬返回的長度去讀原本chars memory中的多少長度
+            }
+        }
+
+        //https://leetcode.com/problems/string-compression/solutions/3247030/easy-to-understand-c-solution-using-two-pointers-approach-o-n-o-1/
+    }
+}

@@ -1,0 +1,55 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+using System.Reflection;
+using System.Security.AccessControl;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int n = 4;
+            int time = 4;
+            Solution solution = new Solution();
+            var result = solution.PassThePillow(n,time) ;
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+
+        public class Solution
+        {
+            public int PassThePillow(int n, int time)
+            {
+                int turns = time /( n - 1);
+                int direction = 1;
+                int start = 1;//因為position不是0 index
+                
+                if(turns%2 == 1)
+                {
+                    direction = -1;
+                    start = n;//因為position不是0 index
+                }
+
+                int count = time % (n - 1);
+
+                while(count > 0)
+                {
+                    start += direction;
+                    count--;
+                }
+
+                return start;                
+            }
+        }
+    }
+}

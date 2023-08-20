@@ -1,0 +1,56 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] nums = new int[] { 1, 4, 4, 5, 5 };         
+            Solution solution = new Solution();
+            var result = solution.UnequalTriplets(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+        public class Solution
+        {
+            public int UnequalTriplets(int[] nums)
+            {
+                int result = 0;
+                for(int i = 0;i<nums.Length-2 ;i++)
+                    for(int j = i+1;j<nums.Length-1;j++)
+                        for(int k = j+1;k<nums.Length; k++)//不能用i+2，因為k可能小於j，因為i會先固定，j一直變大
+                            if (nums[i] != nums[j] && nums[j] != nums[k] && nums[k] != nums[i])
+                                result++;
+                return result;
+                
+            }
+        }
+        //這種次方的我都想不到好解法只能暴力解，速度不錯
+        //其他，乾，其他人都是數學解，都超難懂
+        //最難懂的，幾本上就是被指定的那個數的數量要單獨拿出來，其他就是混在一起算
+        //第一輪  len(all)-a * a * 0，第一輪會零，第二輪開始有值，基本上一輪混先產兩個值(right、cnt)，第三個值算完才產生(left)
+        //第二輪 len(all)-a-b * b * a, 這時作者的公式就有用了，但順序甚麼的沒特別解釋，所以全加起來為啥就是答案可能就是這個加加減減的過程就把重複的濾掉了，所以本質上這個數學解可能要證明公式
+        //https://leetcode.com/problems/number-of-unequal-triplets-in-array/solutions/2831702/o-n/
+        //這好懂一些，這是每一輪都做計算，並且累積
+        //pairs = i - count[A[i]]，代表已經出現的總數減去此數重複出現次數 ex: 4-1 =3 、4-2=2 代表兩兩一對下此輪新增含有此數的distinct後的量,3*1(累積幾個)、2*2,代表含此輪新增有此數的沒distinct後的量(若是1有沒有distinct數量一樣，若非1代表比上一步出現多幾對)
+        //pairs用+=，也代表此次出現比以前出現又多了幾個pairs
+        //new_triplets_with_a = pairs_without_a，總pairs數 - 代表此輪新增含有此數的沒distinct後的量(因為沒distinct代表三三一對下，這些不算數)
+        //所以還是沒懂，這過程中應該也一直把重複的取消...
+        //https://leetcode.com/problems/number-of-unequal-triplets-in-array/solutions/2833367/java-c-python-one-pass-o-n/
+        //最好懂得數學解，就是用排列組合解釋，但我數學爛，重新學應該這個最好掌握，其他都太抽象了
+        //https://leetcode.com/problems/number-of-unequal-triplets-in-array/solutions/2833105/the-fastest-o-n-solution-math-combinations/
+        //乾，這題應該數學家解，我好像只能暴力解
+    }
+}

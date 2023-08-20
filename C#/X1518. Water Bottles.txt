@@ -1,0 +1,70 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+using System.Reflection;
+using System.Security.AccessControl;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int numBottles = 15;
+            int numExchange = 4;
+            Solution solution = new Solution();
+            var result = solution.NumWaterBottles(numBottles, numExchange);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+
+        public class Solution
+        {
+            public int NumWaterBottles(int numBottles, int numExchange)
+            {
+                int result = numBottles;
+                while(numBottles >= numExchange)
+                {
+                    int full = (numBottles / numExchange);
+                    result += full;
+                    numBottles = full + numBottles%numExchange;
+                }
+                return result;
+            }
+        }
+        //感覺單純很少人寫ㄟ，有點汙辱智商，就是小學題目
+
+        //100%的更用小學解法ㄟ...
+        //public class Solution
+        //{
+        //    public int NumWaterBottles(int numBottles, int numExchange)
+        //    {
+        //        int emptyBottles = 0;
+        //        int count = 0;
+
+        //        while (numBottles > 0)
+        //        {
+        //            emptyBottles++;
+        //            numBottles--;
+        //            count++;
+
+        //            if (emptyBottles == numExchange)
+        //            {
+        //                numBottles++;
+        //                emptyBottles = 0;
+        //            }
+        //        }
+
+        //        return count;
+        //    }
+        //}
+    }
+}

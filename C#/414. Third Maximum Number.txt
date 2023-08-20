@@ -1,0 +1,48 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var nums = new int[] { 2, 2, 3, 1 };
+            var result = solution.ThirdMax(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int ThirdMax(int[] nums)
+            {
+                var lst = nums.Distinct().OrderBy(x => x).ToList();
+
+                if (lst.Count < 3)
+                {
+                    return lst[lst.Count - 1];
+                }
+
+                return lst[lst.Count - 3];
+            }
+        }
+        //就排序就得到答案，速度普通偏慢
+        //其他
+        //這個是直接用sortedset類別 -> hashset的自動排序版，速度不錯ㄟ
+        //https://leetcode.com/problems/third-maximum-number/solutions/2765503/c-sortedset/
+        //這也是sortedset，但這位用得更精準了，速度普通偏慢(但我覺得這位寫法比較好)
+        //https://leetcode.com/problems/third-maximum-number/solutions/1025480/c-simple-four-lines-solution-with-explanation/
+        //這有點猛，就是用硬幹3階max if else達成 O(n)?速度很快ㄟ...
+        //https://leetcode.com/problems/third-maximum-number/solutions/1679374/c-solution/
+        //這個JAVA就直接說他是O(n)了，方法就跟第三位一樣
+        //https://leetcode.com/problems/third-maximum-number/solutions/633956/javascript-o-n-o-1/
+    }
+}

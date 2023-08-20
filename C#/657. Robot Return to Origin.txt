@@ -1,0 +1,48 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string moves = "LL";
+            bool result = solution.JudgeCircle(moves);
+            Console.WriteLine(result);           
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public bool JudgeCircle(string moves)
+            {
+                Dictionary<char, int> collect = new Dictionary<char, int> { { 'U',0 }, { 'D', 0 }, { 'L', 0 }, { 'R', 0 } };
+                foreach (char c in moves)
+                {
+                    collect[c] += 1;
+                }
+
+                if((collect['U'] == collect['D']) & (collect['L'] == collect['R'])) //這邊就是用互相抵消               
+                    return true;
+                
+                return false;
+            }
+        }
+
+        //速度偏慢
+        //其他
+        //速度偏慢，這個人是用dictionary和tuple存，直接用座標算
+        //https://leetcode.com/problems/robot-return-to-origin/discuss/487486/Short-And-Simple-C-Solution
+        //這個人用LINQ原理跟我一樣是互相抵消，不過她的速度較快，可能是直接用count，這算LINQ也算好懂，不過one line的感覺比較適合用在較單純的function
+        //https://leetcode.com/problems/robot-return-to-origin/discuss/250092/C-One-Line
+        //這個跟第一個很像，不過他是用dictionary 和 array思路也和特別
+        //https://leetcode.com/problems/robot-return-to-origin/discuss/106407/First-C-solution
+    }
+}

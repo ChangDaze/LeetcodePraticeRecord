@@ -1,0 +1,59 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int maxSum ;
+            int tmp ;
+            //這也不算常見的2維陣列?int[[],[]]
+            //int[][] accounts = new int[2][] { new int[] { 1,2,3 },
+            //new int[] { 3,2,1} };
+            int[][] accounts = new int[3][] { new int[] { 1,5 },
+            new int[] { 7,3},
+            new int[] { 3,5} };
+
+            #region solution1
+            maxSum = accounts[0].Sum();
+
+            for (int j = 1; j < accounts.Length; j++)
+            {
+                tmp = accounts[j].Sum();
+                if (maxSum < tmp)
+                {
+                    maxSum = tmp;
+                }
+
+            }
+            #endregion
+
+            #region solution2
+            //for (int i = 0; i < accounts.GetLength(0); i++)
+            //{
+            //    maxSum = Math.Max(maxSum, accounts[i].Aggregate((a, b) => a + b));
+            //}
+            #endregion
+
+            #region solution3
+            //maxSum = accounts.Select(x => x.Sum()).Max();
+            #endregion
+
+
+            Console.WriteLine(maxSum);
+
+            Console.ReadKey();
+
+        }
+
+
+    }
+
+
+}

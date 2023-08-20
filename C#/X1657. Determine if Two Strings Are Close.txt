@@ -1,0 +1,102 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string word1 = "uau";
+            string word2 = "ssx";
+            Solution solution = new Solution();
+            var result = solution.CloseStrings(word1,word2);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+
+        //2023.0723
+        public class Solution
+        {
+            public bool CloseStrings(string word1, string word2)
+            {
+                if (word1.Length != word2.Length) return false;
+                int[] frequency1 = new int[26];
+                int[] frequency2 = new int[26];
+
+                bool[] flag1 = new bool[26];
+                bool[] flag2 = new bool[26];
+
+                for (int i = 0;i<word1.Length;i++)
+                {
+                    frequency1[word1[i] - 'a']++;
+                    flag1[word1[i] - 'a'] = true;
+                    frequency2[word2[i] - 'a']++;
+                    flag2[word2[i] - 'a'] = true;
+                }
+
+                Array.Sort(frequency1);
+                Array.Sort(frequency2);
+
+                for(int i = 0; i < frequency1.Length; i++)
+                {
+                    if (flag1[i] != flag2[i]) return false;
+                    if (frequency1[i] != frequency2[i]) return false;
+                }
+
+                return true;
+            }
+        }
+        //基本抄這位的，稍微改掉set改用bool，因為只有26個，速度不錯
+        //https://leetcode.com/problems/determine-if-two-strings-are-close/submissions/?envType=study-plan-v2&envId=leetcode-75
+
+        //2023.0723 fail
+        //public class Solution
+        //{
+        //    public bool CloseStrings(string word1, string word2)
+        //    {
+        //        if(word1.Length != word2.Length) return false;
+
+        //        Dictionary<char,int> record1 = new Dictionary<char,int>();
+        //        Dictionary<char, int> record2 = new Dictionary<char, int>();
+
+        //        for(int i = 0;i<word1.Length;i++)
+        //        {
+        //            if (record1.Keys.Contains(word1[i]))
+        //                record1[word1[i]]++;
+        //            else
+        //                record2[word1[i]] = 1;
+
+        //            if (record2.Keys.Contains(word2[i]))
+        //                record2[word2[i]]++;
+        //            else
+        //                record2[word2[i]] = 1;
+        //        }
+
+        //        if (record1.Count() != record2.Count()) return false;
+
+        //        HashSet<char> keys = new HashSet<char>();
+
+        //        foreach(char key in record1.Keys)
+        //            keys.Add(key);
+
+        //        foreach (char key in record2.Keys)
+        //            keys.Add(key);
+
+        //        if (record1.Count() != keys.Count()) return false;
+
+                 
+        //        return true;
+        //    }
+        //}
+    }
+}

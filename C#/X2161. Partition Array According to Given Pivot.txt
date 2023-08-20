@@ -1,0 +1,62 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] nums = new int[] { 9, 12, 5, 10, 14, 3, 10 };
+            int pivot = 10;
+            Solution solution = new Solution();
+            var result = solution.PivotArray(nums,pivot);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+        //2023.0807.0021
+        public class Solution
+        {
+            //題目說明有點破爛
+            //1. 小於pivot的元素要放在等於pivot的元素前
+            //2. 等於pivot的元素要放在小於pivot的元素後但在大於pivot的元素前
+            //3. 移動後除了要求的大小位置，原本的相對位置都要維持原樣
+            public int[] PivotArray(int[] nums, int pivot)
+            {
+                int pivotNums = 0;
+                List<int> result = new List<int>();
+                int i = 0;
+
+                for(int j = 0; j< nums.Length; j++)
+                {
+                    if (nums[j] < pivot)
+                    {
+                        nums[i] = nums[j];//原本的nums用來記小於pivot的元素和它的相對位置
+                        i++;//i代表小於pivot的元素目前在占到原本的nums的哪個index
+                    }                        
+                    else if(nums[j] == pivot)
+                        pivotNums++;//因為pivot都一樣，所以只記數量，要記成list應該也是可
+                    else
+                        result.Add(nums[j]);//先拿來存大於pivot的元素和它的相對位置
+                }
+
+                //三部分照排列融合
+                //take也是ienumerable
+                return nums.Take(i)//把小於pivot的元素從nums取出，take是取element數量不是index
+                        .Concat(//這是ienumerable的倆倆相合
+                            Enumerable.Repeat(pivot, pivotNums)//用計的數量把pivot做出
+                            .Concat(result)//融合大於pivot的list
+                            ).ToArray();
+                //不過result雖是list但能用Concat，代表list實作Ilist也實作ienumerable，代表實例可以實作多個Interface!?
+            }
+        }
+        //感覺我的方法相對土一點，應該其他人有較優雅的方法?
+    }
+
+
+}

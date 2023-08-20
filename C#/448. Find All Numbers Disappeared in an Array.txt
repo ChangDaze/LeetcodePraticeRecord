@@ -1,0 +1,62 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var nums = new int[]{ 4,3,2,7,8,2,3,1
+                        };            
+            var result = solution.FindDisappearedNumbers(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public IList<int> FindDisappearedNumbers(int[] nums)
+            {
+                List<int> result = new List<int>();
+                Array.Sort(nums);
+
+                if (nums[0] > 1)//有可能不是1開始，補齊差異(要用<，因為不包括nums[0])
+                    for (int j = 1; j < nums[0]; j++)
+                        result.Add(j);
+
+                for (int i = 0;i<nums.Length-1;i++)
+                {
+                    if (nums[i] == nums[i + 1])
+                        continue;
+                    else
+                        for (int j = nums[i] + 1; j < nums[i + 1]; j++)//當有差異時補齊差異到result(要用<，因為不包括nums[i]、nums[i + 1])
+                            result.Add(j);                                         
+                }
+
+                for (int j = nums[nums.Length-1] + 1; j <= nums.Length; j++)//有可能不是剛好結尾就是長度，補齊差異(要用<=，因為要包括nums.Length)
+                    result.Add(j);
+
+                return result;
+            }
+            //原本想用two pointer，後來發現不好做，改用上面這個，速度不錯 -> 缺點是sort本身好像就花很多時間了(下面第2種則是保證頂多兩輪)
+            //其他
+            //這用LINQ，速度不錯，驚豔的是有Except(1~10except nums)，然後如下面留言說的，可以不用distinct
+            //https://leetcode.com/problems/find-all-numbers-disappeared-in-an-array/solutions/93031/c-one-liner/
+            //這個就是hens說的把array的位置當flag的方式，因為開array的長度固定，所以當友直就把對應的位置立fla，最後foreach檢查一遍沒有flag的位置就好(雖然這個人寫得有點難懂)，速度很快
+            //https://leetcode.com/problems/find-all-numbers-disappeared-in-an-array/solutions/453825/c-solution/
+            //這個人第一個方法跟第一個人類似，就是用hashset再移除hashset出現的值
+            //第二個方法報幹複雜... (1)nums[i]!=i+1 -> 是nums[i]放i+1是對的(2)nums[nums[i]-1]!=nums[i] 是若nums[i]=9 -> nums[8]=9是正確的(好複雜..有點反證法的味道)
+            //反正就是先把位置放對，然後又多此一舉把位置錯的移到array前面，然後用count把array前面有錯的當成答案報
+            //https://leetcode.com/problems/find-all-numbers-disappeared-in-an-array/solutions/789861/c-optimal-solution-85-99/
+        }
+
+    }
+}

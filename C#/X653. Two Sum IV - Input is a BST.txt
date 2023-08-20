@@ -1,0 +1,69 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var root1 = new TreeNode(5, new TreeNode(3, new TreeNode(2), new TreeNode(4)), new TreeNode(6,null, new TreeNode(7)));
+            int k =28;
+            Solution solution = new Solution();
+            var result = solution.FindTarget(root1,k);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class TreeNode
+        {
+            public int val;
+            public TreeNode left;
+            public TreeNode right;
+            public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+            {
+                this.val = val;
+                this.left = left;
+                this.right = right;
+            }
+        }
+
+
+        public class Solution
+        {
+            HashSet<int> values = new HashSet<int>();
+            public bool FindTarget(TreeNode root, int k)
+            {
+                Recurive(root);
+                foreach(int value in values)
+                {
+                    int tempTarget = k - value;
+                    if(tempTarget != value && values.Contains(tempTarget))
+                        //剛好題目是 valid的bst，限制value一定要是遞增的，所以不會有重複值出現，當需要重複值出現也代表一定錯(tempTarget != value)
+                        //有這種情況之一是root只有一個node,會有兩個不合理 1.少第2個能加的值 2.需要重複值時就會true,但這兩個不合理會伴生出現，所以可以當作同個問題
+                        return true;
+                }
+                return false;
+            }
+
+            public void Recurive(TreeNode node)
+            {
+                if(node == null) return;
+                values.Add(node.val);
+                Recurive(node.left);
+                Recurive(node.right);
+                return;
+            }
+        }
+
+
+    }
+}

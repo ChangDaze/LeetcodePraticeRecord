@@ -1,0 +1,129 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var nums1 = new int[] { 10, 3, 8, 9, 4 };
+            var result = solution.FindRelativeRanks(nums1);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public string[] FindRelativeRanks(int[] score)
+            {
+                string[] result = new string[score.Length];
+                int[] record= new int[score.Length];
+                //Dictionary<int,int> record= new Dictionary<int,int>();
+                //foreach (int scoreitem in score)
+                //{
+                //    int tempscore = score.Length;
+                //    foreach(int recorditem in record.Keys)
+                //    {
+                //        if (scoreitem > recorditem)
+                //            record[recorditem]--;//用dic loop中又修改dic會報錯(leetcode的runtime不知為啥沒報錯，但本機有)
+                //        else
+                //            tempscore--;
+
+                //    }
+                //    record[scoreitem] = tempscore;
+                //}
+
+                #region 用dictionary
+                //for(int i = 0;i<score.Length;i++)
+                //{
+                //    int tempscore = score.Length;
+                //    for(int j = 0; j<i;j++)
+                //    {
+                //        if (score[i] > score[j])
+                //            record[score[j]]--;
+                //        else
+                //            tempscore--;
+
+                //    }
+                //    record[score[i]] = tempscore;//score轉換成range(0,n)的積分
+                //}
+
+                //for (int i = 0; i < score.Length; i++)
+                //{
+                //    int rank = -(record[score[i]] - score.Length - 1);//積分轉換成排名
+                //    switch (rank)
+                //    {
+                //        case 1:
+                //            result[i] = "Gold Medal";
+                //            break;
+                //        case 2:
+                //            result[i] = "Silver Medal";
+                //            break;
+                //        case 3:
+                //            result[i] = "Bronze Medal";
+                //            break;
+                //        default:
+                //            result[i] = rank.ToString();
+                //            break;
+                //    }
+                //}
+                #endregion
+
+                for (int i = 0; i < score.Length; i++)
+                {
+                    int tempscore = score.Length;
+                    for (int j = 0; j < i; j++)
+                    {
+                        if (score[i] > score[j])
+                            record[j]--;
+                        else
+                            tempscore--;
+
+                    }
+                    record[i] = tempscore;//score轉換成range(0,n)的積分
+                }
+
+                for (int i = 0; i < score.Length; i++)
+                {
+                    int rank = -(record[i] - score.Length - 1);//積分轉換成排名
+                    switch (rank)
+                    {
+                        case 1:
+                            result[i] = "Gold Medal";
+                            break;
+                        case 2:
+                            result[i] = "Silver Medal";
+                            break;
+                        case 3:
+                            result[i] = "Bronze Medal";
+                            break;
+                        default:
+                            result[i] = rank.ToString();
+                            break;
+                    }
+                }
+
+                return result;
+            }
+
+            //我原本不想用sort看會不會變快，但意外反而變非常慢，可能是因為一直調dic的值?不用dictionary直接用array和index定位有變快，也是若array一變長我的++--是n^2在長，確實不如直接sort
+            //其他
+            //這就是直接用sort，然後照順序放進dic，然後轉換成答案，速度不錯
+            //https://leetcode.com/problems/relative-ranks/solutions/393339/c-solution/
+            //這也是sort，不過他是用LINQ，但有點猛，先order by score再 order by index，就沒再多用dic，過程中很順的讓LINQ欄位合理增長，可以學一下，速度不錯
+            //https://leetcode.com/problems/relative-ranks/solutions/981198/c-linq-query/
+            //這個方法基本跟第二位一樣，不過多做了一些不必要的篩選?但說真的，因為這個人很強，又自己寫class，所以紀錄一下，速度也不錯
+            //https://leetcode.com/problems/relative-ranks/solutions/180396/easy-c-solution-ef/
+            //這個人也是偏第二位的方法，不過他就沒全程用LINQ，而是混合一般寫法，也老實的用dic
+            //https://leetcode.com/problems/relative-ranks/solutions/197550/concise-c-solution/
+        }
+
+    }
+}

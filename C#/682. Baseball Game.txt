@@ -1,0 +1,57 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var ops = new string[] { "5", "-2", "4", "C", "D", "9", "+", "+"};
+            var result = solution.CalPoints(ops);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+
+            public int CalPoints(string[] operations)
+            {
+                List<int> numbers = new List<int>();
+
+                foreach(string op in operations)
+                {
+                    switch (op)//第一次把switch case的執行全寫在冒號後面(這樣看來有分號，全寫在同一行也沒差)
+                    {
+                        case "C": numbers.Remove(numbers[numbers.Count - 1]); break;
+                        case "D": numbers.Add(numbers[numbers.Count-1]*2); break;
+                        case "+": numbers.Add(numbers[numbers.Count - 1]+ numbers[numbers.Count - 2]); break;
+                        default: numbers.Add(Convert.ToInt32(op)); break;
+                    }
+                }
+
+                return numbers.Sum(); ;
+            }
+            //1.我需要另一個list紀錄計算結果 2.因為都是int32，所以判斷完operation後就都是數字了-> default(原本我還想用char.isnumber，不過就不用了)
+            //3.因為計算valid，所以可以用numbers[numbers.Count - 1]直接幹 4.LINQ返回Sum，速度不錯
+            //其他
+            //這個是用stack，感覺也不錯，速度也不錯，方法理念跟我的差不多，主要是用stack就是push、pop、peek可以用不用像我在[numbers.Count - 1]了
+            //(簡單說就是stack的結構用起來比較合理，pop->拿出來用或丟掉、peek->找最後、push塞回所需)，有個int.Parse轉數字也能學學
+            //https://leetcode.com/problems/baseball-game/solutions/1237154/c-stack-solution/
+            //這個跟上一位差不多，也是用Stack，速度慢上一位一點，不過他是用int.TryParse在前面先做檢查(某些情況下他是可以省去多做operation的檢查的，但我感覺差異應不大)
+            //https://leetcode.com/problems/baseball-game/solutions/417235/c-solution/
+            //方法跟我差不多，也是用List，不過他有特別用Long來計數字，不知道是有用處還是隨便用(主要是這個人的簡介有點強)，速度慢我一點
+            //https://leetcode.com/problems/baseball-game/solutions/1932347/c-using-list/
+            //
+        }
+
+    }
+}

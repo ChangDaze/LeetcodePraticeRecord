@@ -1,0 +1,70 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            int result = solution.CountSegments2("Hello, my name is John");
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public int CountSegments(string s)
+            {
+                char[] charSeparators = new char[] { ' ' };
+                //如果沒設條件空字串split後其實長度會為1
+                if (string.IsNullOrEmpty(s))
+                {
+                    return 0;
+                }
+                //練習StringSplitOptions用法,，
+                //且因為split吃的參數是char[]，所以最好用變數丟入，不然像s.Split(' ', StringSplitOptions.RemoveEmptyEntries)會過不了
+                //因為會判斷StringSplitOptions.RemoveEmptyEntries非字串，當成第2個要split的標準
+                //連續空格時仍切的出長度所以要無視空格
+                return s.Split(charSeparators, StringSplitOptions.RemoveEmptyEntries).Length;
+            }
+
+            public int CountSegments2(string s)
+            {
+                if (s == null || s == string.Empty)
+                    return 0;
+
+                int count = 0;
+                string trimmedString = s.Trim();
+
+                if (trimmedString == string.Empty)
+                    return 0;
+
+                for (int index = 1; index <= trimmedString.Length - 1; index++)
+                    if ((int)trimmedString[index] == 32 && (int)trimmedString[index - 1] != 32)
+                        count++;
+
+                return ++count;//最後要注意加回1
+            }
+            //第一個人的
+        }
+        //速度就一般
+        //其他
+        //這個用一個個對比的，先用trim去頭尾，因此index0必不是空格就1檢查到length-1(仍是一個string)，
+        //檢查到字元為空格(asci 為 int = 32)且上一個index非空格(非連續空格),count就++，速度一般，
+        //還有因為trim所以最尾一定是字元所以用index和index-1來判斷空格時count最後要加回1，這要注意
+        //https://leetcode.com/problems/number-of-segments-in-a-string/discuss/91626/C-Solution
+        //方法跟上一個人一樣，不過沒用trim並將count最後要加回1直接用判斷寫出來，總體速度比較慢，但她有用Space來代替' '，可注意
+        //https://leetcode.com/problems/number-of-segments-in-a-string/discuss/91644/Clean-C-implementation
+        //這是我的Linq簡化版，猛，且因為StringSplitOptions.RemoveEmptyEntries
+        //所以一開始其實不用判斷字串isnullorempty(不過應該也是題目不會給null才能這樣)，可能因此就比我快
+        //https://leetcode.com/problems/number-of-segments-in-a-string/discuss/456809/C-One-Line-Solution
+
+    }
+}

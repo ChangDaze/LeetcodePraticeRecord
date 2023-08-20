@@ -1,0 +1,127 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Globalization;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var nums = new int[] { 1, 12, -5, -6, 50, 3 };
+            var k = 4;
+            var result = solution.FindMaxAverage(nums, k);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        //public class Solution
+        //{
+        //    public double FindMaxAverage(int[] nums, int k)
+        //    {
+        //        double sum = 0;
+        //        double max = double.MinValue;//沒用double用int，sum會突破max
+        //        for (int i = 0; i < nums.Length; i++)
+        //        {
+        //            if (i < k)
+        //            {
+        //                sum += nums[i];
+        //            }
+        //            else
+        //            {
+        //                if (sum > max)//就是連續數字到k以後，走一格丟一格，感覺是queueㄟ，因為大家都除k所以比sum就好
+        //                    max = sum;
+        //                sum += nums[i];
+        //                sum -= nums[i - k];
+        //            }
+        //        }
+
+        //        if (sum > max)
+        //            max = sum;
+
+        //        return max / k;
+        //    }
+        //}
+        //速度不錯
+        //其他
+        //這方法差不多，但感覺他的判斷式為了順便處理0~k還未夠數字變的有點怪..速度還行
+        //https://leetcode.com/problems/maximum-average-subarray-i/solutions/954455/c-solution/
+        //速度還行，他特地把環境營造成純sliding windows的樣子，還有用take(k).sum()的方法，可以學一下，但他算max用除法是敗筆..
+        //https://leetcode.com/problems/maximum-average-subarray-i/solutions/475934/c-sliding-window/
+        //這位方法基本跟第一位一樣，速度不錯
+        //https://leetcode.com/problems/maximum-average-subarray-i/solutions/1382669/c-sliding-window/
+        //這種到一定標準就丟前加後的方法好像就叫slide windows，並不會把每個組合加到，但很適合這種有標準的subarray，大概..
+
+        //2023.07.16
+        //public class Solution
+        //{
+        //    public double FindMaxAverage(int[] nums, int k)
+        //    {
+        //        //有要求contiguous subarray
+
+        //        int left = 0;
+        //        int right = 0;
+        //        int count = 0;
+        //        double sum = 0;
+        //        double max = double.MinValue;
+        //        while (right < nums.Length)
+        //        {
+        //            count++;
+        //            sum += nums[right];
+        //            right++;
+        //            if (count < k)
+        //                continue;
+
+        //            //比較
+        //            max = max > sum ? max : sum;
+
+        //            //左邊內縮
+        //            sum -= nums[left];
+        //            left++;
+        //        }
+
+        //        return max / k;
+        //    }
+        //}
+
+        //2023.07.21
+        //只是練習recursive而已，這用for就好了，用recursive只是浪費效能
+        public class Solution
+        {
+            double sum = 0;
+            double max = double.MinValue;
+            int[] nums;
+            int k;
+            public double FindMaxAverage(int[] nums, int k)
+            {
+                if(nums.Length == 1) return nums[0];
+                this.k= k-1;
+                this.nums = nums;
+                Recursive(0);
+                //if (sum > max) max = sum; //不能亂用，因為最後會減去頭，如果頭是負的就錯了
+                return max / k;
+            }
+
+            public void Recursive(int index)
+            {
+                if (index >= nums.Length)return;
+
+                sum += nums[index];
+                if (index >= k)
+                {
+                    if (sum > max) max = sum;
+                    sum -= nums[index - k];                    
+                }
+                   
+                Recursive(index+1);
+            }
+        }
+    }
+}

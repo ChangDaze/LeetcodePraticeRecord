@@ -1,0 +1,59 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+using System.Reflection;
+using System.Security.AccessControl;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {            
+            int num = 30;
+            Solution solution = new Solution();
+            var result = solution.CountEven(num);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+
+        public class Solution
+        {
+            public int CountEven(int num)
+            {
+                int result = (num - num % 10) / 2;//規律上基本是全部除2
+                int less = num % 10;
+                num = num / 10;
+                int preSum = 0;
+                while(num > 0)
+                {
+                    preSum += num % 10;
+                    num = num / 10;
+                }                                
+
+                if((preSum + 1)%2 == 0)
+                {
+                    result--;//ex:30會有14個，40會有20個，遇到preSum是奇數時會少1但preSum是偶數時會補回來
+                    for (int i = 1; i <= less; i = i + 2)
+                        result++;
+                }
+                else
+                {
+                    for (int i = 2; i <= less; i = i + 2)
+                        result++;
+                }
+                
+                return result;
+            }
+        }
+        //但速度很慢，應該有很多不同解法
+    }
+}

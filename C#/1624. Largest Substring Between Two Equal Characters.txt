@@ -1,0 +1,73 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string s = "cbzxy";
+            var result = solution.MaxLengthBetweenEqualCharacters(s);
+            Console.WriteLine(result);
+            
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int MaxLengthBetweenEqualCharacters(string s)
+            {
+                int result = -1;
+                Dictionary<char,int[]> record = new Dictionary<char,int[]>();
+                for(int i = 0 ; i < s.Length; i++)
+                {
+                    //第2次以上遇到時每次都會修正最長的終點
+                    if (record.ContainsKey(s[i]))
+                    {
+                        //[0]是起點，[1]是終點
+                        record[s[i]][1] = i;                        
+                    }
+                    else//第一次遇到會記錄起點
+                    {                        
+                        record.Add(s[i], new int[2] {i,0});
+                    }
+                }
+
+                foreach(var indices in record.Values)
+                {
+                    //當沒有終點時相減會小於等於-1所以可以無視，-1是為了算中間距離的修正
+                    if(indices[1] - indices[0] -1 > result)
+                    {
+                        result = indices[1] - indices[0] - 1;
+                    }
+                }
+                return result;
+            }
+            //基本上是對著hint攻略，重點是每次更新最長終點，速度普通
+            //比較自豪的是用in[2]，其他還有int[][] -> [[]](陣列中陣列)，int[,] -> int[1,2] = 1(座標)這種用法 
+            //其他
+            //這個有點有趣，他用遞迴，他先他創出所有組合的int[,]，不過這個座標注定一定移半以上會浪費EX:[7,1]不會算到，這先不論
+            //他遞迴的返回點是(1)s[i] == s[j] 或 (2)i < j ，其他就是(3)i+1，j-1遞進交錯
+            //(1)是重點，為甚麼當s[i] == s[j]後面就不用比遞迴了，因為答案是找最長，所以用index 0 和 s.length - 1遞進找，最先找到的絕對是最長的
+            //(2)就是單純要跑得跑完了沒答案
+            //速度很慢，畢竟是遞迴，但作者是故意不用dic，且能想出遞迴還是有缺陷的遞迴(XD)作者也是很厲害
+            //https://leetcode.com/problems/largest-substring-between-two-equal-characters/discuss/987190/c-or-Recusion-or-DP-Memoization
+            //這個也蠻有趣的，他是用雙迴圈i=begin從前面開始，j=end從後面跑來，但他有防止跑過多的機制，速度普通
+            //優點 begin+res>=s.Length 和 end>=begin+res，這是他確認醉茶也不會比現在還長就不跑的機制，還不錯
+            //缺點 (1)他重複的字後來出現還是應該會再跑一次 (2)if(s[begin]==s[end]&&end-begin-1>res)，他每個輪到的字都會執行，所以其實題目越長他可能就要不斷判斷
+            //https://leetcode.com/problems/largest-substring-between-two-equal-characters/discuss/1363035/C-Solution-Faster-than-97.87
+            //這個人也好厲害，他是用LINQ，LINQ因為SQL的處理特性反而適合這種題型
+            //方法(1)LINQ group by 比較難記一點，不過他這邊是select(char,index)，再用s.groupby(char)，再用char找last和first，這
+            //感覺是熟練的複合用法，但也有一點是last和first不會返回錯誤，速度普通偏慢
+            //方法(2)是(1)少去select的動作，所以會多處理重複的，但這種長度下速度好像差不多，但長度一長就差很多了，作者可以喔
+            //https://leetcode.com/problems/largest-substring-between-two-equal-characters/discuss/1780566/C-LINQ-one-liner-O(n)-timespace
+        }
+    }
+}

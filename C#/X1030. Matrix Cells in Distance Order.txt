@@ -1,0 +1,47 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Diagnostics.Contracts;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int rows = 1;
+            int cols = 2;
+            int rCenter = 0;
+            int cCenter = 0;
+            Solution solution = new Solution();
+            var result = solution.AllCellsDistOrder(rows,cols,rCenter,cCenter);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int[][] AllCellsDistOrder(int rows, int cols, int rCenter, int cCenter)
+            {
+                int[][] result = new int [rows*cols][];
+                int[,] record = new int[rows,cols];
+                var tempClass = new[] { new { d = 0, r = 0, c = 0 } }.ToList();//匿名型別要命名(d,r,c)，型別就系統自己判斷
+                for (int i = 0; i < rows; i++)
+                    for (int j = 0; j < cols; j++)
+                        tempClass.Add(new { d = Math.Abs(i - rCenter) + Math.Abs(j - cCenter), r=i, c=j });
+                tempClass.RemoveAt(0);//匿名型別陣列需要輸入值來讓他判斷，所以要刪去第一個用來判斷的值
+                tempClass = tempClass.OrderBy(x => x.d).ToList();
+                for(int i = 0; i < tempClass.Count(); i++)
+                    result[i] = new int[] { tempClass[i].r, tempClass[i].c };
+
+                return result;
+            }
+            //100%ㄟ，是沒人要解嗎?
+        }
+    }
+}

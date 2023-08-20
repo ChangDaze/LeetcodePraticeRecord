@@ -1,0 +1,151 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            ListNode listNode = new ListNode()
+            {
+                val = 1,
+                next = new ListNode()
+                {
+                    val = 2,
+                    next = new ListNode()
+                    {
+                        val = 3,
+                        next = new ListNode()
+                        {
+                            val = 4,
+                            next = new ListNode()
+                            {
+                                val = 5
+                            }
+                        }
+                    }
+                }
+            };
+
+            Solution solution = new Solution();
+            ListNode result = solution.ReverseList(listNode);
+            var nownode = result.val;
+            var nextnode = result.next;
+            Console.WriteLine(nownode);
+            while (nextnode != null)
+            {
+                nownode = nextnode.val;
+                nextnode = nextnode.next;
+                Console.WriteLine(nownode);
+            }
+            Console.ReadKey();
+
+        }
+
+        public class ListNode
+        {
+            public int val;
+            public ListNode next;
+            public ListNode(int val = 0, ListNode next = null)
+            {
+                this.val = val;
+                this.next = next;
+            }
+        }
+
+        //拉出來值慢慢解
+        //public class Solution
+        //{
+        //    public ListNode ReverseList(ListNode head)
+        //    {
+        //        if(head == null)//防null
+        //        {
+        //            return null;
+        //        }
+
+        //        List<int> nodevallst = new List<int> { };
+        //        var nownode = head.val;
+        //        var nextnode = head.next;
+        //        nodevallst.Add(nownode);
+
+        //        while (nextnode != null)//先取到完整的值
+        //        {
+        //            nownode = nextnode.val;
+        //            nextnode = nextnode.next;
+        //            nodevallst.Add(nownode);
+        //        }
+
+        //        var node1 = new ListNode() { val = nodevallst[0], next = null };//從尾部往前，val =[0],next=null
+        //        var node2 = node1;//準備好要拿來裝的尾部
+        //這是把原本前面的val，由後往前裝
+        //        for(int i = 1; i<nodevallst.Count ; i++)
+        //        {
+        //            node1 = new ListNode() { val = nodevallst [i],next=node2};//取值，裝尾部
+        //            node2 = node1 ;
+        //        }
+
+        //        return node1 ;
+        //    }
+        //}
+
+        //比較看得懂的頭尾互換https://leetcode.com/problems/reverse-linked-list/discuss/1450932/C-faster-than-89.30
+        //遞迴https://leetcode.com/problems/reverse-linked-list/discuss/111428/C-recursive
+        //兩種方法(頭尾互換、遞迴)https://leetcode.com/problems/reverse-linked-list/discuss/518977/C-Iterative-and-Recursive
+        //這種single(能看到下個，看不到上一個) linked list 每個 node 都是用指向下一個node的方式
+        //所以只要沒有new過，就會只是同樣幾個點一直指來指去，除非把指向的目標null掉，或指向的目標下一個指向就是null
+        //下面recursive的做法就是往前指向並把往後指向的路徑null掉，可以用畫圖看比較清楚
+        //public class Solution
+        //{
+        //    public ListNode ReverseList(ListNode head)
+        //    {
+        //        if (head == null || head.next == null)//head == null主要功能是題目head一開始是null，不然遞迴只用head.next == null
+        //            return head;
+
+        //        ListNode newHead = ReverseList(head.next);//會一路走到尾部(head == null || head.next == null)，才執行下面的步驟
+        //        head.next.next = head;//一開始執行的會是倒數第二的node，因為最後的node會因head.next == null被退回不執行 
+        //        head.next = null;
+        //        //ex: 3、4、5 => 3、4、5、4、5 ... => 3、4、 null + 5、4、null，變3和5兩處指向4，最後變只剩 5、4、3
+        //        //然後newHead是一開始的尾部也就成了最後的head，然後一路遞迴把頭部的最飆船到最上層(後面綴著reverse的node)
+
+        //        return newHead;
+        //    }
+        //}
+
+        //2023.0806.1352
+        public class Solution
+        {
+            public ListNode ReverseList(ListNode head)
+            {
+                if (head == null || head.next == null)
+                    return head;
+
+                ListNode originalStep = head.next;
+                ListNode reverseNode = head;//準備好拼接模型
+                reverseNode.next = null;//切斷頭
+                ListNode executer = null;//迴圈用的斷頭台
+
+                while (originalStep != null)//沒頭可斷就停下
+                {
+                    executer = originalStep;//放上斷頭台
+                    originalStep= originalStep.next;//指標往下個目標走
+                    executer.next = null;//切斷頭
+                    executer.next = reverseNode; //把原本順序的頭接到後面斷下的頭的尾部
+                    reverseNode = executer;//沿著斷頭往上移到下個拼接點
+                }
+
+                return reverseNode;
+            }
+        }
+        //算是最早寫法的優化版
+        //下次可以試先DFS到最底層取得reverse的head和原本的head作互動，只少應該不會這麼像人體蜈蚣
+        //可以看出linklist很適合用白板
+
+    }
+
+
+}

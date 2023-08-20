@@ -1,0 +1,45 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] nums = new int[] {};
+            Solution solution = new Solution();
+            var result = solution.LargestPerimeter(num);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int LargestPerimeter(int[] nums)
+            {
+                //這裡有一個特性，就是三角形兩邊相加必大於第三邊
+                //假設這第三邊是最大邊，答案就是找出最大邊，不能滿足上面的假設，最大邊就直接捨棄(可以直接排除在選擇外了) => 重點，
+                //所以基本上就是找第二大遞補
+                //另外兩邊也只能繼續遞補，剩餘最大兩邊                
+                Array.Sort(nums);
+
+                for(int i = nums.Length-3;i>=0 ;i--)
+                {
+                    if (nums[i] + nums[i+1] > nums[i+2])
+                        return nums[i] + nums[i+1]+ nums[i+2];
+                }
+                return 0;
+            }
+        }
+    }
+}

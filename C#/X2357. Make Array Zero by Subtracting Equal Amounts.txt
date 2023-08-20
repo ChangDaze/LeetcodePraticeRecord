@@ -1,0 +1,42 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] nums = new int[]{ 1, 5, 0, 3, 5 };
+            Solution solution = new Solution();
+            var result = solution.MinimumOperations(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int MinimumOperations(int[] nums)
+            {
+                HashSet<int> result = new HashSet<int>();
+                foreach (int num in nums)
+                    if (num != 0)
+                        result.Add(num);
+               
+
+                return result.Count;
+                //因為每次都會用最小的減全部 -> 最小的就變0
+                //依小到大減一次 -> 全部才會變0，有點像左極限
+                //所以答案其實就是distinct所有數字後的數字量
+            }
+        }
+    }
+}

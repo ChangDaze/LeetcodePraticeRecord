@@ -1,0 +1,50 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] nums = new int[] { -3, 2, -3, 4, 2 };
+            Solution solution = new Solution();
+            var result = solution.MinStartValue(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int MinStartValue(int[] nums)
+            {
+                int result = 0;
+                int sum = 0;
+
+                foreach(int num in nums)
+                {
+                    if(sum + num > 0)
+                    {
+                        sum += num;
+                        continue;
+                    }
+                    
+                    result += 1 - (sum + num);
+                    sum = 1;
+                }
+
+                return result == 0?1:result; //有點硬要，要求positive value startValue
+            }
+        }
+    }
+}

@@ -1,0 +1,62 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] nums = new int[] { 1, 2, 3 };
+
+            Solution solution = new Solution();
+            var result = solution.Permute(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            IList<IList<int>> result = new List<IList<int>>();
+            bool[] flags;
+            int[] nums;
+            public IList<IList<int>> Permute(int[] nums)
+            {
+                this.flags = new bool[nums.Length];
+                this.nums = nums;
+                BackingTracking(new List<int>());
+                return result;
+            }
+
+            private void BackingTracking(List<int> path)
+            {
+                if(path.Count() >= nums.Length)
+                {
+                    result.Add(path);
+                    return;
+                }
+
+                for(int i = 0;i< nums.Length; i++)
+                {
+                    if (flags[i])
+                        continue;
+
+                    flags[i] = true;
+                    BackingTracking(path.Append(nums[i]).ToList());
+                    flags[i] = false;
+                }
+            }
+        }
+        //其他人應該有更好的空間用法
+    }
+}

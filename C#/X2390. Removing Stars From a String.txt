@@ -1,0 +1,45 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Globalization;
+using System.Runtime.Remoting.Messaging;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var s = "leet**cod*e";
+            var result = solution.RemoveStars(s);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public string RemoveStars(string s)
+            {
+                Stack<char> stack = new Stack<char>();
+
+                foreach(char c in s)
+                {
+                    if (c == '*' && stack.Count > 0)
+                        stack.Pop();
+                    else
+                        stack.Push(c);
+                }
+
+                return string.Join("", stack.Reverse());//因為stack會反轉內容
+            }
+        }
+        //這個直接告訴你正常當array處理一定比較快
+        //https://leetcode.com/problems/removing-stars-from-a-string/solutions/2948191/c-solution-using-stringbuilder-o-n/?envType=study-plan-v2&envId=leetcode-75
+    }
+}

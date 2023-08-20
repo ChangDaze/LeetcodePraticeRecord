@@ -1,0 +1,66 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] students = new int[] { };
+            int[] sandwiches = new int[] { };
+            Solution solution = new Solution();
+            var result = solution.CountStudents(students, sandwiches);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int CountStudents(int[] students, int[] sandwiches)
+            {
+                int arrayLen = students.Length;
+                int position = 0;
+                int last = students.Length;                                
+                Queue<int> lines = new Queue<int>(students);
+                foreach(var sandwich in sandwiches)
+                {
+                    while(position <= arrayLen)
+                    {
+                        if(lines.Peek() != sandwich)
+                        {
+                            lines.Enqueue(lines.Dequeue());
+                            position+=1;
+                        }
+                        else
+                        {
+                            lines.Dequeue();
+                            last -= 1;
+                            break;
+                        }
+                    }
+
+                    if (position > arrayLen)
+                        break;
+                    else
+                    {
+                        position= 0;
+                        arrayLen = lines.Count;
+                    }
+                }
+                //基本上是模擬情境，但寫得有點卡，解的時候多看看別人的好了
+                return last;
+            }
+        }
+    }
+}

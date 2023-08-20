@@ -1,0 +1,54 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string[] words = new string[]{ "abba", "baba", "bbaa", "cd", "cd" };
+            Solution solution = new Solution();
+            var result = solution.RemoveAnagrams(words);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+        public class Solution
+        {
+            public IList<string> RemoveAnagrams(string[] words)
+            {
+                List<string> result = new List<string>();
+                int[] standard = new int[26];
+                for(int i = 0;i<words.Length;i++)
+                {                    
+                    var temp = new int[26];
+                    foreach(char c in words[i])
+                    {
+                        temp[c - 'a']++;
+                    }
+
+                    //不能直接 standard != temp ，會都當不相同，可能因為array比對記憶體的關係?
+                    for (int j= 0;j<standard.Length;j++)
+                    {
+                        if(temp[j] != standard[j])//連續相同的就可以不管，遇到不同的就加入
+                        {
+                            result.Add(words[i]);
+                            standard = temp;
+                            break;
+                        }
+                    }
+                }
+                return result;
+            }
+        }
+    }
+}

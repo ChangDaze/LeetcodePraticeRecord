@@ -1,0 +1,80 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            int result = solution.Tribonacci(25);
+
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        //public class Solution
+        //{
+        //    public int Tribonacci(int n)
+        //    {
+        //        if (n == 0)
+        //        {
+        //            return 0;
+        //        }
+        //        else if (n == 1 || n==2)
+        //        {
+        //            return 1;
+        //        }
+
+        //        int T0 = 0;
+        //        int T1 = 1;
+        //        int T2 = 1;
+        //        int Tr = 0;
+
+        //        for(int i = 3; i <= n; i++)
+        //        {
+        //            Tr = T0 + T1 + T2;
+        //            T0 = T1;
+        //            T1 = T2;
+        //            T2 = Tr;
+        //        }
+
+        //        return Tr;
+
+        //    }
+        //}
+        //較精準寫法，像if<=2我要做2次==判斷可能就比較慢，何況前面==0已經做過，這樣正數下<=2應該比較好
+        //https://leetcode.com/problems/n-th-tribonacci-number/discuss/377834/A-simple-bottom-up-iterative-C-solution
+
+        //Time Limit Exceeded，可能是這個遞迴中呼叫太多自己，數志稍微大一點Stack或函式數量就會爆炸
+        public class Solution
+        {
+            public int Tribonacci(int n)
+            {
+                if (n == 0)
+                {
+                    return 0;
+                }
+                else if (n == 1 || n == 2)
+                {
+                    return 1;
+                }
+
+                return Tribonacci(n-1) + Tribonacci(n-2) + Tribonacci(n-3);
+
+            }
+        }
+        //這個好像才是正確的recursive解法 
+        //消去recursive缺點，把記過的流下來，避免重複呼叫計算，少去計算，速度也會快，指是越大越吃記憶體，因為都記起來了(不過這種大小應該都還好)
+        //https://leetcode.com/problems/n-th-tribonacci-number/discuss/1482981/C-Recursion-%2B-Memoization
+
+    }
+
+
+}

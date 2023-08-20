@@ -1,0 +1,61 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var grid = new int[][] { new int[] { 4, 3, -1, -1 } };
+            Solution solution = new Solution();
+            var result = solution.CountNegatives(grid);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int CountNegatives(int[][] grid)
+            {
+                int result = 0;
+                for (int i = 0; i < grid.Length; i++)
+                {
+                    int left = 0;
+                    int right = grid[0].Length - 1;
+                    while (left <= right)
+                    {
+                        int mid = (left + right) / 2;
+                        if (grid[i][mid] < 0)
+                        {
+                            right = mid - 1;//right指到>=0的第一個
+                        }
+                        else
+                        {
+                            left = mid + 1;//left指到<0的第一個
+                        }
+                    }
+                    result = result + (grid[0].Length - left);//left會到<0的第一個，會多扣1個，所以不用再-1
+
+                }
+
+                return result;
+            }
+        }
+        //就逐行做binary search，速度很慢，這題還有column也是遞減的特性，應該也是能拿來用，像是dp或決定下個left或right之類的
+        //這是我參考的方法，後來發現也不難，不過他拉出來function可以讓程式好看一點，速度意外的不錯
+        //https://leetcode.com/problems/count-negative-numbers-in-a-sorted-matrix/solutions/2096014/c-binary-search/
+        //這個人告訴了我甚麼叫樸實無華，就是把每個都檢查一遍就結束了..速度還行
+        //https://leetcode.com/problems/count-negative-numbers-in-a-sorted-matrix/solutions/2797570/c/
+        //這個人方法跟第二位一樣ㄟ，其實這題不多想才是正解??速度還行
+        //https://leetcode.com/problems/count-negative-numbers-in-a-sorted-matrix/solutions/1273329/c-solution/
+        //這人解法就融合了column也是遞減的特性，應該就是O(N + M)，但他的步驟比我想的好一些，依這特性不只會找到決定下個left或right，速度普通(但東西一多可能很強)
+        //https://leetcode.com/problems/count-negative-numbers-in-a-sorted-matrix/solutions/510330/c-o-n-m/
+    }
+}

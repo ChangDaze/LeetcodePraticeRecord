@@ -1,0 +1,84 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var s = "ab123";
+            s = solution.Reformat(s);
+            Console.WriteLine(s);
+            
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public string Reformat(string s)
+            {
+                string result = "";
+                Stack<char> stackletter = new Stack<char>();
+                Stack<char> stackdigit = new Stack<char>();
+                foreach(char c in s)
+                {
+                    if(c>=48 && c <= 57)
+                    {
+                        stackdigit.Push(c);
+                    }
+                    else
+                    {
+                        stackletter.Push(c);
+                    }
+                }                
+
+                switch(stackletter.Count -stackdigit.Count)
+                {
+                    case -1:
+                        result += stackdigit.Pop();//數字在頭(也在尾)//讓stack長度一致
+                        result = combine_string(stackletter, stackdigit, result);
+                        break;
+                    case 0:
+                        result = combine_string(stackletter,stackdigit,result);
+                        break;
+                    case 1:
+                        char temp = stackletter.Pop();//讓stack長度一致
+                        result = combine_string(stackletter, stackdigit, result);
+                        result += temp;//文字在尾(也在頭)
+                        break;
+                }
+
+                return result;
+            }
+
+            public string combine_string(Stack<char> stackletter, Stack<char> stackdigit,string s)
+            {
+                int rounds = stackletter.Count;//進來裡面文字和數字要跑的次數要一致，不然會out of range
+                for(int i = 0; i < rounds; i++)
+                {
+                    s += stackletter.Pop();//這樣排注定文字在頭，數字在尾，所以差異在外面處理
+                    s += stackdigit.Pop();
+                }
+                return s;
+            }
+        }
+        //這方法就是照題目給的提示，先把數字和文字分開存起來，如果差異過大就直接返回，然後根據誰比較多決定由誰先開始，但不知為啥速度超慢，是我亂用switch和stack嗎?
+        //其他
+        //這個做法概念跟我一樣，不過他用stringbuilder替代我的stack，其他用了一堆if else判斷式來替代我的switch，不過速度快我很多...，
+        //不過他判斷文字數字是用isdigit
+        //https://leetcode.com/problems/reformat-the-string/discuss/729656/C-Simple-solution
+        //這個一樣用stack，其他半段全放在while裡，標準就是digits.Count != 0 || letters.Count != 0，連長度都不比一股腦跑下去了，然後比第一個又快...
+        //我猜差異應該是我拉出來做函數，或是，題目都短到我這樣做反而比較慢的程度...
+        //https://leetcode.com/problems/reformat-the-string/discuss/586480/Simple-C-Solution
+        //這個方法也差不多，只是他用list存，然後把長短差異的方法都寫出來了(我也不知道都寫出來會不會比較好)，他也是比我快很多        
+        //https://leetcode.com/problems/reformat-the-string/discuss/590700/C-Straightforward-solution
+        //不知道是我概念的問題還是怎樣，我覺得拉出來做function可能真的影響不小，還是leetcodeeasy的人程度都不高，還是單純不用這樣寫...
+    }
+}

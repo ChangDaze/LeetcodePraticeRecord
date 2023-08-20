@@ -1,0 +1,41 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var nums = new int[] { 4, 1, 2, 1, 2 };
+            var result = solution.SingleNumber(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public int SingleNumber(int[] nums)
+            {
+                //直接groupby 會有 key 和 count()
+                return nums.ToList().GroupBy(x => x).Where(x => x.Count() == 1).Select(x => x.Key).ToList()[0];
+            }
+            //因為想不到解法所以硬幹，速度看起來不錯，但不太能相信
+            //其他
+            //這是用LINQ+XOR，因為XOR有交換率加上題目限定其他都是兩兩，所以剩下唯一的一定會最後出現且是答案，就很簡潔速度也很快
+            //https://leetcode.com/problems/single-number/solutions/1771676/c-1-liner-linq/
+            //這跟上面基本一樣
+            //https://leetcode.com/problems/single-number/solutions/480995/c/
+            //這是XOR用for迴圈做的，速度也不錯，重點是完全符合題目標準
+            //https://leetcode.com/problems/single-number/solutions/1317178/c-solution/
+        }
+
+    }
+}

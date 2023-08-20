@@ -1,0 +1,48 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.ComponentModel;
+using System.Security.Cryptography;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var num = 16;
+            Solution solution = new Solution();
+            var result = solution.IsPerfectSquare(num);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public bool IsPerfectSquare(int num)
+            {
+                int left = 1;//因為要整數所以其實不方便宣告double，或者需要用到floor
+                int right = num;
+
+                while (left <= right)
+                {
+                    double mid = left + (right-left) / 2;
+                    double midsquare = mid * mid;
+                    if (midsquare < num)
+                        left = (int)mid + 1;
+                    else if (midsquare > num)
+                        right = (int)mid - 1;
+                    else
+                        return true;
+                }
+
+                return false;//因為要嘛有剛好要嘛沒有，所以就不用多判斷
+            }
+        }
+    }
+}

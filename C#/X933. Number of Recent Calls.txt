@@ -1,0 +1,64 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            RecentCounter solution = new RecentCounter();
+            solution.Ping(1);
+            solution.Ping(100);
+            solution.Ping(3001);
+            solution.Ping(3002);
+            Console.ReadKey();
+
+        }
+
+        //public class RecentCounter
+        //{
+        //    //看懂題目的話就是很簡單的queue
+        //    private Queue<int> queue;
+        //    public RecentCounter()
+        //    {
+        //        queue = new Queue<int>();
+        //    }
+
+        //    public int Ping(int t)
+        //    {
+        //        queue.Enqueue(t);
+        //        while (queue.Peek() < t - 3000)
+        //            queue.Dequeue();
+        //        return queue.Count;
+        //    }
+        //}
+
+        //2023.0804.0422
+        public class RecentCounter
+        {
+            private List<int> queue;
+            public RecentCounter()
+            {
+                queue = new List<int>();
+            }
+
+            public int Ping(int t)
+            {
+                queue.Add(t);
+                while (queue.First() < t - 3000)//等於的要留著
+                    queue.RemoveAt(0);
+                return queue.Count;
+            }
+        }
+    }
+}

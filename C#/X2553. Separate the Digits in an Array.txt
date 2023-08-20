@@ -1,0 +1,51 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+using System.Reflection;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] nums = new int[]{ 13, 25, 83, 77 };
+            Solution solution = new Solution();
+            var result = solution.SeparateDigits(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+        public class Solution
+        {
+            public int[] SeparateDigits(int[] nums)
+            {
+                List<int> result = new List<int>();
+                foreach (int num in nums)
+                {
+                    int tempNum = num;
+                    Stack<int> stack = new Stack<int>();
+                    while(tempNum > 0)
+                    {
+                        stack.Push(tempNum%10);
+                        tempNum/=10;
+                    }
+
+                    while(stack.Count > 0)
+                    {
+                        result.Add(stack.Pop());
+                    }
+                }
+                return result.ToArray();
+            }
+        }
+        //速度意外不慢ㄟ，Hint的方法讓我想到另一個，就從後面走回來再一次reverse result或每個num都reverse，之後再用餘10，最簡單的當然是hint的把東西都變string
+    }
+}

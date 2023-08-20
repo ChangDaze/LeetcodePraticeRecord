@@ -1,0 +1,91 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string[] words = new string[] { "leetcoder", "leetcode", "od", "hamlet", "am" };
+            IList<string> result = solution.StringMatching(words);
+            Console.WriteLine(result);
+
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public IList<string> StringMatching(string[] words)
+            {
+                List<string> result = new List<string>();
+                //Array.Sort(words);//直接sort只會比較第一個字母(不是依長度排序)，a在前z在後
+                //Array.Reverse(words);
+                Array.Sort(words, (x, y) => y.Length.CompareTo(x.Length));//這是自訂比較式compare是小在前，但我把x,y放相反所以變大在前
+                //先排序方便之後都是大.Contains(小)的有效判斷，亂了就會錯
+                for (int i = 0; i < words.Length; i++)//比對項(比對中較短一方)，只比一次就換下個比
+                {
+                    for (int j = 1; j < i; j++)//多j比一i，result不會重複新增到i，j是比對中較長一方
+                    {
+                        if (words[j].Contains(words[i]))//有比對到就納入比對項
+                        {
+                            result.Add(words[i]);
+                            break;
+                        }
+                    }
+                }
+
+                return result;
+            }
+            //這題提示有點坑，說用KMP，但KMP比較特別的是返回index，但我目前覺得能返回ture或false就好，所以用contain
+            //其他
+            //這就全部跑過一次，因為用hashset才能避免重複輸入吧，我猜，但因為不用排序，誰快誰慢真不好說，但越長應該還是越不利
+            //https://leetcode.com/problems/string-matching-in-an-array/discuss/574908/Elementary-C-Solution
+            //我參考最多的，這個先用排序大到小(大到小才能每次順序都是大跟小比對)，用兩指標，一大一小，每次只比對一個小的，慢慢遞進
+            //他words[j].IndexOf(words[i]) >= 0就好比我用contain吧，確認有包含
+            //https://leetcode.com/problems/string-matching-in-an-array/discuss/574950/C-Simple-O(N2)-solution
+            //這個跟第一個比較像，因為沒有排序所以要全比對過contain(這個比較快，可能這種長度沒排序較快)
+            //有做j != i防呆，用j = words.Length;當break，因為一次只比對一個i也只加入i所以只要j有break就不會重複
+            //這算是省去排序達成同樣目的的方法
+            //https://leetcode.com/problems/string-matching-in-an-array/discuss/578456/C-Solution-simple-and-fast
+
+            #region 第三位
+            //public IList<string> StringMatching(string[] words)
+            //{
+
+            //    List<String> text = new List<string>();
+
+            //    if (words == null || words.Length == 0)
+            //    {
+            //        return text;
+            //    }
+
+            //    for (int i = 0; i < words.Length; i++)
+            //    {
+            //        int j = 0;
+            //        while (j < words.Length)
+            //        {
+            //            if (j != i && words[j].Contains(words[i]))
+            //            {
+            //                text.Add(words[i]);
+            //                j = words.Length;
+            //            }
+            //            else
+            //            {
+            //                j++;
+            //            }
+            //        }
+            //    }
+
+            //    return text;
+            //}
+            #endregion
+        }
+    }
+}

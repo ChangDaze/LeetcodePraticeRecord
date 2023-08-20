@@ -1,0 +1,89 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] nums = new int[] { 1, 3, 5, 6 };
+            int target = 7;
+            Solution solution = new Solution();            
+            int k = solution.SearchInsert(nums,target);
+            
+            Console.WriteLine(k);
+            Console.ReadKey();
+
+        }
+
+        //public class Solution
+        //{
+        //    public int SearchInsert(int[] nums, int target)
+        //    {
+        //        int position = nums.Length/2;
+        //        int min = 0;
+        //        int max = nums.Length-1;
+
+        //        while (true)
+        //        {
+        //            if (min > max)//因為+1-1所以最後一定這樣，這算好處
+        //            {
+        //                if (position > max)//其實兩個判斷都return min是一樣的，可參考下面第一個連結
+        //                {
+        //                    return position;
+        //                }else if(position < min)
+        //                {
+        //                    return min;
+        //                }
+        //                //else//防無限迴圈用
+        //                //{
+        //                //    Console.WriteLine("FAIL");
+        //                //    return 0;
+        //                //}
+        //            }
+
+        //            if (nums[position] > target)//目標要小一點position
+        //            {
+        //                max = position-1;//加減用，我也很難想像好不好
+        //                position = max - (max - min) / 2;
+
+        //            }
+        //            else if (nums[position] < target)
+        //            {
+        //                min = position+1;
+        //                position = max - (max - min) / 2;
+        //            }
+        //            else
+        //            {
+        //                return position;
+        //            }
+
+
+        //        }
+        //    }
+        //}
+        //其他
+        //這是我的精簡並邏輯清晰版 i是min,j是max,m是position,這比較特別的是他用max + (min - max)/2，這樣integer應該也是比較不會溢位
+        //https://leetcode.com/problems/search-insert-position/discuss/15169/c
+        //這也是一樣方法，也比較精簡
+        //https://leetcode.com/problems/search-insert-position/discuss/279519/C-binary-search
+
+        public class Solution
+        {
+            public int SearchInsert(int[] nums, int target)
+            {
+                int i = nums.ToList().BinarySearch(target);
+                return i >= 0 ? i : ~i;
+            }
+        }
+        //這真的扯，原來VS有幫忙準備好BinarySearch了，~i是取得補數的意思，好像就單純反轉，我應該很少用
+        //https://leetcode.com/problems/search-insert-position/discuss/293227/C-2-liner
+        //這是binarysearch的官方說明，有說明找不到匯回傳補數
+        //https://docs.microsoft.com/zh-tw/dotnet/api/system.array.binarysearch?view=net-6.0
+
+    }
+}

@@ -1,0 +1,48 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string n = "32";
+            Solution solution = new Solution();
+            var result = solution.MinPartitions(n);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+        public class Solution
+        {
+            public int MinPartitions(string n)
+            {
+                //有點微妙
+                char max = ' ';
+                foreach (char c in n)
+                {
+                    if (c > max)
+                        max = c;
+                }
+                return max - '0';
+            }
+        }
+        //基本上就跟hint講得一樣，只要找到每個位數中最大的值就好，
+        //基本上原理就是每次每位數都1111111，當那個位數滿了，改用0就好，就很微妙，速度很快
+        //其他
+        //方法都一樣，不過python的蠻特別的，可以直接return int(max(x))，轉數字不會變ascii，也能直接從string中max單一char的樣子
+        //https://leetcode.com/problems/partitioning-into-minimum-number-of-deci-binary-numbers/solutions/970318/java-c-python-just-return-max-digit/
+        //JAVA的，方法一樣，不過他寫了很詳細的解釋...
+        //https://leetcode.com/problems/partitioning-into-minimum-number-of-deci-binary-numbers/solutions/2202690/one-main-observation-interview-tips-java-explained/
+        //C#，方法一樣
+        //https://leetcode.com/problems/partitioning-into-minimum-number-of-deci-binary-numbers/solutions/1159260/c-solution/
+        //好像就是方法也不會更好，不過很多人寫很多詳細解釋為甚麼@@
+    }
+}

@@ -1,0 +1,57 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] arr = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
+            Solution solution = new Solution();
+            var result = solution.SortByBits(arr);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+        public class Solution
+        {
+            public int[] SortByBits(int[] arr)
+            {
+                int[][] record = new int[arr.Length][];
+                for(int i = 0;i<record.Length ; i++)
+                {
+                    record[i] = new int[2] { CountBits(arr[i]), arr[i] };
+                }
+
+                return record.OrderBy(x => x[0]).ThenBy(x => x[1]).Select(x => x[1]).ToArray();
+            }
+
+            public int CountBits(int num)
+            {
+                int count = 0;
+                while (num != 0)
+                {
+                    count += num % 2;//餘1代表這個位數有1
+                    num = num / 2;
+                }
+
+                return count;
+            }
+        }
+
+        //兩種方法都不錯(前面易懂，後面比較接近原理)
+        //用除2撈餘數
+        //https://leetcode.com/problems/sort-integers-by-the-number-of-1-bits/solutions/517133/c-solution/
+        //用位數右移和1做&的bit比較
+        //https://leetcode.com/problems/sort-integers-by-the-number-of-1-bits/solutions/1746088/c-solution/
+    }
+}

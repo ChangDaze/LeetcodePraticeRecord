@@ -1,0 +1,97 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+using System.Reflection;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            TreeNode root1 = new TreeNode(2,new TreeNode(1), new TreeNode(4));
+            TreeNode root2 = new TreeNode(1, new TreeNode(0), new TreeNode(3));
+            Solution solution = new Solution();
+            var result = solution.GetAllElements(root1,root2);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+
+         public class TreeNode
+         {
+              public int val;
+              public TreeNode left;
+              public TreeNode right;
+              public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+              {
+                this.val = val;
+                this.left = left;
+                this.right = right;
+              }
+         }
+
+        public class Solution
+        {
+            List<int> result;
+            public IList<int> GetAllElements(TreeNode root1, TreeNode root2)
+            {
+                result = new List<int>();
+                if(root1 != null)
+                    Recursive(root1);
+                if (root2 != null)
+                    Recursive(root2);
+                return result.OrderBy(x=>x).ToArray();
+            }
+
+            private void Recursive(TreeNode root)
+            {
+                if (root.left != null)
+                    Recursive(root.left);
+
+                if (root.right != null)
+                    Recursive(root.right);
+
+                result.Add(root.val);//因為int不會有null我才檢查這麼多次，不過可以改用下面這人的方式
+                
+                return;
+            }
+        }
+        //基本是遍歷後排序，速度很慢，說不定有更好的寫法，下面是C#100%寫法，本質方法差不多，不過他檢查null的方式比我好看多了，可以多學學
+
+        #region 100%寫法
+        //public class Solution
+        //{
+        //    List<int> nums = new();
+        //    public IList<int> GetAllElements(TreeNode root1, TreeNode root2)
+        //    {
+        //        getNums(root1);
+        //        getNums(root2);
+        //        var numArr = nums.ToArray();
+        //        Array.Sort(numArr);
+        //        return numArr.ToList();
+
+        //    }
+
+        //    public void getNums(TreeNode current)
+        //    {
+        //        if (current is null)
+        //        {
+        //            return;
+        //        }
+        //        nums.Add(current.val);
+        //        getNums(current.left);
+        //        getNums(current.right);
+        //        return;
+        //    }
+        //}
+        #endregion
+    }
+}

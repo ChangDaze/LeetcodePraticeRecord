@@ -1,0 +1,75 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string text = "we we we we will rock you";
+            string first = "we";
+            string second = "we";
+            string[] result = solution.FindOcurrences(text,first,second);
+            Console.WriteLine(result);
+
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public string[] FindOcurrences(string text, string first, string second)
+            {
+                string[] splittext = text.Split(' ');
+                //int[] splittextrecord = new int[splittext.Length];
+                List<string> result = new List<string>();
+                //for(int i = 0; i < splittext.Length; i++)
+                for (int i = 2; i < splittext.Length; i++)//注意不要超出range
+                {
+                    //if(splittext[i] == first)
+                    //{
+                    //    splittextrecord[i] = 1;
+                    //}else if(splittext[i] == second)
+                    //{
+                    //    splittextrecord[i] = 2;
+                    //}
+
+                    //if (i >= 2)
+                    //{
+                    //if(splittextrecord[i-2] == 1&& splittextrecord[i - 1] == 2)
+                    //{
+                    //    result.Add(splittext[i]);
+                    //}
+                    //}
+                    //原本是走一圈把數字標好比對，速度確實會快些，但如果first=second就會沒辦法標數字，因為可能同時為1或2
+                    //最後只能用題目給的方法每個字都比一次前兩個字，速度比前面的就會相對慢些
+                    if (splittext[i - 2] == first && splittext[i - 1] == second)
+                    {
+                        result.Add(splittext[i]);
+                    }
+                }
+
+                return result.ToArray();
+                //感覺很差，基本照著最死的方法做
+                //其他
+                //這方法基本跟我一樣，不過可能他另外多存很多變數導致速度慢不少，另外他用了string.compare來代替==有點特別
+                //https://leetcode.com/problems/occurrences-after-bigram/discuss/308360/C-One-iteration-of-parsed-words
+                //這方法一樣不過他是用i+1、i+2，我是i-1、i-2，另外感覺她速度快一點，照理來講應該差不多
+                //https://leetcode.com/problems/occurrences-after-bigram/discuss/1136294/C-Straightforward
+                //這個透過LINQ的zip把string包成一層又一層的tuple來比對，雖然看得懂但感覺沒必要，速度理所當然不會快
+                //https://leetcode.com/problems/occurrences-after-bigram/discuss/959172/C-with-LINQ
+
+                //例外
+                //這個解法打算不用split只用index解決，算有趣不過後來題目應該有改動原本找a good的index但題目故意給aa good也會取到index
+                //但照題意aa good不應取到index，因此這個解法就破功了
+                //https://leetcode.com/problems/occurrences-after-bigram/discuss/321593/C-Using-Substring
+            }
+        }
+    }
+}

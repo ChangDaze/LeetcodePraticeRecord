@@ -1,0 +1,72 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();            
+            string s = "011101";            
+            int result = solution.MaxScore(s);
+            Console.WriteLine(result);
+
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int MaxScore(string s)
+            {                
+                int max = 0;                
+
+                for(int i = 1; i < s.Length; i++)//因為左邊至少會有一個字，i=1
+                {
+                    max = max + Convert.ToInt32(s[i].ToString());//這一直convert的方法說實在很智障，但char直接轉會變ASCI，想看其他人有無解法
+                }
+                
+                if(Convert.ToInt32(s[0].ToString()) == 0)//處理第一個字元的影響，若是1則是不加不減
+                {
+                    max++;
+                }
+                //結果會是左邊1字元，右邊剩下字元的值
+
+                int tempmax = max;
+
+                for(int i =1; i < s.Length-1; i++)//因為左邊至少會有一個字，i=1
+                {
+                    if(Convert.ToInt32(s[i].ToString()) == 0)
+                    {
+                        tempmax++;//若是1代表左邊加值，但右邊不少值 -> +1
+                    }
+                    else
+                    {
+                        tempmax--;//若是1代表左邊不加值，但右邊少一值 -> -1
+                    }
+
+                    max = Math.Max(max, tempmax);
+                }
+                return max;
+            }
+        }
+
+        //速度普通，應該算是照著hint的prefix的方法，算還能懂
+        //其他
+        //速度普通，這有點複雜，他先算出每個位置對應左邊多少個0和左邊多少個1(這也是i+1看的是左邊不包含原地的數量)
+        //zeroes[i + 1](左邊多少0) + ones[s.Length](全部1) - ones[i + 1](左邊多少1) -> 後面兩個值相加就是右邊剩多少個1
+        //https://leetcode.com/problems/maximum-score-after-splitting-a-string/discuss/597827/C-Using-prefix-Sums
+        //這跟第一個差不多是算數量，但她是算左邊幾個0和右邊幾個1，導致他的寫法變得有點醜，但意外快一點，但我寧願選上面的
+        //然後看完這兩個我發現沒人在用convert，都用=='1'or'0'
+        //https://leetcode.com/problems/maximum-score-after-splitting-a-string/discuss/598212/Simple-O(n)-readable-solution-on-C
+        //這個用linq，count的方式比較值得學，速度普通，但較簡潔易閱讀
+        //然後她有個細節是他是算0~len-2位置後切的值，因此好像也不用特別跳過0注意尾部要留1就好(就是切到len-2)
+        //res(max)、left(左邊0)、l1(左邊1)、t(tempmax) = left + (totalOne - l1)，這個算試是跟第一個人一樣
+        //https://leetcode.com/problems/maximum-score-after-splitting-a-string/discuss/1418314/C-Solution
+    }
+}

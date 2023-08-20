@@ -1,0 +1,56 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int num = 1234;
+            Solution solution = new Solution();
+            var result = solution.LargestInteger(num);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+        public class Solution
+        {
+            public int LargestInteger(int num)
+            {
+                List<IList<int>> positions= new List<IList<int>>(); //紀錄在char[]中的index
+                List<IList<int>> nums = new List<IList<int>>(); //紀錄在digit值
+
+                int count = num.ToString().Length-1;
+                while(num> 0)
+                {
+                    int digit = num % 10;
+                    positions.Add(new int[2] { digit % 2, count});//int[0] 是紀錄奇數偶數
+                    nums.Add(new int[2] { digit % 2, digit});
+                    count--;
+                    num = num/10;
+                }
+
+                //先OrderBy(x => x[0])區分奇數偶數兩個list的奇數偶數數量一定相同
+                positions = positions.OrderBy(x => x[0]).ThenBy(x => x[1]).ToList();//小的index先排，讓後續大的值可以對號入座
+                nums = nums.OrderBy(x => x[0]).ThenByDescending(x => x[1]).ToList();//大的值對小的index
+                string[] record = new string[nums.Count];
+
+                for(int i =0;i<nums.Count;i++)
+                {
+                    record[positions[i][1]] = nums[i][1].ToString();//照順序對號入座
+                }
+
+                return Convert.ToInt32(string.Join("", record));
+            }
+        }
+    }
+}

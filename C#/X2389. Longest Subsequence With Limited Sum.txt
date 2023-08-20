@@ -1,0 +1,45 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.ComponentModel;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var nums = new int[]{ 4, 5, 2, 1 };
+            var queries = new int[] { 3, 10, 21 };
+            Solution solution = new Solution();
+            var result = solution.AnswerQueries(nums, queries);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int[] AnswerQueries(int[] nums, int[] queries)
+            {
+                int[] answer = new int[queries.Length];
+                Array.Sort(nums);
+                for (int i = 1; i < nums.Length; ++i)//把array變成sum的形狀，就能用binary search了
+                    nums[i] += nums[i - 1];
+
+                for (int i = 0; i < queries.Length; ++i)
+                {
+                    int j = Array.BinarySearch(nums, queries[i]);//沒想到有這個，不過這裡面會再sort所以應該用這個都不快，正數就是找到(因index要+1)，負數就是沒找到(大於所有時會返回max index+1，有小於時會返回第一個大於他的index，因是負數所以要+1抵銷多算的一位index)
+                    //https://learn.microsoft.com/zh-tw/dotnet/api/system.array.binarysearch?view=net-7.0
+                    answer[i] = Math.Abs(j + 1);
+                }
+                return answer;
+            }
+        }
+        //https://leetcode.com/problems/longest-subsequence-with-limited-sum/solutions/2493409/java-c-python-binary-search/
+    }
+}

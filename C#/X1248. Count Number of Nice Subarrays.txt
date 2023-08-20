@@ -1,0 +1,68 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Globalization;
+using System.Runtime.Remoting.Messaging;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            int[] nums = new int[] { 1, 1, 2, 1, 1 };
+            int k = 3;
+            var result = solution.NumberOfSubarrays(nums,k);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int NumberOfSubarrays(int[] nums, int k)
+            {
+                int result = 0;
+                int i = 0, j;
+                int tailDistance = 0;
+                int headDistance = 0;
+                for(j = 0; j < nums.Length; j++)
+                {
+                    if (nums[j] % 2 == 1) k--;
+                    if (k == 0) tailDistance++;
+
+                    if (k < 0)
+                    {
+                        while (k < 0)//因為i~j範圍內有>k的odd，所以必定不會無限迴圈
+                        {
+                            if (nums[i++] % 2 == 1) k++;
+                            headDistance++;
+                        }
+                        result += headDistance * tailDistance;//基本排列組合 
+                        headDistance= 0;
+                        tailDistance = 1;//到這一定是k=0，所以tailDistance從1開始
+
+                    }
+                }
+
+                //處理尾部沒再遇到k<0
+                while (k == 0)
+                {
+                    headDistance++;
+                    if (nums[i++] % 2 == 1) k++;
+                }
+                result += headDistance * tailDistance;
+                
+
+                return result;
+            }
+        }
+        //記錄好每個odd的index，用距離來算
+        //在每個odd點紀錄間距的prefixsum也能算出距離
+    }
+}

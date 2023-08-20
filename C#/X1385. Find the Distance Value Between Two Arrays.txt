@@ -1,0 +1,67 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.ComponentModel;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var arr1 = new int[]{ -3, -3, 4, -1, -10 };
+            var arr2 = new int[] { 7, 10 };
+            var d = 12;
+            Solution solution = new Solution();
+            var result = solution.FindTheDistanceValue(arr1, arr2, d);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int FindTheDistanceValue(int[] arr1, int[] arr2, int d)
+            {
+                Array.Sort(arr2);
+                int result = arr1.Length;
+
+                foreach(int i in arr1)
+                {
+                    int left = 0;
+                    int right = arr2.Length-1;
+
+                    while(left<=right)
+                    {
+                        int mid = (left+right)/2;
+                        if (arr2[mid]<i)
+                        {
+                            left = mid+1;
+                        }
+                        else
+                        {
+                            right= mid-1;
+                        }
+                    }
+
+                    if(left<arr2.Length && right >-1)//right好像也要判斷，前面用這方法的要注意
+                    {
+                        if (Math.Abs(i-arr2[left]) <= d || Math.Abs(i - arr2[right] ) <= d)
+                            result--;
+                    }
+                    else
+                    {
+                        if (Math.Abs(i-arr2[0] ) <= d || Math.Abs(i-arr2[arr2.Length-1]) <= d)
+                            result--;
+                    }
+                }
+
+                return result;
+            }
+        }
+    }
+}

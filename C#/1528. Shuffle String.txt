@@ -1,0 +1,52 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string s = "codeleet";
+            int[] indices = new int[] { 4, 5, 6, 7, 0, 2, 1, 3 };
+            string result = solution.RestoreString(s, indices);
+            Console.WriteLine(result);
+
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public string RestoreString(string s, int[] indices)
+            {
+                Dictionary<int, char> dict = new Dictionary<int, char>(); ;
+                string result = "";
+                for (int i = 0; i < indices.Length; i++)
+                {
+                    dict.Add(indices[i], s[i]);
+                }
+
+                for (int i = 0; i < indices.Length; i++)
+                {
+                    result = result + dict[i];
+                }
+                return result;
+            }
+            //題目很單純就是紀錄位置移過去而已，但要變快可能很難我就沒多想，不過我這個用key照順序擺放還蠻帥的
+            //其他
+            //這個方法告訴我連dic其實都不用，直接用char[]照順序擺位就好(因此速度也容易比我快)
+            //不過他的方法2跟方法1好像一樣，只是多了沒用的動作
+            //https://leetcode.com/problems/shuffle-string/discuss/1073160/C-solutions
+            //這方法跟上一個一樣，不過char[]不是空的，是隨手拿的，可能也因此較慢
+            //https://leetcode.com/problems/shuffle-string/submissions/
+            //這方法跟上面的一樣(大家都想得比我簡單..)，不過有附他的看法
+            //https://leetcode.com/problems/shuffle-string/discuss/893662/C-O(n)-Time-and-Space
+        }
+    }
+}

@@ -1,0 +1,58 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            OrderedStream os = new OrderedStream(5);
+            var step1 = os.Insert(3, "ccccc");
+            var result = 1;
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+        public class OrderedStream
+        {
+            Dictionary<int,string> streams = new Dictionary<int,string>();
+            int current = 1;
+
+            public OrderedStream(int n)
+            {
+                for(int i = 1; i <= n; i++)                
+                    streams[i] = "";                
+            }
+
+            public IList<string> Insert(int idKey, string value)
+            {
+                streams[idKey] = value;
+                List<string> result = new List<string>();
+                for(int i = current; i <= streams.Count(); i++)
+                {
+                    if (streams[i].Length == 5)
+                    {
+                        result.Add(streams[i]);
+                        current++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                return result;
+            }
+        }
+        
+        //超慢
+    }
+}

@@ -1,0 +1,69 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            #region solution1，可以知道只要string一長就會完蛋，因為只要重複地就重來
+            //string s = "azxxzy";
+            //for (int i = 0; i < s.Length; i++)
+            //{
+            //    if (i + 1 < s.Length)
+            //    {
+            //        if (s[i] == s[i + 1])
+            //        {
+            //            s = s.Remove(i, 2);
+            //            i = -1;
+            //        }
+            //    }
+            //}
+
+            //Console.WriteLine(s);
+
+            //Console.ReadKey();
+            #endregion
+
+            #region solution2 方法同solution1不過不是重新檢查，是回到有異動的地方檢察，所以速度比較快，但不知為啥還是慢於很多人
+            //string s = "abbaca";
+            //for (int i = 1; i < s.Length; i++)
+            //{
+            //    if (s[i] == s[i - 1])//從index1當前的和前一個對
+            //    {
+            //        s = s.Remove(i -1 , 2);
+            //        if (i >1)
+            //        {
+            //            i=i-2;//要檢查上一位之後有沒有重複
+            //        }
+            //        else//index0不用跟上一個比
+            //        {
+            //            i--;
+            //        }
+
+            //    }
+            //}
+
+
+
+            //Console.WriteLine(s);
+
+            //Console.ReadKey();
+            #endregion
+
+            //其他解法，都快很多，尤其是Stack<char>好很多，可能因為是專門做這種的型態，我上面用string+remove重複用慢了快20倍，可能string每次異動都會重組?
+            //https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string/discuss/1161590/C-solution-(Two-point-Stack)
+            //Stack用法
+            //https://docs.microsoft.com/zh-tw/dotnet/api/system.collections.stack.peek?view=net-6.0
+        }
+
+
+    }
+
+
+}

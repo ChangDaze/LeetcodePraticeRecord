@@ -1,0 +1,85 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string s = "hello";
+            string result = solution.ReverseVowels(s);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public string ReverseVowels(string s)
+            {
+                List<char> vowels = new List<char> { 'a', 'e', 'i', 'o', 'u','A','E','I','O','U'};//直接把要改的存起來
+                List<int> record = new List<int>();//紀錄要改的位置
+                for(int i = 0; i < s.Length; i++)
+                {
+                    if (vowels.Contains(s[i]))
+                    {
+                        record.Add(i);
+                    }
+                }
+
+                //喔我原本想用s[a] = s[b]，沒想到s是字串時s[i]是readonly，不過別人這裡用tochararray就直接解決了
+
+                record.Reverse();//之前是(Q345)用前後互換，後來想一下直接reverse後插回資料也是解法，不過前後互換這種偏二元搜尋的方法好像快很多
+                int count = 0;
+                string result = "";
+
+                for (int i = 0; i < s.Length; i++)
+                {
+                    if (record.Contains(i)) {//有再紀錄裡的位置就處理
+                        //這就前後互換的方法變出來的粗糙版，但還沒完成我就擺著一半，因為我這次沒想這樣解
+                        //(我前面reverse了，所以這方法不通了因為大的再前面而i只能由小到大，除非改寫也是可好像?)
+                        //好像i由大跑到小就不用reverse了?不知道，沒試
+                        //if(record.IndexOf(i) < record.Count / 2)
+                        //{
+                        //    result = result + s[record[record.Count - 1 - record.IndexOf(i)]];
+                        //    continue;
+                        //}
+
+                        //reverse後就照位置和順序把值放回去
+                        result = result + s[record[count]];
+                        //需要變數輔助紀錄放到哪
+                        count++;
+                        continue;
+                    }
+
+                    //其他照順序組回原來字串
+                    result = result + s[i];
+                }
+                return result;
+            }
+        }
+        //結論是這個超慢，可能跟濫用contain有關係?還有前後互換的方法好像比revere快多了?
+        //其他
+        //這個人用indexof取代我用contain的方法(就快很多了),其他的就是用左右指標(真的好像很適合while)，且不愧是偏快的排序法，然後他超快(我的35倍)
+        //還有他用ToCharArray、new string(char[])可能都是加速關鍵喔?
+        //值得注意的是她用start++和end--來用左右指標來找到位置才做後續處理，這樣loop整個來說只要跑過一趟
+        //end - 1和start + 1好像是start和end會越來越靠近，且在最外層迴圈會做start++和end--，才會預留+1-1的位置?如此才會在奇數時會有start == end?(感覺能用continue處理?)
+        //https://leetcode.com/problems/reverse-vowels-of-a-string/discuss/172723/C-my-most-favorite-algorithm
+        //這在我這時試100%ㄟ，網路飆速喔?
+        //挖草，他把contain用再最少次數反而變得比indexof存變數快??他透過建很少變數來變快的樣子
+        //然後他把for和左右指標融合在一起了變數又更少了，節儉又快，超猛，還有用HashSet可能也會加快搜尋?
+        //https://leetcode.com/problems/reverse-vowels-of-a-string/discuss/81472/C-concise-solution
+        //方法跟上面差不多，不過他把要改的index另外存起來，所以可能因此比較慢
+        //他取index是用LINQ，tup應是tuple(char,index),char應是character,index應是index，LINQ第一變數取值，第二變數取index的樣子
+        //相比其他人用tochararray他是用new stringbuilder(s)轉成char[],感覺跟new string(char[])用法很像，也是一招        
+        //https://leetcode.com/problems/reverse-vowels-of-a-string/discuss/435098/Readable-Solution-on-C
+
+
+    }
+}

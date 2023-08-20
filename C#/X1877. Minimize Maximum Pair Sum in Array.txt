@@ -1,0 +1,51 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+using System.Reflection;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] nums = new int[] { 3, 5, 2, 3 };
+            Solution solution = new Solution();
+            var result = solution.MinPairSum(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+
+        public class Solution
+        {
+            public int MinPairSum(int[] nums)
+            {
+                int result = 0;
+                int left = 0;
+                int right = nums.Length - 1;
+                Array.Sort(nums);
+
+                while (left < right)
+                {
+                    if (nums[left] + nums[right] > result)
+                        result = nums[left] + nums[right];
+
+                    left++;
+                    right--;
+                }
+
+                return result;
+            }
+        }
+        //嗯...，意外簡單，說不定比easy簡單，雖然速度慢
+
+    }
+}

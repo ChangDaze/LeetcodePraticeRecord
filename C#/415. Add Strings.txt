@@ -1,0 +1,61 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            
+            Solution solution = new Solution();
+            Console.WriteLine(solution.AddStrings("11", "123"));
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public string AddStrings(string num1, string num2)
+            {
+                int carry = 0;
+                int i = num1.Length - 1;
+                int j = num2.Length - 1;
+                List<string> list = new List<string>();
+
+                while( i >= 0 || j >= 0 || carry > 0)
+                {
+                    char char1 = i >=0 ? num1[i--] : '0';
+                    char char2 = j >= 0 ? num2[j--] : '0';
+
+                    int sum = char1 + char2 + carry - 96;
+                    carry = sum/10;//carry其實也只會有1和0可以試著找比較快的記法
+                    list.Add((sum%10).ToString());//用stringbuilder會自動轉可能比較直覺
+
+                }
+
+                string result = string.Empty;
+                list.Reverse();
+                for(int k = 0; k < list.Count; k++)
+                {
+                    result = result + list[k];
+                }
+
+                return result;
+            }
+        }
+        //跟題目67. Add Binary 用了同樣的方法，可能高位數字的加法就是這樣?
+        //new string(1,2,3);//char,startindex,length這題也不少人用這種轉字串
+        //其他
+        //這個人char和int轉換很熟練像是直接char - char 就不會有最後須 -48(char '0') 的換算，另外stringbuilder也是有insert和append，我可能須熟練一下，儘管速度不快但整潔
+        //https://leetcode.com/problems/add-strings/discuss/606053/C-solution
+        //這個人用了兩參數for和很多三元運算子還有new string(1,2,3)，很好玩但實際用可能會需要想一段時間，reply裡有用了一個local funtion 的簡易寫法，也十分值得參考，不過都有點複雜，速度也還好
+        //https://leetcode.com/problems/add-strings/discuss/896132/C-faster-than-100.00
+        //這個人也很有趣，是手動把每個步驟分開，或許這也比較容易再一開始比較好下手 -> 把邏輯弄清楚，reply就算一種邏輯弄清後的整合版，不過也都不是很快
+        //https://leetcode.com/problems/add-strings/discuss/174107/C-accepted-solution
+    }
+}

@@ -1,0 +1,161 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    public class ListNode
+    {
+        public int val;
+        public ListNode next;
+        public ListNode(int val = 0, ListNode next = null)
+        {
+            this.val = val;
+            this.next = next;
+        }
+
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            bool result = true;
+
+            //ListNode listNode = new ListNode() { val = 2,
+            //    next = new ListNode() { val = 3,
+            //        next = new ListNode() { val = 3,
+            //            next = new ListNode {val=2 } } } };
+
+            //ListNode listNode = new ListNode()
+            //{
+            //    val = 1
+            //};
+
+            //linked list
+            //奇數、偶數的回文都算
+            ListNode listNode = new ListNode()
+            {
+                val = 2,
+                next = new ListNode()
+                {
+                    val = 3,
+                    next = new ListNode()
+                    {
+                        val = 2,
+                    }
+                }
+            };
+
+            //var a = listNode.val;
+            //var b = listNode.next.val;
+            //var c = listNode.next.next.val;
+            //var d = listNode.next.next.next.val;
+
+            //內容做成陣列
+            List<int> nodevallst = new List<int> { };
+
+            
+            var nownode = listNode.val;
+            var nextnode = listNode.next;
+            nodevallst.Add(nownode);
+
+            while(nextnode != null)
+            {
+                nownode = nextnode.val;
+                nextnode = nextnode.next;
+                nodevallst.Add(nownode);
+            }
+
+            var nodevallstlen = nodevallst.Count;
+
+            if (nodevallstlen % 2 == 0)
+            {
+                var i = 0;
+                var j = nodevallstlen - 1;
+                while (i < nodevallstlen / 2 || j >= nodevallstlen / 2)
+                {
+                    Console.WriteLine("POSITION");
+                    Console.WriteLine(i);
+                    Console.WriteLine(j);
+                    Console.WriteLine("VALUE");
+                    Console.WriteLine(nodevallst[i]);
+                    Console.WriteLine(nodevallst[j]);
+                    if (nodevallst[i] != nodevallst[j])
+                    {
+                        result = false;
+                        break;
+                    }
+
+                    i++;
+                    j--;
+                }
+
+                //因for迴圈會先跑完一邊全部另一邊才走到下一個再跑一次一邊全部，但其實兩邊要一起跑
+                #region 錯用for迴圈
+                //for(int i = 0; i < nodevallstlen/2; i++)
+                //{
+                //    for (int j = nodevallstlen-1; j >= nodevallstlen / 2; j--)
+                //    {
+                //        Console.WriteLine("POSITION");
+                //        Console.WriteLine(i);
+                //        Console.WriteLine(j);
+                //        Console.WriteLine("VALUE");
+                //        Console.WriteLine(nodevallst[i]);
+                //        Console.WriteLine(nodevallst[j]);
+                //        if (nodevallst[i] != nodevallst[j])
+                //        {
+                //            result = false;
+                //            break;
+                //        }
+                //    }
+
+                //    if (result)
+                //    {
+                //        break;
+                //    }
+                //}
+                #endregion
+
+            }else if (nodevallstlen != 1)
+            {
+                var i = 0;
+                var j = nodevallstlen - 1;
+                while (i < (nodevallstlen - 1) / 2 || j > (nodevallstlen - 1) / 2)
+                {
+                    Console.WriteLine("POSITION");
+                    Console.WriteLine(i);
+                    Console.WriteLine(j);
+                    Console.WriteLine("VALUE");
+                    Console.WriteLine(nodevallst[i]);
+                    Console.WriteLine(nodevallst[j]);
+                    if (nodevallst[i] != nodevallst[j])
+                    {
+                        result = false;
+                        break;
+                    }
+
+                    i++;
+                    j--;
+                }
+            }
+
+            //Console.WriteLine(a);
+            //Console.WriteLine(b);
+            //Console.WriteLine(c);
+            //Console.WriteLine(d);
+            //Console.WriteLine(nodevallst[0]);
+            //Console.WriteLine(nodevallst.Count);
+            Console.WriteLine(result);
+
+            Console.ReadKey();
+
+        }
+
+
+    }   
+    
+
+}

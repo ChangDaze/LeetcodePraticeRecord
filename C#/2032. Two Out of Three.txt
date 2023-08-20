@@ -1,0 +1,76 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] nums1 = new int[] { 2, 15, 10, 11, 14, 12, 14, 11, 9, 1 };
+            int[] nums2 = new int[] { 8, 9, 13, 2, 11, 8 };
+            int[] nums3 = new int[] { 13, 5, 15, 7, 12, 7, 8, 3, 13, 15 };            
+            Solution solution = new Solution();
+            var result = solution.TwoOutOfThree(nums1,nums2,nums3);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+        public class Solution
+        {
+            int index = -1;
+            Dictionary<int, int[]> record= new Dictionary<int, int[]>();
+            public IList<int> TwoOutOfThree(int[] nums1, int[] nums2, int[] nums3)
+            {
+                RecordArray(nums1);
+                RecordArray(nums2);
+                RecordArray(nums3);
+                List<int> result = new List<int>();
+                foreach(int key in record.Keys)
+                    if (record[key][1] >=2)
+                        result.Add(key);
+                return result;
+            }
+
+            public void RecordArray(int[] nums)
+            {
+                index++;
+                foreach(int num in nums)
+                {
+                    if(record.Keys.Contains(num))
+                    {
+                        if(record[num][0] != index)//不能放在上一層if，會導致index相同的(重複出現的)跑去else，導致計數變1
+                        {
+                            record[num][0] = index;
+                            record[num][1]++;
+                        }                        
+                    }                        
+                    else
+                        record[num] = new int[2] {index,1};
+                }
+            }
+        }
+        //速度還行，就簡單dictionary，因為他刻意分成很多array所以我寫function複用
+        //其他
+        //這個蠻有趣的，三個方法
+        //1.用bool[3][101]，因為給的陣列就開幾個維度就好，然後用true當flag防止重複，然後C++的bool好像可以相加if (cnt[0][i] + cnt[1][i] + cnt[2][i] > 1)
+        //2.同方法1，不過是組好多維度nums直接丟入，而非一個一個nums帶入
+        //3.先去重複而已
+        //https://leetcode.com/problems/two-out-of-three/solutions/1513355/three-count-arrays/
+        //這個超很，直接全部暴力撸過一遍，python的
+        //set(nums1) & set(nums2) | set(nums2) & set(nums3) | set(nums1) & set(nums3)
+        //https://leetcode.com/problems/two-out-of-three/solutions/1516174/python-one-line-simple-solution/
+        //這java的跟第二位竟然方法差不多...
+        //https://leetcode.com/problems/two-out-of-three/solutions/1513706/java-sets/
+        //感覺程式碼精簡的暴力法蠻多人推的...
+    }
+}

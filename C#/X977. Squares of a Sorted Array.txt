@@ -1,0 +1,53 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] nums = new int[] { -4, -1, 0, 3, 10 };
+            Solution solution = new Solution();
+            var result = solution.SortedSquares(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public int[] SortedSquares(int[] nums)
+            {
+                List<int> result = new List<int>();
+                int x = 0;
+                int y = nums.Length-1;
+                while(x<=y)//two pointer不一定要兩個array，同個array也能用
+                {
+                    if (Math.Pow(nums[x],2)> Math.Pow(nums[y], 2))
+                    {
+                        result.Add((int)Math.Pow(nums[x], 2));
+                        x += 1;
+                    }
+                    else
+                    {
+                        result.Add((int)Math.Pow(nums[y], 2));
+                        y -= 1;
+                    }
+                }
+                result.Reverse();
+                return result.ToArray();
+                //唯一比較不滿意的可能是
+                //1. 每次都要(int)轉型(說不定單純相乘會快?雖然沒啥意義)
+                //2. 最後要Reverse()
+            }
+        }
+    }
+}

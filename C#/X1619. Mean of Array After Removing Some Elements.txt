@@ -1,0 +1,42 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] arr = new int[] { 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3 };
+            Solution solution = new Solution();
+            var result = solution.TrimMean(arr);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+        public class Solution
+        {
+            public double TrimMean(int[] arr)
+            {
+                Array.Sort(arr);
+                int nums = arr.Length/20;
+                double result = 0;
+
+                for(int i = nums; i < arr.Length-nums; i++)
+                {
+                    result += arr[i];
+                }
+
+                return result/ (arr.Length - nums*2);
+            }
+        }
+    }
+}

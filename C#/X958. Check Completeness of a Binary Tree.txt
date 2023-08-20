@@ -1,0 +1,73 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var root = new TreeNode(1, new TreeNode(2, new TreeNode(4), new TreeNode(5)), new TreeNode(3, new TreeNode(6)));
+            Solution solution = new Solution();
+            var result = solution.IsCompleteTree(root);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class TreeNode
+        {
+            public int val;
+            public TreeNode left;
+            public TreeNode right;
+            public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+            {
+                this.val = val;
+                this.left = left;
+                this.right = right;
+            }
+        }
+
+
+        public class Solution
+        {
+            public bool IsCompleteTree(TreeNode root)
+            {
+                Queue<TreeNode> queue = new Queue<TreeNode>();
+                queue.Enqueue((root));
+                //queue bfs iterate，這題好像就是推用bfs確認每層完整性(可參考Q129)
+                while (queue.Any())
+                {
+                    var curr = queue.Dequeue();
+                    if (curr.right != null && curr.left == null) //只要左邊沒有右邊有就一定錯
+                        return false;
+
+                    if (curr.left != null)
+                        queue.Enqueue(curr.left);
+                    if (curr.right != null)
+                        queue.Enqueue(curr.right);
+
+                    if (queue.Any())//這要在目前能加的node都加完後檢查，檢查有下一個node的情況
+                    {
+                        TreeNode check = queue.Peek();
+                        //若此node child 有 null，那下一個node的child就都要是null
+                        if ((curr.right == null || curr.left == null) && check.left != null)
+                            //正常是要&& (check.left != null||check.left != null)，不過前面有檢察curr.left == null的情況，所以就沒在寫
+                            return false;
+                    }
+
+                }
+                return true;
+            }
+
+            
+        }
+    }
+}

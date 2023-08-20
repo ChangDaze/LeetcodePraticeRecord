@@ -1,0 +1,68 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string s = "abab";
+            
+            bool result = solution.RepeatedSubstringPattern(s);           
+
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        //參考: https://www.youtube.com/watch?v=bClIZj66dVE
+        public class Solution
+        {
+            //其實不往複雜想他很簡單，就是從第一個char開始慢慢放大到最多len/2，重複組成字串比對就好(但仔細想更好的方法我也想不出來)
+            //但有一些特性可知sub頭一定是s的頭，sub的尾一定是s的尾(這邊應該算有用到頭=頭的特性，反之尾應該也能這樣用，其實也不算特性啦)
+            public bool RepeatedSubstringPattern(string s)
+            {
+                int len = s.Length;
+                for(int i = len/2; i >=1; i--)//從len/2開始比心理上能安慰自己從簡單的重複開始做比對哈哈，這裡i指的是長度所以1開始，也方便後面用
+                {
+                    if (len % i == 0)
+                    {
+                        int run_reapeat = len / i;
+                        string sub = s.Substring(0,i);
+                        StringBuilder sb = new StringBuilder();
+                        for(int j = 0; j < run_reapeat; j++)
+                        {
+                            sb.Append(sub);
+                        }
+                        if (sb.ToString().Equals(s))//這裡StringBuilder沒有用tosting還是能比對但會返回false...
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
+            }
+            //速度普通
+            //其他
+            //這個比較刁鑽，他一個字一個字比，且不知為啥把第一個字拉出來另外處理，速度普通偏慢
+            //https://leetcode.com/problems/repeated-substring-pattern/discuss/840400/C-faster-than-96
+            //這個也有點刁鑽，用recursive，每次比對一段substring，並推進index,當比對到結尾就是true,速度很慢
+            //https://leetcode.com/problems/repeated-substring-pattern/discuss/718925/c-recursion
+            //這個也很刁鑽，他是先立好patternlength決定比對用範圍,然後用patternlength的餘數比對超出範圍的部分相不相同直到全部比完,速度偏快
+            //https://leetcode.com/problems/repeated-substring-pattern/discuss/94436/C-Greedy-Solution
+
+            //以上的方法都很刁鑽，可能他們都想要有自己的解法,但對我來說太難看懂,不知道解法還會被誤導...
+            //我看出的好處只有可以提前確認並break而已，或許資料量大時就必須考慮這些了
+
+
+        }
+
+
+    }
+}

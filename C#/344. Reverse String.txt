@@ -1,0 +1,84 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            char[] s = new char[] {'h', 'e', 'l', 'l', 'o'};
+            solution.ReverseString(s);
+            foreach(char c in s)
+            {
+                Console.WriteLine(c);
+            }
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public void ReverseString(char[] s)
+            {
+                //var test = s.Reverse();
+                //s = s.Reverse().ToArray();
+
+                //s[1] = 'a';
+
+                int slen = s.Length;
+
+                if(s == null || s.Length == 0)
+                {
+                    return;
+                }
+
+
+                int breakpoint;
+                if (slen %2 == 0)
+                {
+                    breakpoint = slen/2;
+                }
+                else
+                {
+                    breakpoint = slen/2 +1;//其實不用做這步因為中間的東西不用換(換了其實也是自己換自己...)
+                }
+
+                int maxinex = slen - 1; 
+                char temp;
+                for (int i = 0; i < breakpoint; i++)
+                {
+                    temp = s[i];
+                    s[i] = s[maxinex - i];
+                    s[maxinex - i] = temp;
+                }
+            }
+
+            //這是我上面改成不存變數的版本，意外地變很快，可能存變數或取變數意外的花時間?
+            public void ReverseString2(char[] s)
+            {
+                char temp;
+                for (int i = 0; i < s.Length / 2; i++)
+                {
+                    temp = s[i];
+                    s[i] = s[s.Length - 1 - i];
+                    s[s.Length - 1 - i] = temp;
+                }
+            }
+            //速度偏慢
+            //其他
+            //這方法跟我一樣，不過更慢可能是因為他用var或我特地把length-1存起來防止每次都計算?
+            //https://leetcode.com/problems/reverse-string/discuss/458692/C
+            //這方法跟我一樣，不過偏快，他告訴了我，存變數再取變數不一定比單純計算快喔
+            //https://leetcode.com/problems/reverse-string/discuss/380582/A-simple-C-O(n)-soltuion
+            //這方法原理跟我的也一樣不過他用左右指標和while(while的好方法和判斷?)來做，省去了找中間的部分，偏快，不過也需注意left++和right--
+            //https://leetcode.com/problems/reverse-string/discuss/310265/C-swap
+        }
+
+    }
+}

@@ -1,0 +1,115 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] arr = new int[] { 4, 4, 4, 4, 4 };
+            Solution solution = new Solution();
+            var result = solution.UniqueOccurrences(arr);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+        //public class Solution
+        //{
+        //    public bool UniqueOccurrences(int[] arr)
+        //    {
+        //        Dictionary<int, int> record = new Dictionary<int, int>();
+        //        foreach (int num in arr)
+        //        {
+        //            if (record.Keys.Contains(num))
+        //                record[num]++;
+        //            else
+        //                record[num] = 1;
+        //        }
+
+        //        bool[] flags = new bool[arr.Length + 1];//因為最大出現次數其實就是arr長度，記得要+1
+        //        foreach (int key in record.Keys)
+        //        {
+        //            if (flags[record[key]])
+        //                return false;
+        //            flags[record[key]] = true;
+        //        }
+        //        return true;
+        //    }
+        //}
+        //就是最基本的hashtable，速度超慢ㄟ
+
+        //2023.0723
+        public class Solution
+        {
+            public bool UniqueOccurrences(int[] arr)
+            {
+                Dictionary<int, int> record = new Dictionary<int, int>();
+
+                foreach (int i in arr)
+                {
+                    if (record.Keys.Contains(i))
+                    {
+                        record[i]++;
+                        continue;
+                    }
+
+                    record[i] = 1;
+                }
+
+                HashSet<int> set = new HashSet<int>();
+                int count = 0;
+
+                foreach(int key in record.Keys)
+                {
+                    set.Add(record[key]);
+                    count++;
+                    if(set.Count()!=count) return false;
+                }
+
+                return true;
+            }
+        }
+
+	//2023.0803
+ 	public class Solution
+        {
+            public bool UniqueOccurrences(int[] arr)
+            {
+                Dictionary<int, int> record = new Dictionary<int, int>();
+
+                foreach (int i in arr)
+                {
+                    if (record.Keys.Contains(i))
+                    {
+                        record[i]++;
+                        continue;
+                    }
+
+                    record[i] = 1;
+                }
+
+                HashSet<int> set = new HashSet<int>();
+                //int count = 0;
+
+                foreach(int key in record.Keys)
+                {
+                    if(set.Contains(record[key])) return false;
+                    set.Add(record[key]);
+                    //count++;
+                    
+                }
+
+                return true;
+            }
+        }
+    }
+}

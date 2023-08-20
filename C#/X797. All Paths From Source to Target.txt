@@ -1,0 +1,57 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[][] graph = new int[][] { new int[] { 1, 2 }, new int[] { 3 }, new int[] { 3 }, new int[0] { } };
+
+            Solution solution = new Solution();
+            var result = solution.AllPathsSourceTarget(graph);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            int[][] graph;
+            IList<IList<int>> allPaths = new List<IList<int>>();
+            int target = 0;
+            public IList<IList<int>> AllPathsSourceTarget(int[][] graph)
+            {
+                this.graph = graph;
+                this.target = graph.Length-1;
+                BackTracking(new List<int>() { 0}, 0);
+                return allPaths;
+            }
+            public void BackTracking(List<int> path,int index)
+            {                
+                for(int i = 0; i < graph[index].Length; i++)
+                {
+                    if (graph[index][i] != target)
+                    {
+                        BackTracking(path.Append(graph[index][i]).ToList(), graph[index][i]);
+                        continue;
+                    }
+
+                    allPaths.Add(path.Append(graph[index][i]).ToList());
+                }
+            }
+        }
+        //超慢
+
+    }
+}

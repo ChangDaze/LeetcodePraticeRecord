@@ -1,0 +1,72 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+
+
+            bool result = solution.IsIsomorphic("ab", "aa");
+
+            Console.WriteLine(result);
+
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public bool IsIsomorphic(string s, string t)
+            {
+                if(s== t)//必定成功的處理
+                {
+                    return true;
+                }
+                else if (s.Length== 1)
+                {
+                    return true;
+                }
+                Dictionary<char, char> dict = new Dictionary<char, char>();
+
+                dict.Add(s[0], t[0]);//第一祖先處理，不處理也行，但有之後好像比較快ㄟ
+
+                for (int i = 1; i < s.Length; i++)
+                {
+                    if (dict.ContainsKey(s[i]))//有key之後val不同就false -> 因同一字對應不同值
+                    {
+                        if (dict[s[i]] != t[i])
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        if (t.Substring(0, i).Contains(t[i]))//不同字防止(前面)對應同一字，substring(index,len)
+                        {
+                            return false;
+                        }
+                        dict.Add(s[i], t[i]);//檢查通過就加入key
+                    }
+                }
+
+                return true;
+
+            }
+        }
+        //Hashtable就是Dictionary的來源，其實差不多，這其實就是用兩個dictionary互比
+        //https://leetcode.com/problems/isomorphic-strings/discuss/57835/C-Solution
+        //同上面的，只是一半dic一半hashtable
+        //https://leetcode.com/problems/isomorphic-strings/discuss/294620/C-dictionary-hashSet
+        //最基礎的組成兩列互比
+        //https://leetcode.com/problems/isomorphic-strings/discuss/294620/C-dictionary-hashSet
+
+    }
+}

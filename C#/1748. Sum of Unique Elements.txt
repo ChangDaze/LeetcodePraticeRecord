@@ -1,0 +1,61 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] nums = new int[] { 1, 2, 3, 2 };
+            Solution solution = new Solution();
+            var result = solution.SumOfUnique(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int SumOfUnique(int[] nums)
+            {
+                int result = 0;
+                int[] flag = new int[101];
+
+                foreach(int num in nums)
+                {
+                    if (flag[num] > 1)
+                        continue;
+                    else if (flag[num] == 1)
+                        result -= num;
+                    else
+                        result += num;                        
+
+                    flag[num]++;
+                }
+
+                return result;
+            }
+            //速度普通
+            //其他
+            //這是C++的，他有說道幾個點，數字多但密集ex1~100可以用array，若疏散，則用Hashmap好點
+            //他有7個解法，大同小異，但有個點我可以學，他是先做好全部set再將 出現=1 的值加起來，這樣兩次Loop，這確實比每次都檢查hashmap的contain好多了
+            //https://leetcode.com/problems/sum-of-unique-elements/solutions/1052455/c-7-solutions/
+            //這是用JAVA的，方法一樣
+            //https://leetcode.com/problems/sum-of-unique-elements/solutions/1052575/java-solution/
+            //這是用C# LINQ groupby +( count = 1 )+ select key + sum,觀念很像SQL，但底層我不確定運作是否比較快，速度很快，感覺要算的較少時可以多用?
+            //https://leetcode.com/problems/sum-of-unique-elements/solutions/1918022/c/
+
+            //反而純用dictionary的不多??
+        }
+    }
+}

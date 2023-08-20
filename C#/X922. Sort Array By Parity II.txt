@@ -1,0 +1,50 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] nums = new int[] { 3, 1, 4, 2 };
+            Solution solution = new Solution();
+            var result = solution.SortArrayByParityII(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public int[] SortArrayByParityII(int[] nums)
+            {
+                int x = 0;
+                int y = 1;
+                int temp = -1;//暫存用
+                //這題目有個蠻大的前提，就是x和y一樣多
+                
+                while(x < nums.Length&&y<nums.Length)//基本上x或y排好，題目也解了
+                {
+                    if (nums[x] % 2 == 1)
+                    {
+                        temp = nums[x];
+                        while (y < nums.Length && nums[y] % 2 == 1)//當遇到不用調換的就跳下個目標，跟奇數裡面值為偶數的做調換                    
+                            y += 2;
+                        nums[x] = nums[y];
+                        nums[y] = temp;
+                    }
+                    x += 2;//照著偶數的順序解
+                }
+                return nums;
+            }
+        }
+    }
+}

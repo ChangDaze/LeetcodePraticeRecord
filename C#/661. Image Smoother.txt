@@ -1,0 +1,71 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var img = new int[4][] { 
+                            new[] { 100,200,100 },
+                            new[] { 200,50,200},
+                            new[] { 100,200,100},
+                            new[] { 100,200,100},
+                        };            
+            var result = solution.ImageSmoother(img);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public int[][] ImageSmoother(int[][] img)
+            {
+                int[][] result = new int[img.Length][];//先建好放的地方
+                for(int i = 0; i < img.Length; i++)
+                {
+                    result[i] = new int[img[0].Length];
+                }
+
+                for(int i = 0; i < img.Length; i++)
+                {
+                    for(int j = 0; j < img[0].Length; j++)
+                    {
+                        int amount = 0;
+                        int count = 0;
+                        for(int k = Math.Max(i - 1, 0); k<=Math.Min(i+1,img.Length-1); k++)//要注意row -> i -> img
+                        {
+                            for (int l = Math.Max(j - 1, 0); l <= Math.Min(j + 1, img[0].Length-1); l++)//要注意col -> j -> img[0]
+                            {
+                                count++;
+                                amount += img[k][l];
+                            }
+                        }
+                        result[i][j] = amount/count;
+                    }
+                }
+
+                return result;
+            }
+            //就是用Min、Max注意邊界 -> 大陣列中要用for座小陣列計算，速度不慢，不過這是看過別人答案的
+            //其他
+            //這個基本上方法一樣，不過可以看一下int[,]的寫法
+            //https://leetcode.com/problems/image-smoother/solutions/275810/c-solution-why-leetcode-is-not-friendly-to-2-dimension-c-array/
+            //這方法也一樣，就是硬幹，不過他是在for的條件上用三元運算子
+            //https://leetcode.com/problems/image-smoother/solutions/379184/a-c-easy-understanding-maybe-solution-beats-100/
+            //這個是自己另存2元的上下左右，把四個for變三個for，也能看看，速度普通
+            //https://leetcode.com/problems/image-smoother/solutions/1509028/c-solution/
+            //雖然上面都是硬幹解法，不過其他語法下大家好像也都這樣寫
+
+        }
+
+    }
+}

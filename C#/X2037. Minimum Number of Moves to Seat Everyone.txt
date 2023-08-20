@@ -1,0 +1,43 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] seats = new int[] { 3, 1, 5 };
+            int[] students = new int[] { 2,7,4 };
+            Solution solution = new Solution();
+            var result = solution.MinMovesToSeat(seats,students);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+        public class Solution
+        {
+            public int MinMovesToSeat(int[] seats, int[] students)
+            {
+                Array.Sort(seats);
+                Array.Sort(students);
+
+                int result = 0;
+                for (int i = 0; i < students.Length; i++)
+                    result += Math.Abs(seats[i] - students[i]);
+                
+                return result;
+            }
+        }
+
+        //典型greedy
+    }
+}

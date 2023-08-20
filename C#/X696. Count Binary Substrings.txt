@@ -1,0 +1,57 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string s = "00110011";
+            Solution solution = new Solution();
+            var result = solution.CountBinarySubstrings(s);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public int CountBinarySubstrings(string s)
+            {
+                int result = 0;
+                int x = 0;
+                int y = 1;//必要，(1)因為本來起始點就跟x不同(2)y - 1才不會破功
+                while (y < s.Length)
+                {
+                    //題目有個有趣的設定substrings that have the same number of 0's and 1's
+                    //基本上開始計算是在 EX:x在0的起點，y在1的起點
+                    //若有人走完他那部份就會造成s[x] == s[y]
+                    //此時要判斷誰到下個起點了，s[y] == s[y - 1]代表y沒到起點(x到了)，s[y] != s[y - 1]代表y到起點了
+                    //然後把另一個人推到起點s[x] != s[y]，然後開始計算
+                    if (s[x] == s[y])
+                    {
+                        if (s[y] == s[y - 1])//判斷後把另一人推到起點
+                            y += 1;
+                        else
+                            x += 1;
+                    }                        
+                    else
+                    {
+                        result += 1;//開始計算直到某人走完
+                        x += 1;y += 1;
+                    }
+                }
+                return result;
+            }
+        }
+    }
+}

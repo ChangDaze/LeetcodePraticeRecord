@@ -1,0 +1,33 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Diagnostics.Contracts;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int low = 3;
+            int high = 7;
+            Solution solution = new Solution();
+            var result = solution.CountOdds(low, high);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int CountOdds(int low, int high)
+            {
+                return (high - low) / 2 + (low % 2 == 1 || high % 2 == 1 ? 1 : 0);
+            }
+        }
+    }
+}

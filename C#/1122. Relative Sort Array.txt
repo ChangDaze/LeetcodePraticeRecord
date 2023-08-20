@@ -1,0 +1,111 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] arr1 = new int[] { 943, 790, 427, 722, 860, 550, 225, 846, 715, 320 };
+            int[] arr2 = new int[] { 943, 715, 427, 790, 860, 722, 225, 320, 846, 550 };
+            Solution solution = new Solution();
+            var result = solution.RelativeSortArray(arr1, arr2);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+        public class Solution
+        {
+            public int[] RelativeSortArray(int[] arr1, int[] arr2)
+            {
+                int current = 0;
+                foreach(int num in arr2)//把有出現的排好
+                {
+                    for(int i = current; i < arr1.Length; i++)
+                    {
+                        if (arr1[i] == num)
+                        {
+                            int temp = arr1[current];
+                            arr1[current] = arr1[i];
+                            arr1[i] = temp;
+                            current++;
+                        }
+                    }
+                }
+
+                //抄來的 https://blog.csdn.net/qq_41731286/article/details/120348404
+                if (current < arr1.Length-1)//把沒出現的用快速排序排好
+                    QuickSort(arr1, current, arr1.Length - 1);
+
+                return arr1;
+            }
+
+            //快速排序
+            public void QuickSort(int[] arr, int min, int max)
+            {
+                int key = arr[min];
+                int start = min;
+                int end = max;
+
+                while(end > start)
+                {
+                    while(end > start && arr[end] >= key)
+                        end--;
+
+                    if (key > arr[end])
+                    {
+                        int temp = arr[end];
+                        arr[end] = arr[start];
+                        arr[start] = temp;
+                    }
+
+                    while (end > start && arr[start] <= key)
+                        start++;
+
+                    if (key < arr[start])
+                    {
+                        int temp = arr[start];
+                        arr[start] = arr[end];
+                        arr[end] = temp;
+                    }
+
+                    if(start > min)
+                        QuickSort(arr, min, start-1);
+
+                    if (end < max)
+                        QuickSort(arr, end +1 , max);
+                }
+            }
+        }
+        //速度普通
+        //其他
+        //這是JAVA的有三種
+        //1.用int[1001]紀錄出現次數，再照arr2排一遍並消除次數，再照剩下的依小到大走一遍[1001]
+        //2.用有順序的treemap，然後先用key走arr2，再把剩下的照順序走完
+        //3.HashMap + PriorityQueue，hasmap處理arr2的順序和次數，PriorityQueue就沒數次數直接塞進去，然後依值自動排權重，不過答案有寫錯
+        //  map.containsKey(n) 應該是類似於 arr2.contains(n)，先建立key，不然連範例都跑不過
+        //不過我覺得第三種這種切割處理也很有趣
+        //https://leetcode.com/problems/relative-sort-array/solutions/335056/java-in-place-solution-using-counting-sort/
+        //乾，這個很有趣ㄟ，是python的，雖然語法看不懂，他是先用arr2的index做索引，若不再arr2的就用1000(就是一定比arr2之後)+自己值當索引套入sort規則
+        //https://leetcode.com/problems/relative-sort-array/solutions/334585/python-straight-forward-1-line-and-2-lines/
+        //這C#的，反而最照題目規定，做好map後套用sort規則，雖然是C# sort，但套用多層規則後，有點難學...，共三種
+        //0. 先用arr2造 hashmap + index，這裡sort規則的(x,y)，x是前數，y是後數，return -1應該是x排在前??
+        //1. 若x,y同時存在hashmap裡，就用index大小排序
+        //2. 若x,y同時都不存在hashmap裡就單純用值比大小
+        //3. x,y其中一個在hashmap裡，所以用三元運算式，若是x在hashmap裡就排在前面，反之亦然
+        //因為可以用很多if，感覺可以套用很複雜的比較，這邊規則好像就是濃縮成x,y前後數和0,1,-1的return，不過這樣看來很像泡沫排序ㄟ，因為倆倆互比，可能裡面也有最佳化另外紀錄些參數之類的來加速??
+        //https://leetcode.com/problems/relative-sort-array/solutions/778987/c-simple-solution/
+        //這是C# LINQ的，比較好懂，但應該LOOP超多次，因為每走一個字都where1次?
+        //https://leetcode.com/problems/relative-sort-array/solutions/827444/c-linq/
+
+    }
+}

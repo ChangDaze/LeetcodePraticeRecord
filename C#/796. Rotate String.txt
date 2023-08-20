@@ -1,0 +1,54 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string s = "bcdea", goal = "cdeab";
+            bool result = solution.RotateString(s,goal);
+            Console.WriteLine(result);           
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public bool RotateString(string s, string goal)
+            {
+                if(s.Length != goal.Length)
+                {
+                    return false;
+                }
+
+                for(int i = 0; i < s.Length; i++)
+                {
+                    if(s[i] == goal[0])//固定一邊的頭當比對物
+                    {
+                        if ( s.Substring(i,s.Length-i) + s.Substring(0,i) == goal)//假設頭對頭，s[i~尾巴] + s[0~i] = goal
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
+            }
+        }
+        //速度偏慢
+        //其他
+        //這個邏輯很清晰(不過幸好他有解釋邏輯，讚)，很厲害，但意外的不快，但真的很精簡
+        //https://leetcode.com/problems/rotate-string/discuss/376828/A-simple-three-line-C-solution
+        //這個跟上一個人方法一樣，不過又精簡一點(不過像這種沒說明的我可能沒看過上一個就會看不懂)，速度一樣偏慢
+        //https://leetcode.com/problems/rotate-string/discuss/120908/C
+        //這個人第一個方法是手做left shift，邏輯會有點不直覺(難懂)，且他是全部可能性都跑沒做篩選排除，所以速度較慢，第二個方法跟前面都一樣
+        //https://leetcode.com/problems/rotate-string/discuss/1055813/C-solution
+    }
+}

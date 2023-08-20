@@ -1,0 +1,53 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] arr = new int[] { 2, 2, 2, 2, 5, 5, 5, 8 };
+            int k = 3;
+            int threshold = 4;
+            Solution solution = new Solution();
+            var result = solution.NumOfSubarrays(arr,k,threshold);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int NumOfSubarrays(int[] arr, int k, int threshold)
+            {
+                threshold = threshold * k;
+                k = k - 1;//因為後面用k-1剛好，所以就直接換掉了
+                int sum = 0;
+                int result = 0;
+                for( int i = 0;i<arr.Length;i++)
+                {
+                    sum += arr[i];
+                    if (i < k)                                            
+                        continue;                    
+                    //進來時剛好k+1個，這邊k是調整後的k
+                    if (sum >= threshold)                    
+                        result++;
+                    //出去時是k個
+                    sum -= arr[i - k];
+                }
+
+                return result;
+            }
+        }
+    }
+}

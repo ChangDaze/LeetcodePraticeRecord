@@ -1,0 +1,105 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+using System.Reflection;
+using System.Security.AccessControl;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string s = "  hello world  ";
+            Solution solution = new Solution();
+            var result = solution.ReverseWords(s) ;
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+        //public class Solution
+        //{
+        //    public string ReverseWords(string s)
+        //    {
+        //        List<string> record = s.Split(' ').ToList();
+
+        //        for(int i = 0; i < record.Count(); i++)
+        //        {
+        //            if (string.IsNullOrEmpty(record[i]))
+        //            {
+        //                record.RemoveAt(i);
+        //                i--;
+        //            }
+        //        }
+
+        //        record.Reverse();
+
+        //        return string.Join(" ",record);
+        //    }
+        //}
+
+        //public class Solution
+        //{
+        //    public string ReverseWords(string s)
+        //    {
+        //        string result = "";
+        //        int pointer = 0;
+        //        s = s.Trim();
+
+        //        foreach(char c in s)
+        //        {
+        //            if(c == ' ')
+        //            {
+        //                if (pointer == 0)
+        //                    continue;
+        //                pointer = 0;
+        //                result = ' ' + result;
+        //            }
+        //            else
+        //            {
+        //                result = result.Insert(pointer, c.ToString());
+        //                pointer++;
+        //            }
+        //        }
+
+        //        return result;
+        //    }
+        //}
+
+        public class Solution
+        {
+            public string ReverseWords(string s)
+            {
+                string result = "";
+                string temp ="";
+
+                for(int i = 0; i < s.Length; i++)
+                {
+                    if (s[i] != ' ')
+                    {
+                        temp = temp + s[i];
+                        continue;
+                    }
+
+                    if (temp == "")
+                        continue;
+                    result = temp + ' ' + result;
+                    temp = "";
+                        
+                }
+
+                if(temp != "")
+                    result = temp + ' ' + result;
+
+                return result.Trim();
+            }
+        }
+    }
+}

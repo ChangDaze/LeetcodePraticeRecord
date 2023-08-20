@@ -1,0 +1,38 @@
+Create table #Products (product_id int, store1 int, store2 int, store3 int)
+insert into #Products (product_id, store1, store2, store3) values ('0', '95', '100', '105')
+insert into #Products (product_id, store1, store2, store3) values ('1', '70', null, '80')
+select * from #Products 
+
+select * from(
+	select 
+		product_id, 'store1' store, store1 price
+	from #Products
+	union
+	select 
+		product_id, 'store2' store, store2 price
+	from #Products
+	union
+	select 
+		product_id, 'store3' store, store3 price
+	from #Products) u
+where price is not null
+order by product_id, store
+
+--這是第二位的改來的，沒想到mssql也可通，速度普通
+SELECT product_id,store,price
+FROM #Products
+UNPIVOT
+(
+	price
+	FOR store in (store1,store2,store3)
+) AS T
+
+--速度偏慢，主要是參考第一位的用union組合，union本身好像就會幫忙order，但我保險起見還是有重新select
+--其他
+--這是mysql的，他們有GROUP_CONCAT處理group by 後的值，裡面還可以放distinct..
+--https://leetcode.com/problems/rearrange-products-table/solutions/2521016/mysql-beginner-level-easy-to-understand-simple-short-solution/
+--這是mysql的(1)就是UNPIVOT，可以學一下(2)也是union，他有order 1,2，但沒有重新select在mssql效果好像到不了全部
+--https://leetcode.com/problems/rearrange-products-table/solutions/1118884/2-simple-solutions-reverse-pivot-and-union/
+--這是mssql的，方法基本跟我一樣
+--https://leetcode.com/problems/rearrange-products-table/solutions/1521624/ms-sql/
+drop table #Products

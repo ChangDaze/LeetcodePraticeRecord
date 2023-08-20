@@ -1,0 +1,118 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+
+            
+            IList<int> list = solution.GetRow(3);
+            
+            for(int i = 0; i < list.Count; i++)
+            {
+                Console.WriteLine(list[i]);
+            }
+
+            Console.ReadKey();
+
+            
+
+        }
+
+
+        //public class Solution
+        //{
+        //    public IList<int> GetRow(int rowIndex)
+        //    {
+        //        int[] temp;
+        //        int[] row = new int[1] {1};
+        //        for(int i = 0; i < rowIndex; i++)
+        //        {
+        //            temp = new int[row.Length+1];//每多一行長度加一，int陣列雖然長度被限制(記憶體先放好?)但有特性是長度被設好的地方會預設為0，一般list沒辦法
+        //            for(int j = 0; j < row.Length; j++)
+        //            {
+        //                temp[j] += row[j];
+        //                temp[j+1] = row[j];//位置其實也只是重疊部分相加
+        //            }
+        //            row = temp;
+        //        }
+
+        //        return row;//array也能被ilist實做
+        //    }
+        //}
+
+        //public class Solution
+        //{
+        //    public IList<int> GetRow(int rowIndex)
+        //    {
+        //        if (rowIndex == 0)
+        //        {
+        //            return new List<int>() { 1 };
+        //        }
+
+        //        rowIndex++;//最後一行會是rowindex+1(層數由0開始)
+
+        //        int[] prevRow = new int[rowIndex];
+        //        int[] currentRow = new int[rowIndex];//設好最大長度
+
+        //        for (int row = 1; row <= rowIndex; row++)//因為層數有加1，他又用小於等於才從1開始，這裡指是紀錄處理次數
+        //        {
+        //            if (row == 1)//只有第一層處理會進入
+        //            {
+        //                currentRow[0] = 1;
+        //                Array.Copy(currentRow, prevRow, row);//(source,destination,len)，把建立好的層數複製為上層
+        //                continue;
+        //            }
+
+        //            for (int i = 0; i < row; i++)//這裡的row是目前層數的陣列長度
+        //            {
+        //                int left = (i < 1 ? 0 : prevRow[i - 1]);//[0]永遠是1
+        //                int right = (i == row - 1 ? 0 : prevRow[i]);//最後[len-1]永遠是left+0
+        //                //其他就是這層[i] = 上層 [i] + 上層 [i-1]
+        //                currentRow[i] = (left + right);
+        //            }
+        //            Array.Copy(currentRow, prevRow, row);
+        //        }
+
+        //        return currentRow;
+        //    }
+        //    //這個計算方式就是只計算中間不計算頭尾，一般人比較難看懂，效率好像也不好
+        //    //https://leetcode.com/problems/pascals-triangle-ii/discuss/453730/Easy-C-Solution
+        //}
+
+
+        public class Solution
+        {
+            public IList<int> GetRow(int rowIndex)
+            {
+                IList<int> prev = new List<int> { 1 };
+
+                for (int i = 1; i <= rowIndex; i++)//在計算層數
+                {
+                    IList<int> cur = new List<int> { 1 };//第一格設好
+
+                    for (int j = 1; j < i; j++)//故意從1開始又不用小於等於計算最後一格，ex0~5(index5)在for只計算0~4
+                        cur.Add(prev[j - 1] + prev[j]);
+
+                    cur.Add(1);//最後一格設好
+
+                    prev = cur;
+                }
+
+                return prev;
+            }
+            //比較容易懂，意外的比較快
+            //https://leetcode.com/problems/pascals-triangle-ii/discuss/1078617/c
+        }
+    }
+
+
+}

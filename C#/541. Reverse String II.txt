@@ -1,0 +1,116 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string s = "abcdefg";
+            int k = 1;
+            string result = solution.ReverseStr(s,k);
+            Console.WriteLine(result);           
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public string ReverseStr(string s, int k)
+            {
+                int lastchar = s.Length % (2 * k);//取得需要特別處理的部分
+                if (lastchar == 0)
+                {
+                    return Reverse2K(s, k);
+                }
+                else if(s.Length > (2*k))
+                {
+                    string head = s.Substring(0,s.Length - lastchar);
+                    head = Reverse2K(head,k);//head統一處理
+                    string foot = s.Substring(s.Length-lastchar,lastchar);
+                    if(foot.Length <= k)
+                    {
+                        string tempfootk = foot;
+                        foot = "";
+                        for (int i = 0; i < tempfootk.Length; i++)//0~k-1 Reverse
+                        {
+                            foot = foot + tempfootk[tempfootk.Length - 1 - i];
+                        }
+                    }
+                    else
+                    {
+                        string tempfootk = foot.Substring(0,k);
+                        string tempfoot2k = foot.Substring(k,foot.Length-k);
+                        foot = "";
+                        for (int i = 0; i < k; i++)//0~k-1 Reverse
+                        {
+                            foot = foot + tempfootk[k - 1 - i];
+                        }
+                        foot = foot + tempfoot2k;//k~2k-1 保持原樣
+                    }
+                    return head + foot;
+                }
+                else//s.Length <= (2*k)，不能跟上面的一起處裡，因為只有foot取head會錯誤，不過同樣部分應該要寫成function
+                {
+                    string foot = s;
+                    if (foot.Length <= k)
+                    {
+                        string tempfootk = foot;
+                        foot = "";
+                        for (int i = 0; i < tempfootk.Length; i++)
+                        {
+                            foot = foot + tempfootk[tempfootk.Length - 1 - i];
+                        }
+                    }
+                    else
+                    {
+                        string tempfootk = foot.Substring(0, k);
+                        string tempfoot2k = foot.Substring(k, foot.Length - k);
+                        foot = "";
+                        for (int i = 0; i < k; i++)
+                        {
+                            foot = foot + tempfootk[k - 1 - i];
+                        }
+                        foot = foot + tempfoot2k;
+                    }
+                    return foot;
+                }
+            }
+
+            public string Reverse2K(string s, int k)
+            {
+                //統一處理部分
+                string result = "";
+                for (int i = 0; i < s.Length; i = i + 2 * k)
+                {
+                    for (int j = i; j < i + k; j++)//0~k-1 Reverse
+                    {
+                        result = result + s[(i + k - 1 - j)+i];
+                    }
+
+                    for (int j = i + k; j < i + 2 * k; j++)//k~2k-1 保持原樣
+                    {
+                        result = result + s[j];
+                    }
+                }
+                return result;
+            }
+        }
+
+        //速度非常慢，主要是因為一個個字元慢慢調位置?
+        //其他
+        //速度平均，這個很簡潔有力，只要看破了就很容易懂，主要是只挪動0~k-1的部分(用1/2法reverse)，其他輔助的有，變成array，Math.Min(t.Length, i + k)等重點
+        //https://leetcode.com/problems/reverse-string-ii/discuss/201680/C
+        //速度偏慢，方法跟上面的人原理相同，不過他是用while、stringbuilder和左右逼近法來達成reverse
+        //https://leetcode.com/problems/reverse-string-ii/discuss/516631/Elementary-C-Solution
+        //速度偏慢，這個也很特別，把s依k切成每個部分組成list，foot也最後接上去當作最後的k，然後只處理0~k-1的部分reverse(i+=2，所以k~2k-1會跳過)，最後再將處理好的list還原成string
+        //https://leetcode.com/problems/reverse-string-ii/discuss/100945/C-solution-and-comments
+
+    }
+}

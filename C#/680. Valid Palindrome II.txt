@@ -1,0 +1,56 @@
+public class Solution {
+    public bool ValidPalindrome(string s)
+        {
+            if (s == null || s.Length == 0)
+            {
+                return true;
+            }
+
+            var start = 0;
+            var end = s.Length - 1;
+
+            while (start < end)
+            {
+                if (s[start] != s[end])
+                {
+                    var removeStart = new StringBuilder(s);
+                    removeStart.Remove(start, 1);
+
+                    var removeEnd = new StringBuilder(s);
+                    removeEnd.Remove(end, 1);
+
+                    return isPalindrome(removeStart.ToString()) ||
+                           isPalindrome(removeEnd.ToString());
+                }
+
+                start++;
+                end--;
+            }
+
+            return true;
+        }       
+
+        /// <summary>
+        /// two pointer technique
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        private static bool isPalindrome(string s)
+        {
+            var start = 0;
+            var end = s.Length - 1;
+
+            while (start < end)
+            {
+                if (s[start] != s[end])
+                {
+                    return false;
+                }
+
+                start++;
+                end--;
+            }
+
+            return true;
+        }
+}

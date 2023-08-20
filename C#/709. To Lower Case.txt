@@ -1,0 +1,53 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string s = "Hello";
+            string result = solution.ToLowerCase(s);
+            Console.WriteLine(result);           
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            //upper 65~90  
+            //lower 97~122 = upper + 32
+
+            public string ToLowerCase(string s)
+            {
+                string result = "";
+                for(int i =0; i < s.Length; i++)
+                {
+                    if(s[i] >= 65 & s[i] <= 90)//因為有些不是英文字所以不能純用s[i] <= 97
+                    {
+                        result += (char)(s[i] + 32);
+                    }
+                    else
+                    {
+                        result += s[i];
+                    }
+                }
+                return result;
+            }
+        }
+        //就是不用tolower用ascii的方法，速度普通
+        //其他
+        //這方法跟我用的一模一樣，頂多存變數時有差異，速度差不多
+        //https://leetcode.com/problems/to-lower-case/discuss/384631/C-faster-than-99.7-solutions!
+        //這在鬧XD
+        //https://leetcode.com/problems/to-lower-case/discuss/494182/one-line-in-C
+        //這個人應該是用shift的方式,32 2^5, 他的1<<5應該是源自於此，不過後來題目好像有改過，這個方法其實現在不會過，就當參考        
+        //https://leetcode.com/problems/to-lower-case/discuss/461032/C-Most-solutions-miss-the-point-of-this-question
+    }
+}

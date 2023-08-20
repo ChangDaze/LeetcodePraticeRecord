@@ -1,0 +1,191 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+	    //測試null + foreach
+            IList<int> a = null;
+            //foreach(int i in a)
+            //{
+            //    Console.Write(i);
+            //}
+	    //沒用建構式(每寫完還超複雜)
+            //Node tree = new Node() { val=1,
+            //    children = { 
+            //    new Node() { val=2, },
+            //    new Node() { val=3, 
+            //            children = {
+            //                new Node(){ val=6, },
+            //                new Node() { val=7, 
+            //                    children = { 
+            //                        new Node(){}
+            //                    }
+            //                },
+            //            }
+            //        },
+            //    new Node() { val=4, 
+            //            children = {
+            //                new Node(){ val=8, },
+            //            }
+            //        },
+            //    new Node() { val=5, 
+            //            children = { 
+            //                new Node(){val=9,},
+            //                new Node() { val=10,},
+            //            }
+            //        },                    
+            //    } 
+            //};
+	    //用建構式，相對簡單，所以下次寫class可考慮建構式
+            Node tree = new Node(1,new List<Node> {
+                new Node(2, new List<Node> { }),
+                new Node(3, new List<Node> {
+                        new Node (6, new List<Node> { }),
+                        new Node (7, new List<Node> {
+                            new Node (11, new List<Node> {
+                                new Node (14, new List<Node> { }),
+                            }),
+                        }),
+                    }),
+                new Node(4, new List<Node> {
+                        new Node (8, new List<Node> {
+                            new Node (12, new List<Node> { }),
+                        }),
+                    }),
+                new Node(5, new List<Node> {
+                        new Node (9, new List<Node> {
+                            new Node (13, new List<Node> { }),
+                        }),
+                        new Node (10, new List<Node> { }),
+                    }),
+            });
+
+            IList<int> reult = solution.Preorder(tree);
+
+            foreach(int i in reult)
+            {
+                Console.WriteLine(i);
+            }
+
+            Console.ReadKey();
+
+        }
+
+        
+        // Definition for a Node.
+        public class Node {
+            public int val;
+            public IList<Node> children;
+
+            public Node() {}
+
+            public Node(int _val) {
+                val = _val;
+            }
+
+            public Node(int _val,IList<Node> _children) {
+                val = _val;
+                children = _children;
+            }
+        }
+
+
+        //public class Solution
+        //{
+        //    public IList<int> Preorder(Node root)
+        //    {
+        //        if (root == null)//此題學到最多的就是要處理null，runtime error記得去查error的地方
+        //        {
+        //            return new List<int>() {};
+        //        }
+        //        else if (root.children == null)
+        //        {
+        //            return new List<int>() { root.val};
+        //        }
+
+        //        List<int> list = new List<int>() { root.val };
+        //        list = recursive(root,list);
+
+        //        return list;
+        //    }
+
+        //    public List<int> recursive(Node root, List<int> list)
+        //    {
+        //        if(root.children == null)//處理null
+        //        {
+        //            return list;
+        //        }
+        //        foreach (Node node in root.children.ToList())//foreach在recursive本身好像也算判斷返回的點
+        //        {
+        //            list.Add(node.val);//走過的點都記錄
+        //            list = recursive(node, list);
+        //        }
+        //        return list;
+        //    }
+        //}
+        //跟我的差不多但他簡潔很多，也少不少傳遞的過程?也快不少的樣子
+        //https://leetcode.com/problems/n-ary-tree-preorder-traversal/discuss/519196/Easy-C-Solution
+        //這也是我的簡潔版，跟上面差不多
+        //https://leetcode.com/problems/n-ary-tree-preorder-traversal/discuss/184782/C-Recursive-Code
+
+        //public class Solution
+        //{
+        //    public IList<int> Preorder(Node root)
+        //    {
+
+        //        List<int> res = new List<int>();
+        //        if (root == null)
+        //            return res;
+
+        //        Stack<Node> stack = new Stack<Node>();
+        //        stack.Push(root);//從前面(左邊)加入Stack，123照順序放到Stack會變321
+        //        while (stack.Count > 0)
+        //        {
+        //            Node curr = stack.Pop();//從前面開始抽出123Stack會變23Stack，遍歷 = stack被抽完
+        //            res.Add(curr.val);//加入此層(Node)val
+
+        //            foreach (Node node in curr.children.Reverse())//因為Reverse後是54321放入Push()Stack才是12345，把要走的節點照順序排好
+        //            {
+        //                //此步也是進入子節點的地方也是，會把最前面的線深挖到children=null才開始往前處理其他線
+        //                if (node != null)//當等於null代表此條線的節點走完了，會去處理其他節點
+        //                {
+        //                    stack.Push(node);
+        //                }
+        //            }
+        //            //這樣走下去因為每次都處理最前面的節點所以會照順序走完所有節點
+        //        }
+
+        //        return res;
+        //    }
+        //}
+        //Stack的push和pop用的很強!(也很快)
+        //他的recursive也是把每個走過的點記錄下來並記錄val(方法2)
+        //https://leetcode.com/problems/n-ary-tree-preorder-traversal/discuss/1167730/C-solution
+
+
+        public class Solution
+        {
+            public IList<int> Preorder(Node root)
+            {
+                if (root == null) return new List<int>();
+                var result = new List<int> { root.val };
+                return root.children == null
+                    ? result
+                    : result.Concat(root.children.SelectMany(Preorder)).ToList();
+            }
+            //selectmany會選出所有子項
+            //然後selectmany(function)會把所有子節點都走一次function
+            //最後用Concat把所有走過的節點都建立list和單一val和原本的list融合
+            //雖然看起來很潔簡但過程會一直建list(應該不快)且一般人要看很久才能懂我覺得這方法不算好
+            //https://leetcode.com/problems/n-ary-tree-preorder-traversal/discuss/486876/C-Recursive-Solution
+        }
+    }
+}

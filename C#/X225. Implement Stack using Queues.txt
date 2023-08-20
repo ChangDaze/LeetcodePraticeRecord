@@ -1,0 +1,63 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            MyStack solution = new MyStack();
+            solution.Push(1);
+            solution.Push(2);
+            var peek = solution.Top();
+            var pop = solution.Pop();
+            Console.ReadKey();
+
+        }
+
+        public class MyStack
+        {
+            //用跟stack題一樣的方法，在看有沒有更好的方法
+            private Queue<int> queue1;
+            private Queue<int> queue2;
+            public MyStack()
+            {
+                queue1 = new Queue<int>();
+                queue2 = new Queue<int>();
+            }
+
+            public void Push(int x)
+            {
+                queue1.Enqueue(x);
+                queue2 = new Queue<int>(queue1.Reverse());
+            }
+
+            public int Pop()
+            {
+                int answer = queue2.Dequeue();
+                queue1 = new Queue<int>(queue2.Reverse());
+                return answer;
+            }
+
+            public int Top()
+            {
+                return queue2.Peek();
+            }
+
+            public bool Empty()
+            {
+                return queue1.Count== 0;
+            }
+        }
+    }
+}

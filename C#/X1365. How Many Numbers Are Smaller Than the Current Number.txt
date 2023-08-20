@@ -1,0 +1,50 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] nums = new int[] { 8, 1, 2, 2, 3 };
+            Solution solution = new Solution();
+            var result = solution.SmallerNumbersThanCurrent(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+        public class Solution
+        {
+            public int[] SmallerNumbersThanCurrent(int[] nums)
+            {
+                int standard = 0;
+                int[] result = new int[nums.Length];
+                List<int[]> sortedNums = new List<int[]>();
+                for(int i = 0; i < nums.Length; i++)
+                    sortedNums.Add(new int[] { i, nums[i]});//自己建序號+複製nums做排序
+
+                sortedNums.Sort((x,y) => x[1].CompareTo(y[1]));//List排序方法，可見 https://dotblogs.com.tw/shanna/2019/09/09/213800
+
+                for (int i = 1;i< sortedNums.Count;i++)//因為排序的關係和result預設值為0 i = 0 一定是最小，所以可以忽略
+                {
+                    if (sortedNums[i][1] > sortedNums[i - 1][1])                    
+                        standard = i;
+                    result[sortedNums[i][0]] = standard;//用原本的index座標回填result
+                }
+
+                return result;
+                
+            }
+        }
+        //題目給的排序後在計數很好用，但麻煩的是要維持排序前的順序
+    }
+}

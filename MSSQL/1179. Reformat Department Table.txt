@@ -1,0 +1,38 @@
+Create table #Department (id int, revenue int, month varchar(5))
+insert into #Department (id, revenue, month) values ('1', '8000', 'Jan')
+insert into #Department (id, revenue, month) values ('2', '9000', 'Jan')
+insert into #Department (id, revenue, month) values ('3', '10000', 'Feb')
+insert into #Department (id, revenue, month) values ('1', '7000', 'Feb')
+insert into #Department (id, revenue, month) values ('1', '6000', 'Mar')
+
+select * from #Department 
+
+select 
+id,
+sum(case when month = 'Jan' then revenue else null end) Jan_Revenue,--因為null還能相加，但答案不要顯示0所以用null比較好
+sum(case when month = 'Feb' then revenue else null end) Feb_Revenue,
+sum(case when month = 'Mar' then revenue else null end) Mar_Revenue,
+sum(case when month = 'Apr' then revenue else null end) Apr_Revenue,
+sum(case when month = 'May' then revenue else null end) May_Revenue,
+sum(case when month = 'Jun' then revenue else null end) Jun_Revenue,
+sum(case when month = 'Jul' then revenue else null end) Jul_Revenue,
+sum(case when month = 'Aug' then revenue else null end) Aug_Revenue,
+sum(case when month = 'Sep' then revenue else null end) Sep_Revenue,
+sum(case when month = 'Oct' then revenue else null end) Oct_Revenue,
+sum(case when month = 'Nov' then revenue else null end) Nov_Revenue,
+sum(case when month = 'Dec' then revenue else null end) Dec_Revenue
+from #Department
+group by id
+order by id
+
+--這對我來說是蠻新的想法，確實在資料數不多時用case when能做出相當多變化，另外也學到group 後仍能用case when + sum 的靈活做法，速度普通
+--其他
+--這是做多人投的，也是一開始參考的
+--https://leetcode.com/problems/reformat-department-table/solutions/376357/mysql-postgresql-solutions/
+--這個有第二種解法是自我left join(才能有null)並限制顯示的是幾月的值，沒有資料也會順利產生null，也是很好的想法，但會相對select較多次
+--https://leetcode.com/problems/reformat-department-table/solutions/382960/mssql-multiple-joins-groupby-and-pivot-table-solutions/
+--這是用 if
+--https://leetcode.com/problems/reformat-department-table/solutions/1812493/simple-mysql-solution-using-if-and-sum/
+--這是MSSQL不過也跟第一位一樣
+--https://leetcode.com/problems/reformat-department-table/solutions/488673/mssql-solution-using-group-by/?orderBy=most_votes
+drop table #Department

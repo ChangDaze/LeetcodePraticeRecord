@@ -1,0 +1,66 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+using System.Reflection;
+using System.Security.AccessControl;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string s = "abcdefghi";
+            int k = 3;
+            char fill = 'x';
+            Solution solution = new Solution();
+            var result = solution.DivideString(s,k,fill);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+
+        public class Solution
+        {
+            public string[] DivideString(string s, int k, char fill)
+            {
+                List<string> result = new List<string>();
+
+                int count = 0;
+                string temp = "";
+
+                for(int i = 0;i<s.Length;i++)
+                {
+                    count++;
+                    temp += s[i];
+
+                    if(count>=k)//長度相關要用k
+                    {
+                        result.Add(temp);
+                        count= 0;
+                        temp = "";
+                    }
+                }
+
+                if(temp.Length >0)
+                {
+                    while(temp.Length < k)
+                    {
+                        temp += fill;
+                    }
+                    result.Add(temp);
+                }
+                
+                return result.ToArray();
+            }
+        }
+        //速度普通，感覺比前幾題簡單，可能單純寫的人少，另一點就是可能加速的方法很多?我看hint還有說要數分成幾組?
+    }
+}

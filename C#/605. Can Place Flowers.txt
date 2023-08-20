@@ -1,0 +1,149 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var flowerbed = new int[] { 0, 0, 0 };
+            var n = 2;
+            var result = solution.CanPlaceFlowers(flowerbed, n);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public bool CanPlaceFlowers(int[] flowerbed, int n)
+            {
+                //設 x 是空間
+                //這題其實符合greedy，就是從可以放的地方先放(也能用直覺種花->也是greedy)
+                //(1)2格可以放1格(2)3格可以放2格 -> (1)+(2) = (x+1)/2 代表若有多一格就用greedy填滿 EX:01010 -> 10101
+                //(3)為了營造這樣的環境，把相接花的格子先扣掉
+                //三種情況
+                //一邊有花 -> 開頭和結尾
+                //  (開頭)(i) / 2 => i = x，所以要+1，但一邊有花所以-1打平
+                //  (結尾)(flowerbed.Length - start - 1) / 2 => flowerbed.Length - start = x+1，但一邊有花所以-1
+                //兩邊有花 -> 中間
+                //  (i - start - 2) / 2 =>  i - start是x+1，扣掉兩邊花是-2
+                //兩邊沒花 -> 都沒種花
+                //  (flowerbed.Length - start) / 2 => start=-1,flowerbed.Length - start = x-(-1)，所以直接除二就好
+                int resources = 0;
+                int start = -1;
+                for (int i = 0; i < flowerbed.Length; i++)
+                {
+                    if (flowerbed[i] == 1)
+                    {
+                        if (start == -1)
+                            resources = resources + (i) / 2;
+                        else
+                            resources = resources + (i - start - 2) / 2;
+
+                        if (resources >= n)
+                            return true;
+                        start = i;
+                    }
+                }
+
+                if (start == -1)
+                    resources = resources + (flowerbed.Length - start) / 2;
+                else
+                    resources = resources + (flowerbed.Length - start - 1) / 2;
+                if (resources >= n)
+                    return true;
+
+                return false;
+            }
+        }
+        //速度忽快忽慢，普通和很快
+        //其他
+        //這他媽才叫greedy，他是種一格算一格，能種就種，可以好好學學他，速度還行
+        //https://leetcode.com/problems/can-place-flowers/solutions/1260611/c-solution/
+        //這個人方法跟第一個人一樣，不過他寫的比較直接一點，把條件列出來都混在if else裡，但方法其實一樣也是先種再說，速度不錯，有一點這位好一點是他中途都有判斷要不要結束
+        //https://leetcode.com/problems/can-place-flowers/solutions/1698522/c/
+        //這位的寫法介於前兩位之間，不過方法也一樣，速度不錯
+        //https://leetcode.com/problems/can-place-flowers/solutions/589272/c-elementary-solution/
+
+        //解法2
+        /*
+        public class Solution
+        {
+            public bool CanPlaceFlowers(int[] flowerbed, int n)
+            {
+                bool flag = true;
+                for(int i = 0;i<flowerbed.Length-1 ;i++)
+                {
+                    if (flowerbed[i] == 0 )
+                    {
+                        if (flowerbed[i+1] == 0 && flag)
+                        {
+                            n--;
+                            flag = false;
+                            continue;
+                        }
+                        flag = true;
+                        continue;
+                    }
+                    flag= false;
+                }
+
+                if (flowerbed[flowerbed.Length - 1]== 0 && flag)
+                    n--;
+                return n <= 0;
+            }
+        }
+        */
+//2023/07/07
+        //public class Solution
+        //{
+        //    public bool CanPlaceFlowers(int[] flowerbed, int n)
+        //    {
+        //        if (flowerbed.Length > 1)
+        //        {
+        //            if (flowerbed[0] == 0 && flowerbed[1] == 0)
+        //            {
+        //                n--;
+        //                flowerbed[0] = 1;
+        //            }
+
+        //            if (flowerbed[flowerbed.Length - 1] == 0 && flowerbed[flowerbed.Length - 2] == 0)
+        //            {
+        //                n--;
+        //                flowerbed[flowerbed.Length - 1] = 1;
+        //            }
+        //        }
+        //        else
+        //        {
+        //            if (flowerbed[0] == 0)
+        //            {
+        //                n--;
+        //                flowerbed[0] = 1;
+        //            }
+        //        }
+
+        //        for (int i = 1; i < flowerbed.Length - 1; i++)
+        //        {
+        //            if (flowerbed[i-1]==0 && flowerbed[i + 1] == 0 && flowerbed[i] == 0)
+        //            {
+        //                n--;
+        //                flowerbed[i] = 1;
+        //                i++;
+        //            }
+        //        }
+
+                
+
+        //        return n <= 0;
+        //    }
+        //}
+    }
+}

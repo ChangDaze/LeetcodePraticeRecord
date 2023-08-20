@@ -1,0 +1,64 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] nums =  new int[]{ 11, 7, 2, 15 };
+            Solution solution = new Solution();
+            var result = solution.CountElements(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+        public class Solution
+        {
+            public int CountElements(int[] nums)
+            {
+                int min = int.MaxValue;
+                int minCount = 0;
+                int max = int.MinValue;
+                int maxCount = 0;
+
+                for(int i = 0;i< nums.Length;i++)
+                {
+                    if (nums[i] < min)
+                    {
+                        min = nums[i];
+                        minCount = 1;
+                    }
+                    else if (nums[i] == min)
+                    {
+                        minCount++;
+                    }
+                    
+                    //大小要分開比，避免min一開始拿走nums中的max之類的情況
+
+                    if (nums[i] > max)
+                    {
+                        max = nums[i];
+                        maxCount = 1;
+                    }                    
+                    else if (nums[i] == max)
+                    {
+                        maxCount++;
+                    }
+                }
+
+                return nums.Length - minCount - maxCount > 0? nums.Length - minCount - maxCount : 0;
+                //hint的建議很不錯，當max = min 時就會數兩倍的數量
+            }
+        }
+    }
+}

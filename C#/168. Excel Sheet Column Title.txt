@@ -1,0 +1,56 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+
+            Solution solution = new Solution();
+            //各種char和int轉換方法
+            //char c = (char)65;
+            //string s = Encoding.ASCII.GetString(new byte[] { 65 });
+            //int a = (int)'A';
+            //Console.WriteLine(a);
+            Console.WriteLine(solution.ConvertToTitle(701));
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public string ConvertToTitle(int columnNumber)
+            {
+                string result = "";
+                Stack<int> record = new Stack<int>();//use stack to maintain the sequence
+                int temp = columnNumber;
+                while (temp != 0)
+                {
+                    temp--;//because the answer give every digit from 1~26，but I tranfer it from 0~25，so every carry(進位) iI got minus 1
+                    record.Push(temp % 26);//push the renaibder to transfer every digit
+                    temp = temp / 26;//carry
+                }
+
+                foreach (int i in record)
+                {
+                    result = result + (char)(i + 65);//65 means A
+                }
+
+                return result;//return string
+            }
+        }
+        //其他
+        //這是一個recursive，進位和餘數處理一樣，且一樣是限制每一位0~25，特別的是她用recursive，還有map的部分應該是能透過char和int取代而非建立map不過可能某些情況也行
+        //https://leetcode.com/problems/excel-sheet-column-title/discuss/169793/C-readable-code
+        //這方法跟我一樣，也是進位和餘數處理不過他用int + char的方式比我用int +65 直覺且有用string buider和stack pop感覺比較正規，速度有比較快
+        //https://leetcode.com/problems/excel-sheet-column-title/discuss/51411/c
+        //這是精簡版的，方法一樣不過很好的利用for迴圈的功能還有string( char array)的方法，猛
+        //https://leetcode.com/problems/excel-sheet-column-title/discuss/51416/C-iterative
+    }
+}

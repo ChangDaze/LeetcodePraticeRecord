@@ -1,0 +1,57 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var numarray = new int[] { -2, 0, 3, -5, 2, -1 };
+            NumArray solution = new NumArray(numarray);
+            var result = solution.SumRange(2, 5);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class NumArray
+        {
+            private int[] nums;
+
+            public NumArray(int[] nums)
+            {
+                this.nums = nums;
+            }
+
+            public int SumRange(int left, int right)
+            {
+                int sum = 0;
+                for (int i = left; i <= right; i++)
+                {
+                    sum += nums[i];
+                }
+
+                return sum;
+            }
+        }        
+
+        /**
+         * Your NumArray object will be instantiated and called as such:
+         * NumArray obj = new NumArray(nums);
+         * int param_1 = obj.SumRange(left,right);
+         */
+    }
+    //這題好像就單純只是實作一個class，所以我就class裡做一個field存array，用建構式做setting，他好像也不用取numarray出來，所以做好suarray function就好，ㄜ，速度超慢
+    //乾，這個人在建構式存array時做了sum的DP，這要好好多學學，速度不錯
+    //https://leetcode.com/problems/range-sum-query-immutable/solutions/1237877/c-solution/
+    //這個跟第一位一樣，速度不錯
+    //https://leetcode.com/problems/range-sum-query-immutable/solutions/304568/c-sum-array/
+    //這也是一樣的方法，速度不錯
+    //https://leetcode.com/problems/range-sum-query-immutable/solutions/2928199/c-solution/
+}

@@ -1,0 +1,78 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var root = new TreeNode(1, new TreeNode(2, new TreeNode(3), new TreeNode(4)), new TreeNode(2, new TreeNode(4), new TreeNode(3)));
+            Solution solution = new Solution();
+            var result = solution.IsSymmetric(root);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class TreeNode
+        {
+            public int val;
+            public TreeNode left;
+            public TreeNode right;
+            public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+            {
+                this.val = val;
+                this.left = left;
+                this.right = right;
+            }
+        }
+
+
+        public class Solution
+        {
+            bool stop = false;
+            public bool IsSymmetric(TreeNode root)
+            {
+                Recurive(root.left, root.right);
+                if (stop)
+                    return false;
+                return true;
+            }
+
+            public void Recurive(TreeNode node1, TreeNode node2)
+            {
+                if (node1 == null || node2 == null || stop == true)
+                {
+                    if (node1 != node2)
+                        stop = true;
+                    return;
+                }
+                if (node1.val != node2.val)
+                {
+                    stop = true;
+                    return;
+                }
+                Recurive(node1.left, node2.right);//對稱就是能這樣搞(就是這麼剛好)
+                Recurive(node1.right, node2.left);
+                return;
+            }
+            //就是同時爬兩棵樹並同時確認值和node都存在
+            //速度忽快忽慢
+            //這個很厲害精簡，雖然本質都一樣，但他寫的就是比較好看ㄟ，速度意外不快
+            //https://leetcode.com/problems/symmetric-tree/solutions/1469517/c-faster-than-93-66/
+            //挖喔，這位已經變成再刻意濃縮了，不過也能參考一下寫法，比較特別的是他用node1?.val這樣的寫法代替null可能會出錯，蠻特別的，速度意外不快
+            //https://leetcode.com/problems/symmetric-tree/solutions/3290740/c/
+            //這位寫法比較偏向第一位，我發現他們都習慣用bool然後return Recurive(node1.left, node2.right)&&Recurive(node1.right, node2.left) 這樣寫ㄟ，速度還行
+            //https://leetcode.com/problems/symmetric-tree/solutions/2033705/c-solution/
+        }
+
+    }
+}

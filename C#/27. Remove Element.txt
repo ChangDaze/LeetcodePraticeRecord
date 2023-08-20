@@ -1,0 +1,52 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var nums = new int[] { 0, 1, 2, 2, 3, 0, 4, 2 };
+            var val = 2;
+            var result = solution.RemoveElement(nums,val);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public int RemoveElement(int[] nums, int val)
+            {
+                int result = nums.Length - 1;//有幾個好的
+                for(int i = nums.Length - 1; i >= 0; i--)//前後來沒差
+                {
+                    if(nums[i] == val)
+                    {
+                        //int temp = nums[i];//原本想把尾巴還好的跟前面壞的換位置，但後來發現不用
+                        nums[i] = nums[result];//概念是這樣，第1個是壞的，若只有一個壞的，第result個必定是好的
+                        //原[1,2,3],若長度3，第1、2個是壞的，從後面來，第2個會先被3替換 -> [1,3,3] -> result --，第1個會被第2個替換 -> [3,3,3]，答案只會確認前result個(最後result=1)
+                        result--;
+                    }                    
+                }
+                return result+1;//長度記得加回來
+            }
+            //有想清楚所以蠻有成就感的，不過速度雖然不錯，但空間用量好像墊底，大概、可能大家都差不多吧??
+            //其他
+            //這方法跟我一樣ㄟ，只是命名不同
+            //https://leetcode.com/problems/remove-element/solutions/1487742/98-39-faster-c/
+            //這個有幾個點不同，但整體概念差不多，1.他從前方走 2.他判斷不同的 3.不同的照順序(j)往前面塞 ，整體來說更有順序，但總感覺多做不少事，但速度也沒有慢
+            //https://leetcode.com/problems/remove-element/solutions/1507118/c-faster-than-100-00/
+            //這是用LINQ來的，所以他會另外造array，嚴格來講這不符題目，最後他是用clear和copy回原array的方式規避，不過速度也不算慢
+            //https://leetcode.com/problems/remove-element/solutions/881462/c-with-linq/
+        }
+
+    }
+}

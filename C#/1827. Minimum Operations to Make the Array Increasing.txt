@@ -1,0 +1,55 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] nums = new int[] { 1, 1, 1 };
+            Solution solution = new Solution();
+            var result = solution.MinOperations(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int MinOperations(int[] nums)
+            {
+                int result = 0;
+                int standard = nums[0];
+                for(int i = 1;i<nums.Length ;i++)
+                {
+                    if (nums[i] <= standard)
+                    {                        
+                        standard += 1;
+                        result += (standard - nums[i]);
+                        continue;
+                    }
+                    standard= nums[i];
+                }
+                return result;
+            }
+            //if nums[i] < nums[i - 1] make nums[i] = nums[i - 1]+1
+            //use variable[standard] to represent nums[i - 1]
+            //這題很簡單，但也能很直觀的表現greedy，就是nums[i] = max(nums[i-1]+1, nums[i])，跟題目說的一樣
+            //速度普通
+            //這就是最平凡的寫法..，速度100%，是因為沒人寫C#嗎..
+            //https://leetcode.com/problems/minimum-operations-to-make-the-array-increasing/solutions/2743326/c-faster-than-53-73/
+            //這除了變數命名，基本同第一位，速度普通
+            //https://leetcode.com/problems/minimum-operations-to-make-the-array-increasing/solutions/1559702/c-solution/
+            //這方法跟我一樣，不過有點變種，他是每次計算增加量(有時會=0)，所以回圈內會多設一個增加量的變數，速度不錯
+            //https://leetcode.com/problems/minimum-operations-to-make-the-array-increasing/solutions/1163933/c-o-n/
+        }
+    }
+}

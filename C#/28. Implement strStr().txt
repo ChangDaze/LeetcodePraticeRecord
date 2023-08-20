@@ -1,0 +1,120 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution2 solution = new Solution2();
+            
+
+            string haystack = "mississippiissiabiaciad", needle = "iabiaciad";
+            int result = solution.StrStr(haystack, needle);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public int StrStr(string haystack, string needle)
+            {
+                if (string.IsNullOrEmpty(needle))
+                {
+                    return 0;
+                }
+
+                int count = needle.Length;//看要連續檢查幾個
+                bool check;
+                for (int i = 0; i < haystack.Length - (count - 1); i++)
+                {
+                    check = true;//每次要重製架設成功
+                    for (int j = 0; j < count; j++)
+                    {
+                        if (haystack[i + j] != needle[j])//到的位置往後連續檢查
+                        {
+                            check = false;//失敗了就確認此次失敗不再檢查
+                            break;
+                        }
+                    }
+
+                    if (check)//如果找到了就return
+                    {
+                        return i;
+                    }
+                }
+
+                return -1;
+            }
+        }
+        //用很基礎的觀念，但兩層for迴圈偏很慢
+        //其他
+        //這方法我有補註解在下面，比較複雜，但比較符合追求快?但感覺有蠻多累贅還沒解決，所以偏慢
+        //https://leetcode.com/problems/implement-strstr/discuss/1066884/c-kmp
+        //這個人的第一種方法是用substring相對就很好懂許多(我覺得優勢很大)，缺點是每次都要另存起來，速度就中等偏慢
+        //第二種方法跟我一樣，但我用check他用if(j == needle.Length-1),邏輯比我清晰多了，速度也是偏慢
+        //https://leetcode.com/problems/implement-strstr/discuss/402189/C-Substring-Solution
+        //這個人跟第二個人的第一種方法一樣，不過他特地用hashset存起來，所以可能因此就變超慢，不過他有說明到hashset在在某些時候找東西(contain(?))是算快的?
+        //https://leetcode.com/problems/implement-strstr/discuss/12809/C-using-HashSet
+
+        //第二個人用的方法，太複雜了，不過如果追求快可能要弄懂
+        public class Solution2
+        {
+            public int StrStr(string haystack, string needle)
+            {
+                int i = 0,
+                    j = 0;
+                int[] lps = BuildLPS(needle);//紀錄如果在某個index上斷掉，可以試著從哪個index上重來
+
+                while (i < haystack.Length && j < needle.Length)//比法跟BuildLPS一樣不過多了while，j < needle.Length多出一個確定正確了的break
+                    if (haystack[i] == needle[j])
+                    {
+                        i++;
+                        j++;
+                    }
+                    else
+                    {
+                        if (j > 0)
+                            j = lps[j - 1];
+                        else
+                            i++;
+                    }
+
+                return j == needle.Length ? i - j : -1;//這個返回有點簡潔有力，不過每次這種的我都要想好久...
+            }
+
+            private int[] BuildLPS(string needle)
+            {
+                int[] lps = new int[needle.Length];
+                int i = 0;
+
+                for (int j = 1; j < needle.Length;)//lps的第一個會跳過因為沒差，最爛都是從第一個開始比
+                    if (needle[i] == needle[j])//有可能needle[0]和needle[1],也有可能needle[0]和needle[11]
+                    {
+                        //i就是開頭的幾個可以跳過
+                        lps[j] = i + 1;//重複出現開頭類似時，說明可以試著跳過幾個檢查
+
+                        i++;//檢驗是否下個也能跳過
+                        j++;//內容繼續跑
+                    }
+                    else
+                    {
+                        if (i > 0)//通常是000 12345 00 123之類的abc [ab]cab dd abc
+                            i = lps[i - 1];//如果檢查沒過就在往前一個重複地方比對
+                                           //(不過這個地方應該可以不用是i-1，第一次i-1第二次應該能直接0因為已經確定重複的地方沒有接續下去之類的?)
+                                           //但這要能試出來方法，說不定沒有i-1不行，但我覺得要快就要解決這裡
+                        else
+                            j++;//一般正常沒有就繼續內容
+                    }
+
+                return lps;
+            }
+        }
+    }
+}

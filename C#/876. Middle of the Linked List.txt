@@ -1,0 +1,146 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    public class ListNode
+    {
+        public int val;
+        public ListNode next;
+        public ListNode(int val = 0, ListNode next = null)
+        {
+            this.val = val;
+            this.next = next;
+        }
+
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //ListNode listNode = new ListNode() { val = 2,
+            //    next = new ListNode() { val = 3,
+            //        next = new ListNode() { val = 3,
+            //            next = new ListNode {val=2 } } } };
+
+            //ListNode listNode = new ListNode()
+            //{
+            //    val = 1
+            //};
+
+            //linked list
+            //奇數、偶數的回文都算
+            ListNode listNode = new ListNode()
+            {
+                val = 1,
+                next = new ListNode()
+                {
+                    val = 2,
+                    next = new ListNode()
+                    {
+                        val = 3,
+                        next = new ListNode()
+                        {
+                            val = 4,
+                            next = new ListNode()
+                            {
+                                val = 5
+                            }
+                        }
+                    }
+                }
+            };
+
+            #region 舊方法只能處理12345之類的照順序排法
+
+            //ListNode result ;
+            //int nownodeval = 0;
+            //ListNode nownode;
+            //int tail;
+            //int middle;
+
+            //nownode = listNode;
+
+            //while (nownode != null)
+            //{
+            //    nownodeval= nownode.val;
+
+            //    nownode = nownode.next;
+            //}
+
+            //tail = nownodeval;
+
+            //middle = Convert.ToInt32(Math.Ceiling(Convert.ToDecimal(tail + 1) / 2));
+
+            //nownode = listNode;
+
+            //while (nownode != null)
+            //{
+            //    nownodeval = nownode.val;//當前節點val
+            //    if(nownodeval == middle)
+            //    {
+            //        break;
+            //    }
+            //    nownode = nownode.next;//進入下個節點
+            //}
+
+            //result = nownode;
+
+            #endregion
+
+
+            ListNode result;
+            //int nownodeval = 0;
+            //int tail;
+            ListNode nownode;
+            int middle;
+            int count = 1;
+
+            nownode = listNode;
+
+            while (nownode != null)
+            {
+                nownode = nownode.next;
+                count++;//對應現在在哪個節點
+            }
+
+            //因為最後的節點是null所以-1，因為保證取中間或中間右邊節點所以+1/2和ceiling
+            middle = Convert.ToInt32(Math.Ceiling(Convert.ToDecimal((count - 1) + 1) / 2));
+
+            nownode = listNode;
+            count = 1;
+
+            while (nownode != null)
+            {
+                if (count == middle)
+                {
+                    break;
+                }
+                nownode = nownode.next;
+                count++;
+            }
+
+            result = nownode;
+
+
+            //Console.WriteLine(a);
+            //Console.WriteLine(b);
+            //Console.WriteLine(c);
+            //Console.WriteLine(d);
+            //Console.WriteLine(nodevallst[0]);
+            //Console.WriteLine(nodevallst.Count);
+            Console.WriteLine(result.val);
+
+            Console.ReadKey();
+
+        }
+
+
+    }
+
+
+}

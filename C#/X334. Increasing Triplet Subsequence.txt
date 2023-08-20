@@ -1,0 +1,51 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+using System.Reflection;
+using System.Security.AccessControl;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] nums = new int[] {1,2,3,4,5};
+            Solution solution = new Solution();
+            var result = solution.IncreasingTriplet(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+        public class Solution
+        {
+            public bool IncreasingTriplet(int[] nums)
+            {
+                
+                if (nums.Length < 3) return false;
+
+                int max = int.MinValue;
+                int secondMax = int.MinValue;
+
+
+                for(int i = nums.Length - 1; i > -1; i--)
+                {
+                    if (nums[i] >= max) max = nums[i]; //有等於是要確保是絕對小於的數才能放行
+                    else if (nums[i] >= secondMax) secondMax = nums[i];
+                    else return true;//如果進到這就代表一定 max 和 secondMax 和 此數 3個，且因為if順序關係，max 一定在 secondMax 後面
+                    //這種放行機制不在意index，只在意前面判斷有符合條件就代表一定存在
+                }
+
+                return false;
+            }
+        }
+        //https://leetcode.com/problems/increasing-triplet-subsequence/solutions/1365486/simple-c-solution-o-n-faster-than-99-53/
+    }
+}

@@ -1,0 +1,49 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] nums = new int[] { 4, 3, 10, 9, 8 };
+            Solution solution = new Solution();
+            var result = solution.MinSubsequence(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public IList<int> MinSubsequence(int[] nums)
+            {
+                List<int> result = new List<int>();
+                int exclude = nums.Sum();
+                int include = 0;
+                Array.Sort(nums);
+                Array.Reverse(nums);
+                foreach(int num in nums)
+                {
+                    exclude -= num;
+                    include += num;
+                    result.Add(num);
+                    if (include > exclude)
+                        break;
+                }
+                return result;
+            }
+            //就是最簡單的解法，應該有其他方法讓變數更少或減少時間複雜度
+            //也可以參考一下有沒有更明顯的greedy方法
+            //然後sort應該是必要的，因為順便符合題目條件而不多考慮其他的設定
+        }
+    }
+}

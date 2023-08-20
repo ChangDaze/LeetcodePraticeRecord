@@ -1,0 +1,41 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int number = 123;
+            int count = 0;
+
+            while(number != 0)
+            {
+                if(number % 2 == 0)
+                {
+                    number = number / 2;
+                }
+                else
+                {
+                    number--;
+                }
+
+                count++;
+            }
+
+            Console.WriteLine(count);
+            Console.ReadLine();
+            
+
+        }
+
+
+    }
+
+
+}

@@ -1,0 +1,66 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string jewels = "z";
+            string stones = "ZZ";
+            int result = solution.NumJewelsInStones(jewels, stones);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int NumJewelsInStones(string jewels, string stones)
+            {
+                int sumnumber = 0;
+                Dictionary<char,int> record = new Dictionary<char, int>();
+                foreach (char ch in jewels)
+                {
+                    if (!record.ContainsKey(ch))
+                    {
+                        record.Add(ch, 0);
+                    }
+                }
+
+                foreach(char ch in stones)
+                {
+                    if (!record.ContainsKey(ch))
+                    {
+                        continue;
+                    }
+                    record[ch] = record[ch] + 1;
+                }
+
+                foreach(int number in record.Values)
+                {
+                    sumnumber += number;
+                }
+
+                return sumnumber;
+            }
+        }
+        //簡單易懂，速度頗慢
+        //其他
+        //超扯，算快，要多練Linq return stones.Count(c => jewels.Contains(c));
+        //https://leetcode.com/problems/jewels-and-stones/discuss/123408/C-Using-Linq
+        //說明了hashset也能做，只要單純記數其實也不用特地分類算數量，意外算慢
+        //https://leetcode.com/problems/jewels-and-stones/discuss/379843/A-simple-C-hashset-solution
+        //舊版Linq，用兩個from(新版應該也行)，頗厲害，速度也快 => (from j in J from s in S where j == s select s).Count();
+        //https://leetcode.com/problems/jewels-and-stones/discuss/487624/C-One-Liner-with-LINQ
+
+
+
+    }
+}

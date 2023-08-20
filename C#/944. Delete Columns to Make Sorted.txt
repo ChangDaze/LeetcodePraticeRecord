@@ -1,0 +1,57 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string[] strs = new string[] { "cba", "daf", "ghi" };
+            int result = solution.MinDeletionSize(strs);
+            Console.WriteLine(result);
+
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int MinDeletionSize(string[] strs)
+            {
+                int deletecolumn = 0;
+
+                for(int i = 0; i < strs[0].Length; i++)//第幾column
+                {
+                    char before = 'a';
+                    for(int j = 0; j < strs.Length; j++)//第幾row
+                    {
+                        char now = strs[j][i];
+                        if(before > now)//不合格的加入list
+                        {
+                            deletecolumn++;
+                            break;
+                        }
+                        before = now;
+                    }
+                }
+
+                return deletecolumn;
+            }
+            //就很單純的解法，最大就是全部走過一次，速度應該不會太慢
+            //其他
+            //這個蠻有趣的，照cloumn順序把所有column做成array，再sort array，若原array跟sort後不同就count
+            //他的new string和compare式應該用的很熟，但可能linq一多，速度蠻慢的
+            //https://leetcode.com/problems/delete-columns-to-make-sorted/discuss/741397/C-one-liner
+            //這個方法跟我差不多，不過我有開變數存brfore和now他沒有而已，所以速度差不多
+            //https://leetcode.com/problems/delete-columns-to-make-sorted/discuss/391798/C-96-ms
+            //這個跟上一個一樣，不過他們兩個因為沒有用變數存，所以row迴圈的數字有要+1-1來處理避免超過長度
+            //https://leetcode.com/problems/delete-columns-to-make-sorted/discuss/196696/Simple-C-solution
+        }
+    }
+}

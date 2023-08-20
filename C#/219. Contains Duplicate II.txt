@@ -1,0 +1,73 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var nums = new int[] { 1, 2, 3, 1, 2, 3 };
+            var k = 3;
+            var result = solution.ContainsNearbyDuplicate(nums, k);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public bool ContainsNearbyDuplicate(int[] nums, int k)
+            {
+                Dictionary<int, int> record = new Dictionary<int, int>();
+                for (int i = 0; i < nums.Length; i++)
+                {
+                    if (record.Keys.Contains(nums[i]))
+                    {
+                        if (i - record[nums[i]] <= k)
+                            return true;
+                        record[nums[i]] = i;
+                    }
+                    else
+                    {
+                        record.Add(nums[i], i);
+                    }
+                }
+                return false;
+            }
+            //題目說明:找到值香的index，index距離<=k
+            //我這題解法從前往後紀錄每個值的index，再次遇到時判斷符不符合條件，不符合就更新index(因為是<=k找小於且由前往後，所以如果後面還有同樣值，越往後的index，距離會越短)，速度普通
+            //其他
+            //這寫法基本跟我一樣，速度不錯
+            //https://leetcode.com/problems/contains-duplicate-ii/submissions/889507471/
+            //這方法也一模一樣，不過他把判斷濃縮成and，利用了C# and的特性，第一個條件false就不會判斷後面的，不然先判斷後面的條件其實會錯誤
+            //速度很快ㄟ
+            //https://leetcode.com/problems/contains-duplicate-ii/solutions/1321800/c-soltuion/
+
+            //這說明超級複雜所以把code放在下面說，速度普通，這個人是不是超熟LINQ阿..
+            //https://leetcode.com/problems/contains-duplicate-ii/solutions/2728713/c-1-liner-linq/
+            //public bool ContainsNearbyDuplicate(int[] nums, int k) => nums
+            //.Select((n, i) => (num: n, index: i))
+            //.Aggregate(                                //next是前面的select組成的迴圈變數 -> next含num,index屬性
+            //    (map: new HashSet<int>(), dupe: false),//這是Aggregate克制宣告的變數的起始值acc含map,dupe屬性(和next本身不一樣)
+            //    (acc, next) => (                       //傳遞下去的答案
+            //        acc.map,                           //因為是屬性所以可以用逗點隔開
+            //        acc.dupe || (                      //這個有3個部分
+            //            (next.index <= k || acc.map.Remove(nums[next.index - k - 1])) &&
+            //            !acc.map.Add(next.num)         //第1部分 acc.dupe也就是前面傳遞下來的答案
+            //        )                                  //第2部分 目前index<=k 或 map無條件移除跟目前index距離為k以上的num，
+            //    ),                                     //有刪到(index>k)就true沒刪到(index<=k，前面index<=k的條件就會true)就false
+            //    acc => acc.dupe //這就是返回的答案        //(因在範圍內的後面會一直Add回來所以不用考慮刪錯)
+            //                                           //第3部分 HashSet Add num => ttrue 有重複值，反之沒重複值
+            //                                           //所以判斷主要是第2+3部分，當index<=k且有重複值 => true
+            //);                                         //當index>k且距離k內還有重複值 => true
+            //第一部分只是傳遞前面結果
+        }
+    }
+}

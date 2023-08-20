@@ -1,0 +1,48 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Globalization;
+using System.Runtime.Remoting.Messaging;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            int[][] ranges = new int[][] {  new int[] { 3,4 }, new int[] { 5,6 } ,new int[] { 1, 2 }};
+            int left = 2;
+            int right = 5;
+            var result = solution.IsCovered(ranges,left,right);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public bool IsCovered(int[][] ranges, int left, int right)
+            {
+                Array.Sort<int[]>(ranges, (x, y) => Comparer<int>.Default.Compare(x[0], y[0]));
+                //https://stackoverflow.com/questions/232395/how-do-i-sort-a-two-dimensional-rectangular-array-in-c
+
+                foreach (int[] range in ranges)
+                {
+                    if (left >= range[0] && left <= range[1])
+                        left = range[1]+1;
+                }
+
+                return left > right;//等於會殘留，所以不能等於
+            }
+        }
+        //這個是我比較理想中的解法，因為如果排序後的值仍會開在left~right中而非包含一邊界，就代表一定不會全包，可以直接false
+        //https://leetcode.com/problems/check-if-all-the-integers-in-a-range-are-covered/solutions/1267403/java-sort-time-o-nlog-n-space-o-1/
+        //乾這解法好抽象，就是每個地方下錨點，+1代表range的左邊界有蓋到，-1代表range的右邊界有蓋到，0代表不連續、中斷【沒蓋到】，所以只有範圍內都有蓋到才會true，但可以不排序，應該也不錯，下次寫寫看
+        //https://leetcode.com/problems/check-if-all-the-integers-in-a-range-are-covered/solutions/1267923/line-sweep-o-n-m/
+    }
+}

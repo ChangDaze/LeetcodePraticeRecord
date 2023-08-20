@@ -1,0 +1,28 @@
+Create table #Sales (sale_id int, product_id int, year int, quantity int, price int)
+Create table #Product (product_id int, product_name varchar(10))
+insert into #Sales (sale_id, product_id, year, quantity, price) values ('1', '100', '2008', '10', '5000')
+insert into #Sales (sale_id, product_id, year, quantity, price) values ('2', '100', '2009', '12', '5000')
+insert into #Sales (sale_id, product_id, year, quantity, price) values ('7', '200', '2011', '15', '9000')
+insert into #Product (product_id, product_name) values ('100', 'Nokia')
+insert into #Product (product_id, product_name) values ('200', 'Apple')
+insert into #Product (product_id, product_name) values ('300', 'Samsung')
+
+
+select * from #Sales 
+select * from #Product
+
+select B.product_name ,A.year, A.price from #Sales A
+left join #Product B
+	on A.product_id = B.product_id
+
+--好像就單純的join
+--其他
+--這個蠻有趣的，說明left join比join慢的原因，還特別說明join + distinct，但速度是否真的差很多，不確定
+--https://leetcode.com/problems/product-sales-analysis-i/solutions/386943/can-someone-explain-why-subquery-faster-than-left-join-here/
+--這用inner join
+--https://leetcode.com/problems/product-sales-analysis-i/solutions/3405933/single-select-solution-using-sql-server/
+--這也是inner join
+--https://leetcode.com/problems/product-sales-analysis-i/solutions/3403035/ms-sql-solution/
+--好像可以用inner joinㄟ，因為不在#Product的資料可能可以不用顯現?不能的話就還是要left join
+drop table #Sales
+drop table #Product

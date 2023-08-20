@@ -1,0 +1,125 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string word1 = "ab";
+            string word2 = "pqrs";
+            Solution solution = new Solution();
+            var result = solution.MergeAlternately(word1, word2);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        //2023.08.20
+        public class Solution
+        {
+            public string MergeAlternately(string word1, string word2)
+            {
+                string result = "";
+                int i;
+                for (i = 0; i < word1.Length && i < word2.Length; i++)
+                    result += (word1[i].ToString() + word2[i].ToString());
+
+                result += (word1.Substring(i, word1.Length - i) + word2.Substring(i, word2.Length - i));
+
+
+                return result;
+            }
+        }
+        //這位C++就兩邊每次都判斷長度
+        //https://leetcode.com/problems/merge-strings-alternately/solutions/1075534/java-c-python-straignt-forward-solutions/?envType=study-plan-v2&envId=leetcode-75
+        //這位JAVA方法跟第一位一樣
+        //https://leetcode.com/problems/merge-strings-alternately/solutions/3429116/easy-solutions-in-java-python-and-c-look-at-once-with-exaplanation/?envType=study-plan-v2&envId=leetcode-75
+        //這位JS寫法很有趣，是判斷word1[i]是否存在，應該是JS才可以的寫法
+        //https://leetcode.com/problems/merge-strings-alternately/solutions/2759924/simple-js-solution-95-98/?envType=study-plan-v2&envId=leetcode-75
+
+        //2023/04/19
+        //public class Solution
+        //{
+        //    public string MergeAlternately(string word1, string word2)
+        //    {
+        //        string result = "";
+        //        for (int i = 0; i < word1.Length || i < word2.Length; i++)
+        //        {
+        //            if (i < word1.Length)
+        //                result += word1[i];
+
+        //            if (i < word2.Length)
+        //                result += word2[i];
+        //        }
+        //        return result;
+        //    }
+        //    //整個會精簡不少，速度也不錯
+        //}
+
+        //2023/03/18
+        //public class Solution
+        //{
+        //    public string MergeAlternately(string word1, string word2)
+        //    {
+        //        string result = "";
+        //        int firstSeg = Math.Min(word1.Length, word2.Length);
+        //        int x = 0;
+        //        int y = 0;
+        //        while (y < firstSeg)//因為第一部分x和y要走一樣長距離，所以用y當結束判斷，不然用x的話y會少走一步
+        //        {
+        //            if (x <= y)
+        //            {
+        //                result += word1[x];
+        //                x += 1;
+        //            }
+        //            else
+        //            {
+        //                result += word2[y];
+        //                y += 1;
+        //            }
+        //        }
+        //        //就把缺的部分補上
+        //        if (word1.Length > x)
+        //            result += word1.Substring(x, word1.Length - x);//Length-1-x+1 = Length-x
+        //        else if (word2.Length > y)
+        //            result += word2.Substring(y, word2.Length - y);
+
+        //        return result;
+        //    }
+        //    //意外很慢ㄟ，可以看看別人的
+        //}
+
+        //2023/07/06
+        //public class Solution
+        //{
+        //    public string MergeAlternately(string word1, string word2)
+        //    {
+        //        int pointer1 = 0;
+        //        int pointer2 = 0;
+
+        //        string result = "";
+
+        //        while(pointer1 < word1.Length && pointer2 < word2.Length)
+        //        {
+        //            result += word1[pointer1++];
+        //            result += word2[pointer2++];
+        //        }
+
+        //        if(pointer1 < word1.Length)
+        //            result += word1.Substring(pointer1, word1.Length - pointer1);
+        //        else if(pointer2 < word2.Length)
+        //            result += word2.Substring(pointer2,word2.Length-pointer2);
+
+        //        return result;
+        //    }
+        //}
+    }
+}

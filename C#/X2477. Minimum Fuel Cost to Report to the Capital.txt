@@ -1,0 +1,110 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Diagnostics.Contracts;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[][] matrix = new int[][] { new int[] { 3,1 },
+                new int[] { 3,2 },
+                new int[] { 1,0 },
+                new int[] { 0,4 },
+                new int[] { 0,5 },
+                new int[] { 4,6 }};
+            int seats = 1;
+            Solution solution = new Solution();
+            var result = solution.MinimumFuelCost(matrix,seats);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            private List<List<int>> routes = new List<List<int>>();//用來記錄每個節點通往的方向，有個特性是不會自己通自己
+            private long result = 0;
+            public long MinimumFuelCost(int[][] roads, int seats)
+            {
+                for (int i = 0; i < roads.Length + 1; i++)//roads.Length + 1是因為節點共routes+1個
+                    routes.Add(new List<int>());//先開好個節點空間才能紀錄
+
+                for (int i = 0; i < roads.Length; i++)
+                {
+                    routes[roads[i][0]].Add(roads[i][1]);//不管是去或回的路都記錄
+                    routes[roads[i][1]].Add(roads[i][0]);
+                }
+                DFS(0, -1, seats);//遞迴，用result紀錄所以不用返回值
+                return result;
+            }
+
+            public long DFS(int point,int parent,int seats)
+            {
+                long people = 1;//是目前人數，每個節點人數是至少為1
+
+                foreach(int route in routes[point])
+                {
+                    if(route!=parent)//若有通向仔節點的路就先深入去計算，直到所有人到目前節點
+                        people += DFS(route,point,seats);//累積目前節點人數
+                }
+
+                if (point != 0)//到節點0就不用算了
+                    result += (seats - 1 + people) / seats;
+                //用目前人數算到下個節點耗費的油，並記錄
+                //這是為了讓值至少=1所以+seats，-1是因為total至少1人，若要搭第二台車就需要至少total=seat+1 => 2*seats/seats = 2
+                return people;//告知下個節點多少人會過去
+            }
+        }
+        //有時會100%ㄟ
+
+        #region 參考答案 https://www.acwing.com/solution/content/150628/
+        //public class Solution
+        //{
+        //    private List<List<int>> graph = new List<List<int>>();
+        //    private long result = 0;
+
+        //    public long MinimumFuelCost(int[][] roads, int seats)
+        //    {
+        //        int n = roads.Length + 1;
+        //        for (int i = 0; i < n; i++)
+        //        {
+        //            graph.Add(new List<int>());
+        //        }
+
+        //        foreach (int[] road in roads)
+        //        {
+        //            graph[road[0]].Add(road[1]);
+        //            graph[road[1]].Add(road[0]);
+        //        }
+
+        //        DFS(0, -1, seats);
+
+        //        return result;
+        //    }
+
+        //    private long DFS(int x, int parent, int seats)
+        //    {
+        //        long total = 1;
+
+        //        foreach (int i in graph[x])
+        //        {
+        //            if (i != parent)
+        //            {
+        //                total += DFS(i, x, seats);
+        //            }
+        //        }
+
+        //        if (x != 0) result += (total + seats - 1) / seats;//這是為了讓值至少=1所以+seats，-1是因為total至少1人，若要搭第二台車就需要至少total=seat+1 => 2*seats/seats = 2
+        //        return total;
+        //    }
+        //}
+        #endregion
+    }
+}

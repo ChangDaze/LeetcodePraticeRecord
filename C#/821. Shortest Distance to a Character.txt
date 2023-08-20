@@ -1,0 +1,144 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string s = "loveleetcodea";
+            char c = 'e';
+            int[] result = solution.ShortestToChar(s, c);
+            Console.WriteLine(result);
+
+            //int[] result = test(11);
+
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int[] ShortestToChar(string s, char c)
+            {
+                int[] result = new int[s.Length];
+
+                List<int> recordlst = new List<int>();//紀錄c的index
+                for (int i = 0; i < s.Length; i++)
+                {
+                    if (s[i] == c)
+                    {
+                        recordlst.Add(i);
+                    }
+                }
+
+                for (int i = 0; i < recordlst.Count; i++)
+                {
+                    result[recordlst[i]] = 0;//補進0，感覺可以不做
+                    if (i > 0)
+                    {
+                        //i主要用來算字之間的間距有幾個數字，所以i=0不用管(但也因此頭尾要另外補)
+                        result = PutInNumber(result, recordlst[i - 1] + 1, recordlst[i] - recordlst[i - 1] - 1);
+                    }
+                }
+
+                if (recordlst[0] != 0)
+                {
+                    //補頭部用index數即可
+                    result = PutInNumberHead(result, recordlst[0]);
+                }
+
+                if (recordlst[recordlst.Count - 1] != s.Length - 1)
+                {
+                    //補尾部要用相對尾部的number
+                    result = PutInNumberTail(result, recordlst[recordlst.Count - 1] + 1, s.Length - 1 - recordlst[recordlst.Count - 1]);
+                }
+
+                return result;
+            }
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="result">要補字的result</param>
+            /// <param name="index">開始補字的index</param>
+            /// <param name="number">補幾個字</param>
+            /// <returns></returns>
+            public int[] PutInNumber(int[] result, int index, int number)
+            {
+                int count = 1;
+                //因為在target和target之間，所以填入用回文的方式，要注意index要加回才不會每次都從0開始補
+                for (int i = index; i < index + (number / 2); i++)
+                {
+                    result[i] = count;
+                    result[index + number - 1 - i + index] = count;
+                    count++;
+                }
+
+                //不是雙數要補迴文的中間
+                if (number % 2 != 0)
+                {
+                    result[index + number / 2] = number / 2 + 1;//number/2就是上面回文做到哪(int不會四捨五入的樣子大概?)
+                }
+
+                return result;
+            }
+            /// <summary>
+            /// 補頭部由大到小
+            /// </summary>
+            /// <param name="result"></param>
+            /// <param name="number"></param>
+            /// <returns></returns>
+            public int[] PutInNumberHead(int[] result, int number)
+            {
+                int count = 1;
+                for (int i = 0; i < number; i++)
+                {
+                    result[number - 1 - i] = count;
+                    count++;
+                }
+
+                return result;
+            }
+            /// <summary>
+            /// 補尾部由小到大
+            /// </summary>
+            /// <param name="result"></param>
+            /// <param name="index"></param>
+            /// <param name="number"></param>
+            /// <returns></returns>
+            public int[] PutInNumberTail(int[] result, int index, int number)
+            {
+                int count = 1;
+                for (int i = index; i < index + number; i++)
+                {
+                    result[i] = count;
+                    count++;
+                }
+
+                return result;
+            }
+        }
+        //速度偏慢，感覺寫得有點複雜，但拆解來看還是能很快懂
+        //其他
+        //這個人填數字的方法很有趣，一開始可能填錯的字(head、tail要盡量筆最大的number大避免第3層Min沒取到正確的數字)，
+        //第一層是head、tail朝方向先照順序填
+        //第二層是避免預設的0搶數字
+        //第三層是交錯回來找min的距離形成迴文
+        //速度偏慢但空間小
+        //https://leetcode.com/problems/shortest-distance-to-a-character/discuss/325759/C-solution.-o(n)
+        //這個算法也很有趣，就是把每個空間比對和每個target的距離，然後把每個空間的min index記錄下來而已，但註定數字一多就可能爆炸，速度偏慢
+        //https://leetcode.com/problems/shortest-distance-to-a-character/discuss/196575/C-sample-code
+        //這解題方法也很有趣，用abs找出距離diff2代表下一個標的，當只有一個標以下，diff2就無用，
+        //但當diff2<diff1時代表進入下一個標的範圍(脫離原目標接近下個目標)，就可以index++設定下一個diff(由原diff2取代)和diff2(設定下一個目標)了      
+        //https://leetcode.com/problems/shortest-distance-to-a-character/discuss/379816/Readable-C-O(n)-Solution
+
+
+
+    }
+}

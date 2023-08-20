@@ -1,0 +1,67 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var s = "a-bC-dEf-ghIj";
+            var result = solution.ReverseOnlyLetters(s);
+            Console.WriteLine(result);
+            
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public string ReverseOnlyLetters(string s)
+            {
+                int i = 0;
+                int j = s.Length-1;
+                char[] words = new char[s.Length];
+                while(i <= j)
+                {
+                    if(!((s[i]>=65 && s[i] <= 90) || (s[i] >= 97 && s[i] <= 122)))
+                    {
+                        words[i] = s[i];
+                        i++;
+                    }
+                    else if (!((s[j] >= 65 && s[j] <= 90) || (s[j] >= 97 && s[j] <= 122)))
+                    {
+                        words[j] = s[j];
+                        j--;
+                    }
+                    else
+                    {
+                        words[i] = s[j];
+                        words[j] = s[i];
+                        i++;j--;
+                    }
+                }
+                
+                return new string(words);
+            }
+            //原本想要用頭尾逼近，但判斷字母的if else有點慘烈，所以要看看其他人有沒有好辦法，速度偏慢，對了++或--都要檢查i <= j，所以if(i)重複做目前看來不能避免，速度偏慢
+            //其他
+            //這個基本跟我用的方法一樣，不過他多餘一些，但有個東西他做得比較好是不用特地去ANSI找數字，直接c >= 'A' && c <= 'Z'就好(另做isLetter function 也不錯)
+            //https://leetcode.com/problems/reverse-only-letters/solutions/960043/c-solution/
+            //這個也一樣ㄟ，不過原來VS原本就內建好isletter了@@
+            //https://leetcode.com/problems/reverse-only-letters/solutions/1463831/c-faster-than-98-95/
+            //這個方法也一樣，說是SWAP也只是把換位置寫成function，不過他有用ref可以學一下，速度其實不錯?
+            //https://leetcode.com/problems/reverse-only-letters/solutions/705455/c-swap/
+            //原本想說這個人會寫得很漂亮，不過其實還好，只是記錄非letter的位置填字而已，速度普通偏慢
+            //https://leetcode.com/problems/reverse-only-letters/solutions/462235/c/
+            //不過有個逆向的想法，一般都是找letter不過同時也直接找到非letter的位置了
+
+        }
+
+    }
+}

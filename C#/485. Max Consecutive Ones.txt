@@ -1,0 +1,59 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var nums = new int[] { 1, 2, 3 };
+            var result = solution.FindMaxConsecutiveOnes(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int FindMaxConsecutiveOnes(int[] nums)
+            {
+                int max = 0;
+                int temp = 0;
+                for (int i = 0; i < nums.Length; i++)
+                {
+                    if (nums[i] == 1)
+                    {
+                        temp++;
+                    }
+                    else
+                    {
+                        if (temp > max)
+                            max = temp;
+                        temp = 0;
+                    }
+                }
+
+                if (temp > max)
+                    max = temp;
+
+                return max;
+            }
+        }
+        //就連續就計數，沒連續就歸零，然後找max，速度不錯
+        //其他
+        //一模一樣，速度普通
+        //https://leetcode.com/problems/max-consecutive-ones/solutions/448944/c/
+        //也是一模一樣，不過他的方法可以不再最後再做一次判斷，但應該比較慢，速度不錯..
+        //https://leetcode.com/problems/max-consecutive-ones/solutions/96758/c-solution-ac/
+        //這位跟第二位一樣，不過在精簡一點，速度不錯
+        //https://leetcode.com/problems/max-consecutive-ones/solutions/346172/c-solution/
+
+    }
+}

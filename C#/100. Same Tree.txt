@@ -1,0 +1,122 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {            
+            Solution solution = new Solution();                       
+
+            TreeNode root1 = new TreeNode(1,new TreeNode(1),new TreeNode(1));
+            TreeNode root2 = new TreeNode(1, new TreeNode(1), new TreeNode(2));
+            Console.WriteLine(solution.IsSameTree(root1,root2));
+
+            Console.ReadKey();
+
+        }
+
+        
+          
+        public class TreeNode {
+            public int val;
+            public TreeNode left;
+            public TreeNode right;
+            public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+                this.val = val;
+                this.left = left;
+                this.right = right;
+            }
+        }
+
+        //public class Solution
+        //{
+        //    public bool IsSameTree(TreeNode p, TreeNode q)
+        //    {
+        //        Stack<TreeNode> stack1 = new Stack<TreeNode>();
+        //        Stack<TreeNode> stack2 = new Stack<TreeNode>();
+
+        //        stack1.Push(p);//直接兩個tree都遍歷比對差異BFS
+        //        stack2.Push(q);//乾Stack是先進後出，所以應該算DFS?用queue才算BFS
+
+        //        while (stack1.Count > 0 || stack2.Count > 0)
+        //        {
+        //            TreeNode tempp = stack1.Pop();
+        //            TreeNode tempq = stack2.Pop();
+
+        //            if(tempp == null)//其中一邊null另一邊沒null就false
+        //            {
+        //                if(tempq != null)
+        //                    return false;
+        //                continue;
+        //            }
+        //            else if(tempq == null)
+        //            {
+        //                if(tempp != null)
+        //                    return false;
+        //                continue;
+        //            }
+        //            else
+        //            {
+        //                if (tempp.val != tempq.val)//節點值不一樣也false
+        //                {
+        //                    return false;
+        //                }
+
+        //                stack1.Push(tempp.left);
+        //                stack1.Push(tempp.right);
+        //                stack2.Push(tempq.left);
+        //                stack2.Push(tempq.right);
+        //            }                    
+        //        }
+
+        //        if(stack1.Count != stack2.Count)
+        //        {
+        //            return false;
+        //        }
+
+        //        return true;
+        //    }
+        //}
+        //其他
+        //乾這簡潔好多，應該算DFS，看到覺得好厲害好有道理，就是走過順便比對就好了
+        //https://leetcode.com/problems/same-tree/discuss/645173/c-solution
+        //這個人是我的作法的清晰版，但單純簡潔上我喜歡上一個人的
+        //https://leetcode.com/problems/same-tree/discuss/734391/C-DFSBFS-solutions
+
+        public class Solution
+        {
+            public bool IsSameTree(TreeNode p, TreeNode q)
+            {
+                //這好像是實作乾，完全不會用
+                IEnumerable<int?> traverse(TreeNode t)
+                {
+                    if (t != null)
+                    {
+                        yield return t.val;//yield可以看成迴圈(程式)執行到一半會先中途return回上一層值
+                        foreach (var v in traverse(t.left)) yield return v;//這也是
+                        foreach (var v in traverse(t.right)) yield return v;
+                    }
+                    else
+                        yield return null;
+                }
+
+                return
+                    //Zip是把兩組結合，數量不同也可，會做到其中一組沒了
+                    //然後ALL會把內容拿出來依條件比對，傳回true會false
+                    //乾這linq功力
+                  Enumerable
+                    .Zip(traverse(p), traverse(q), (a, b) => (a, b))
+                    .All(pair => pair.Item1 == pair.Item2);
+
+            }
+            //來源
+            //https://leetcode.com/problems/same-tree/discuss/196093/C-with-Linq
+        }
+    }
+}

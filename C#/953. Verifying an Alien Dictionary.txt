@@ -1,0 +1,97 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string[] words = new string[] { "hello", "hello" };
+            string order = "abcdefghijklmnopqrstuvwxyz";
+            var result = solution.IsAlienSorted(words, order);
+            Console.WriteLine(result);
+
+
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            Dictionary<char, int> rank = new Dictionary<char, int>();//放全域方便大家用
+            public bool IsAlienSorted(string[] words, string order)
+            {
+                //不要想得太複雜，第一個字元順序有差異就能決定順序了，除非等於，不然不用比較第二個字元，
+                //但也因此第二個字元比較是不規則的，所以不能全部一起比，只能倆倆比對
+                char[] chars = order.ToCharArray();//方便塞dictionary order
+                for (int i = 0; i < chars.Length; i++)
+                {
+                    rank.Add(chars[i], i);
+                }                
+
+                for(int j =0 ; j < words.Length-1;j++)
+                {
+                    int testlenth = Math.Min(words[j].Length, words[j+1].Length);//決定最多比到哪
+                    if(words[j].Length == testlenth) //testlenth一定會有一個中所以用等於
+                    {
+                        //前一個較短或等於
+                        if (!(words[j + 1].Substring(0, testlenth) == words[j]))//只要前面一樣後面就不用比因必定對
+                        {
+                            if (!checking(words[j], words[j + 1].Substring(0, testlenth)))//我們外層必定continue我們內層就要檢查false
+                            {
+                                return false;
+                            }
+                        }
+                        continue;
+                    }
+                    else
+                    {
+                        //前一個較長
+                        if (!(words[j].Substring(0, testlenth) == words[j + 1]))//只要前面一樣後面就不用比錯
+                        {
+                            if (checking(words[j].Substring(0, testlenth), words[j + 1]))//我們外層必定false我們內層就要檢查continue
+                            {
+                                continue;
+                            }
+                        }
+                        return false;
+                    }
+                }
+
+                return true;//都過就true
+            }
+
+            public bool checking(string word1, string word2)//比前面order比後面小
+            {
+                for(int i = 0; i < word1.Length; i++)
+                {
+                    if(rank[word1[i]] > rank[word2[i]])//前比後大
+                    {
+                        return false;
+                    }
+                    else if(rank[word1[i]] == rank[word2[i]])//只有=時要繼續比
+                    {
+                        continue;
+                    }
+                    return true;//前比後小
+                }
+                return true;//完全一樣一樣給過
+            }
+        }
+        //題目不算難，但不要想得太複雜比如全部字元都要比過，速度普通，不過好像寫的太長
+        //其他
+        //內容跟我差不多，不過我多做了提前檢查要不要比較，然後他比較時是直接return true/false整體用的比我精簡不少，但我的也算詳細，看人，速度差不多
+        //另外他把長度比較放得字元比較的最後，當prefix all equal時就比長度給true false
+        //https://leetcode.com/problems/verifying-an-alien-dictionary/discuss/430593/C-Solution
+        //這個人是用類似two pointer 的 while 來做比較，後最後做長度比較(有設有比到最後和長度有問題條件)，速度偏慢
+        //https://leetcode.com/problems/verifying-an-alien-dictionary/discuss/475857/Easy-C-Solution
+        //這個方法基本跟我一樣，就差少我提前檢查要不要比較，速度差不多
+        //https://leetcode.com/problems/verifying-an-alien-dictionary/discuss/776835/EZ-C-solution
+    }
+}

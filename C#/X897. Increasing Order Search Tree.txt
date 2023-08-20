@@ -1,0 +1,61 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var root = new TreeNode(5, new TreeNode(3, new TreeNode(2, new TreeNode(1)), new TreeNode(4)), new TreeNode(6,null, new TreeNode(8, new TreeNode(7), new TreeNode(9))));
+            Solution solution = new Solution();
+            var result = solution.IncreasingBST(root);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class TreeNode
+        {
+            public int val;
+            public TreeNode left;
+            public TreeNode right;
+            public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+            {
+                this.val = val;
+                this.left = left;
+                this.right = right;
+            }
+        }
+
+        public class Solution
+        {
+            TreeNode result = new TreeNode(0);//一開始要是node不能是null，才能將node在recursive中串起來
+            TreeNode resultTemp = null;//兩個TreeNode，一個是根本，一個是指標
+            public TreeNode IncreasingBST(TreeNode root)
+            {
+                resultTemp = result;
+                Recurvice(root);
+                return result.right;//把頭去掉
+            }
+
+            public void Recurvice(TreeNode node)
+            {
+                if (node == null)
+                    return;
+                Recurvice(node.left);
+                resultTemp.right = new TreeNode(0);//因為要確定有value節點才能存在，所以都往下一層節點建，並把值塞入下一層(下一層只得到value，right先空著，確定有value才建立)，一開始我不是把值塞入下一層而是塞在當層並先預建new TreeNode(0)在下一層，導致沒val後下一層仍有多出new TreeNode(0)
+                resultTemp.right.val = node.val;                
+                resultTemp = resultTemp.right;//目標點移到下層開始串接
+                Recurvice(node.right);//inorder 的 讀法 left root right
+                return;
+            }
+        }
+    }
+}

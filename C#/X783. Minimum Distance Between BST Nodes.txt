@@ -1,0 +1,66 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var root = new TreeNode(4, new TreeNode(2, new TreeNode(1), new TreeNode(3)), new TreeNode(6));
+            Solution solution = new Solution();
+            var result = solution.MinDiffInBST(root);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class TreeNode
+        {
+            public int val;
+            public TreeNode left;
+            public TreeNode right;
+            public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+            {
+                this.val = val;
+                this.left = left;
+                this.right = right;
+            }
+        }
+
+
+        public class Solution
+        {
+            List<int> record = new List<int>();
+            public int MinDiffInBST(TreeNode root)
+            {
+                Recurive(root);
+                int min = Int32.MaxValue;
+                //因為BST已經排序過了，所以兩兩間一定是互相的最小距離
+                for(int i = 1; i < record.Count;i++)//從1開始
+                {
+                    if ((record[i] - record[i - 1]) < min)
+                        min = record[i] - record[i - 1];
+                }
+                return min;
+            }
+
+            public void Recurive(TreeNode node)
+            {
+                if(node == null) return;//preorder
+                Recurive(node.left);
+                record.Add(node.val);
+                Recurive(node.right);
+                return;
+            }
+        }
+       
+    }
+}

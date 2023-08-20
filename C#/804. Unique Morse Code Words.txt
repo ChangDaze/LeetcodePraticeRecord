@@ -1,0 +1,56 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            string[] s = new string[] { "gin", "zen", "gig", "msg" };
+            int result = solution.UniqueMorseRepresentations(s);
+            Console.WriteLine(result);           
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int UniqueMorseRepresentations(string[] words)
+            {
+                string[] transformwords = new string[words.Length];
+                string[] map = new string[] { ".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--.." };
+                for(int i = 0; i < words.Length;i++)
+                {
+                    string transformword = "";
+                    foreach (char c in words[i])
+                    {                        
+                        int sign = c - 'a';
+                        transformword += map[sign];
+                    }
+                    transformwords[i] = transformword;
+                }
+
+                return transformwords.Distinct().Count();//善用linq會很好count
+            }
+        }
+        //速度很慢
+        //其他
+        //這個用hashset計算唯一，算很慢，裡面有提到hashset幾個東西，add裡包含contain check，可以用count直接記數等等
+        //https://leetcode.com/problems/unique-morse-code-words/discuss/320682/A-C-Solution-for-c-people
+        //這個人是下功夫在map上的樣子，使用dic當map意外提升速度?速度算快
+        //https://leetcode.com/problems/unique-morse-code-words/discuss/394315/A-very-simple-and-fast-C-solution-faster-than-99.85!
+        //這個人方法跟我一樣，不過他是用linq來製作function
+        //https://leetcode.com/problems/unique-morse-code-words/discuss/461579/C-Consise-4-line
+
+
+
+
+
+    }
+}

@@ -1,0 +1,144 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+using System.Reflection;
+using System.Security.AccessControl;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] nums = new int[] { 1, 2, 3, 4 };
+            Solution solution = new Solution();
+            var result = solution.ProductExceptSelf(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+
+        //2023.0725.2119
+        public class Solution
+        {
+            public int[] ProductExceptSelf(int[] nums)
+            {
+                int[] result = Enumerable.Repeat(1,nums.Length).ToArray();
+
+                int pre = 1, post = 1, len = nums.Length-1;
+
+                for(int i = 0;i< nums.Length;i++)
+                {
+                    result[i] *= pre;
+                    result[len-i] *= post;
+                    pre *= nums[i];
+                    post *= nums[len - i];
+                }
+
+                return result;
+            }
+        }
+        //主要抄這位
+        //https://leetcode.com/problems/product-of-array-except-self/solutions/3734044/practice-sol/
+
+        //public class Solution
+        //{
+        //    public int[] ProductExceptSelf(int[] nums)
+        //    {
+        //        bool zeroFlag = false;
+        //        int zeroIndex = -1;
+        //        int product = 1;
+
+        //        for (int i = 0; i < nums.Length; i++)
+        //        {
+        //            if (nums[i] != 0)
+        //            {
+        //                product *= nums[i];
+        //                continue;
+        //            }
+
+        //            //num == 0                    
+        //            if (zeroFlag)
+        //            {
+        //                product = 0;
+        //                break;
+        //            }
+        //            zeroFlag = true;
+        //            zeroIndex = i;
+        //        }
+
+        //        if (zeroFlag)
+        //        {
+        //            nums = new int[nums.Length];
+        //            nums[zeroIndex] = product;
+        //            return nums;
+        //        }
+
+        //        for (int i = 0; i < nums.Length; i++)
+        //            nums[i] = product / nums[i];
+
+        //        return nums;
+
+        //    }
+        //}
+
+        //2023/07/11
+        //public class Solution
+        //{
+        //    public int[] ProductExceptSelf(int[] nums)
+        //    {
+        //        int[] result = new int[nums.Length];
+        //        int[] prefix = new int[nums.Length];
+        //        int[] suffix = new int[nums.Length];
+        //        //prefix
+        //        prefix[0] = 1;
+        //        for(int i = 1;i< nums.Length;i++)                
+        //            prefix[i] = prefix[i-1] * nums[i-1];
+
+        //        //suffix
+        //        suffix[nums.Length-1] = 1;
+        //        for (int i = nums.Length - 2; i >-1; i--)
+        //            suffix[i] = suffix[i + 1] * nums[i + 1];
+
+        //        for(int i = 0;i< nums.Length; i++)                
+        //            result[i] = prefix[i] * suffix[i];
+
+        //        return result;
+        //    }
+        //}
+
+        //2023/07/11
+        //public class Solution
+        //{
+        //    public int[] ProductExceptSelf(int[] nums)
+        //    {
+        //        int[] result = new int[nums.Length];
+
+        //        //prefix
+        //        result[0] = 1;
+        //        for (int i = 1; i < nums.Length; i++)
+        //            result[i] = result[i - 1] * nums[i - 1];
+
+        //        //suffix
+        //        //[0] products
+        //        //[1] products /original[0]
+        //        //[2] (products / original[0]) / original[1]
+        //        for (int i = nums.Length - 2; i > -1; i--)
+        //            nums[i] = nums[i] * nums[i + 1];
+
+        //        for (int i = 0; i < nums.Length - 1; i++)
+        //            result[i] = result[i] * nums[i + 1];
+
+        //        return result;
+        //    }
+        //}
+
+    }
+}

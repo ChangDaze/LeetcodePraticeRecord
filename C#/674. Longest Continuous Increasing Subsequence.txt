@@ -1,0 +1,57 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var nums = new int[] { 1, 3, 5, 4, 7 };
+            var result = solution.FindLengthOfLCIS(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int FindLengthOfLCIS(int[] nums)
+            {
+                int result = 1;//最小連續是1
+                int start = 0;//連續的起始點
+                int temp = nums[0];
+                for (int i = 1; i < nums.Length; i++)//從第二格開始比就好
+                {
+                    if (temp >= nums[i])//當值不是遞增時
+                    {
+                        if (i - start > result)//連續數較大才紀錄
+                            result = i - start;
+                        start = i;//重置start
+                    }
+                    temp = nums[i];//紀錄值方便檢查遞增
+                }
+
+                if (nums.Length - start > result)//尾巴再檢查一次
+                    result = nums.Length - start;
+
+                return result;
+            }
+            //就一般解法，速度偏慢
+            //其他
+            //這方法本質相同，但他把東西弄的比較簡單，不像我還在i - start > result，且每次檢查所以他尾巴不用再寫code，速度很快(可能就是我變數比較多吧)
+            //https://leetcode.com/problems/longest-continuous-increasing-subsequence/solutions/2688529/c-faster-than-98-31/
+            //這位方法跟第一位一樣，不過他從0開始，所以有多做一個index=0的判斷，速度偏慢
+            //https://leetcode.com/problems/longest-continuous-increasing-subsequence/solutions/2088697/c-solution/
+            //這位第一個方法跟第一位一樣，但速度普通
+            //第二個方法用了dp的紀錄法，但本質上跟用count比好像沒變，但速度不錯，至少是易懂的DP，可以看看
+            //https://leetcode.com/problems/longest-continuous-increasing-subsequence/solutions/1253672/c-solutions-one-pass-dp/
+        }
+    }
+}

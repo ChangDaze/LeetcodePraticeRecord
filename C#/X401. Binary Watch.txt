@@ -1,0 +1,68 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int turnedOn = 9;
+
+            Solution solution = new Solution();
+            var result = solution.ReadBinaryWatch(turnedOn);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            //應該用bit之類操作會比較好，之後再看別人的
+            int[][] options = new int[][] {
+                    new int[2] { 0, 1 },
+                    new int[2] { 0, 2 },
+                    new int[2] { 0, 4 },
+                    new int[2] { 0, 8 },
+                    new int[2] { 1, 1 },
+                    new int[2] { 1, 2 },
+                    new int[2] { 1, 4 },
+                    new int[2] { 1, 8 },
+                    new int[2] { 1, 16 },
+                    new int[2] { 1, 32 }, };
+            int standard = 0;
+            List<string> result = new List<string>();
+            public IList<string> ReadBinaryWatch(int turnedOn)
+            {
+                this.standard= turnedOn;
+                BackTracking(0, 1, 0, 0);
+                return result;
+                //return result.OrderBy(x => x).ToList(); //因為測試時會用排序可以比較好核對差異
+            }
+
+            private void BackTracking(int index,int depth, int hour, int minute)
+            {
+                if (depth > standard)//代表值是depth == standard 時的樣子，才做加入
+                {
+                    if(hour<12 && minute <60)//0~11 和 0~59，題目限制，原因不明
+                        result.Add(hour.ToString() + ":" + minute.ToString("00"));//hour不能0 lead，minute要0 lead
+                    return;
+                } 
+
+                for(int i = index;i< options.Length;i++)//因為本質上還是要避免重複，所以都可以用向後推的方式檢查
+                    BackTracking(i+1, depth+1, hour + (options[i][0]==0? options[i][1]:0), minute + (options[i][0] == 1 ? options[i][1] : 0));//3元運算式括號要框好
+                                
+            }
+        }
+        
+    }
+}

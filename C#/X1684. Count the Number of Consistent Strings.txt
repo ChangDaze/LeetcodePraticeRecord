@@ -1,0 +1,59 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string allowed = "ab";
+            string[] words = new string[] { "ad", "bd", "aaab", "baa", "badab" };
+            Solution solution = new Solution();
+            var result = solution.CountConsistentStrings(allowed, words);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int CountConsistentStrings(string allowed, string[] words)
+            {
+                //這題好像只有暴力解，用Bit Manipulation好像會比較快
+                //BitArray array = new BitArray(123);//本質上取出值還是bool
+                bool[] flag = new bool[123];//用123是，不用特地char-'a'可以加速
+                int result = words.Length;//用倒扣的御豆東西直接扣比較方便
+
+                foreach(char c in allowed)                
+                    flag[c] = true;
+                
+                foreach(string word in words)
+                {
+                    foreach(char c in word)
+                        if (!flag[c]) 
+                        {
+                            result -= 1;
+                            break;
+                        }
+                }
+
+                return result;
+            }
+            //參考的
+            //bool array
+            //https://leetcode.com/problems/count-the-number-of-consistent-strings/solutions/970028/c-linear-fastest-solution-100-time-100-space/
+            //看很多人推的python，結果是單純暴力解
+            //https://leetcode.com/problems/count-the-number-of-consistent-strings/solutions/971323/python-3-solution-100-faster-than-any-other-codes/
+        }
+    }
+}

@@ -1,0 +1,153 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[][] image = new int[][]{
+                            new int[]{1,1,1 },
+                            new int[] { 1, 1, 0 } ,
+                            new int[] { 1, 0, 1 } };
+            Solution solution = new Solution();
+            int[][] result = solution.FloodFill(image,1,1,2);
+
+            for(int i = 0; i < result.Length; i++)
+            {
+                for(int j = 0; j < result[i].Length; j++)
+                {
+                    Console.Write(result[i][j]);
+                    Console.Write(",");
+                }
+                Console.WriteLine();
+            }
+
+            Console.ReadKey();
+
+        }
+
+        //public class Solution
+        //{
+        //    public int[][] FloodFill(int[][] image, int sr, int sc, int color)
+        //    {
+        //        int oldcolor = image[sr][sc];
+
+        //        if (image[sr][sc] == color)//同樣顏色不用處理因為變完還是相同顏色，變得前提也是相同顏色，所以沒有顏色會改變
+        //        {
+        //            return image;
+        //        }
+
+        //        image = Fill(image, sr, sc, color, oldcolor);
+
+        //        return image;
+        //    }
+
+        //    public int[][] Fill(int[][] image, int sr, int sc, int color,int oldcolor)
+        //    {
+        //        if (sr < 0 || sc < 0 || sr >= image.Length || sc >= image[0].Length)//設定邊界，前提應該是每列一樣長
+        //        {
+        //            return image;
+        //        }else if (image[sr][sc] == color)//同樣顏色代表1.做過了 2.舊顏色不一樣也能不做，這裡主要考慮1
+        //        {
+        //            return image;
+        //        }
+        //        else if (image[sr][sc] != oldcolor) //舊顏色不一樣不做
+        //        {
+        //            return image;
+        //        }
+        //        else
+        //        {
+        //            image[sr][sc] = color;//通過檢查就設定新顏色
+        //        }
+        //          並向外感染顏色
+        //        image = Fill(image, sr - 1, sc, color, oldcolor);//列的
+        //        image = Fill(image, sr + 1, sc, color, oldcolor);
+        //        image = Fill(image, sr, sc - 1, color, oldcolor);//欄的
+        //        image = Fill(image, sr, sc + 1, color, oldcolor);
+
+        //        return image;
+        //    }
+        //}
+        //這樣遞迴的方式要設清楚return否則容易stackoverflow
+        //這好像算DFS的方法
+        //這方法很帥，就是記錄連著的所有舊顏色，最後再一次變色，可以喔
+        //https://leetcode.com/problems/flood-fill/discuss/435474/Easy-C-Solution
+
+        //public class Solution
+        //{
+        //    public int[][] FloodFill(int[][] image, int sr, int sc, int newColor)
+        //    {
+        //        if (image[sr][sc] == newColor)
+        //            return image;
+
+        //        var originalColor = image[sr][sc];
+
+        //        var changeStack = new Stack<(int i, int j)>();//把要感染的點放入處理名單，這種<int,int>雙value的Stack和var(int,int)好像要另外裝套件
+        //        changeStack.Push((sr, sc));
+
+        //        while (changeStack.Count > 0)//開始處理處理名單
+        //        {
+        //            var (i, j) = changeStack.Pop();//拉出處理名單
+
+        //            if (i < 0 || i > image.Length - 1 ||
+        //                j < 0 || j > image[0].Length - 1)
+        //                continue;
+
+        //            // we break this branch if current color is
+        //            // - not the same as original color
+        //            
+        //            if (image[i][j] != originalColor)//這裡跟原版修掉一些，但一樣可行，不同顏色就不處理1.做過了(所以不同色) 2.舊顏色不一樣也能不做
+        //                continue;
+
+        //            image[i][j] = newColor;//檢查完後才處理
+
+        //            changeStack.Push((i - 1, j)); // top//加入新的處理名單，只要不通過上面的條件處理名單就不會增加
+        //            changeStack.Push((i + 1, j)); // bottom
+        //            changeStack.Push((i, j + 1)); // right
+        //            changeStack.Push((i, j - 1)); // left
+        //        }
+
+        //        return image;
+        //    }
+        //}
+        //這方法很猛，不用recursive，使用stack的好的特性，因此也快很多
+        //https://leetcode.com/problems/flood-fill/discuss/1493270/Simple-to-read-C-DFS
+
+        public class Solution
+        {
+            public int[][] FloodFill(int[][] image, int sr, int sc, int newColor)
+            {
+                int rows = image.Length;
+                int cols = image[0].Length;
+                var queue = new Queue<(int Row, int Col)>();//這種雙value的一樣要裝套件
+                var shifts = new List<(int, int)>() { (-1, 0), (0, -1), (0, 1), (1, 0) };//移動方向
+                int oldColor = image[sr][sc];
+                if (oldColor == newColor)
+                    return image;
+                queue.Enqueue((sr, sc));//加入處理隊列
+                while (queue.Count > 0)
+                {
+                    var cell = queue.Dequeue();//後進的先拉出來處理
+                    image[cell.Row][cell.Col] = newColor;//設定顏色(一開始是起點所以先做，)
+                    foreach (var p in shifts)//所以會4次
+                    {
+                        int r = cell.Row + p.Item1;//這item1、item2就是預設提供的(int, int)ㄟ，好帥
+                        int c = cell.Col + p.Item2;
+                        if (r >= 0 && r < rows && c >= 0 && c < cols && image[r][c] == oldColor)//判斷邊界和舊顏色
+                            queue.Enqueue((r, c));//基本上有加入的就是要處理的，這是後判斷，帥，同時透過先進先出達成BFS(對列前面的都處理完才處理後面的)
+                    }
+                }
+                return image;
+            }
+        }
+        //這是BFS的方法，帥
+        //這方法跟上面的Stack很像(後進先出會達成DFS)
+        //兩個方法速度差不多，這個快一些，可能是因為後判斷所以要判斷的都只剩必要的
+        //一般Stack是後進先出，Queue是先進先出(從先進的開始拿出)
+    }
+}

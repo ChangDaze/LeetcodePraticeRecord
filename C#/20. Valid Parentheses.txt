@@ -1,0 +1,124 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string str = "{ { } [ ] [ [ [ ] ] ] } ";
+            Solution solution = new Solution();
+
+            Console.WriteLine(solution.IsValid(str));
+            Console.ReadKey();
+
+        }
+
+        //這是自己想的舊方法，看hint得到想法
+        //public class Solution
+        //{
+        //    public bool IsValid(string s)
+        //    {
+        //        return Recurive(s.Replace(" ", ""));//先去掉空格
+        //    }
+
+        //    public bool Recurive(string s)
+        //    {
+        //        string temp = s;//後面檢查要用到原本的s所以存起來
+
+        //        bool check1 = true;
+        //        bool check2 = true;
+        //        bool check3 = true;
+
+                  //如果確定沒有三種中的某一種，那一種就可以不做後面replace了
+        //        if (!temp.Contains(")"))
+        //            check1 = false;
+
+        //        if (!temp.Contains("]"))
+        //            check2 = false;
+
+        //        if (!temp.Contains("}"))
+        //            check3 = false;
+                  //先把連在一起的replace掉
+        //        if (check1)
+        //            temp = temp.Replace("()", "");
+        //        if (check2)
+        //            temp = temp.Replace("[]", "");
+        //        if (check3)
+        //            temp = temp.Replace("{}", "");
+                  
+                  //檢查要不要繼續recursive
+        //        if (temp.Length == 0)//都replace完代表true
+        //        {
+        //            return true;
+        //        }
+        //        else if (temp == s)//replace後沒變化代表剩下不正常的ex:({)]
+        //        {
+        //            return false;
+        //        }
+
+        //        s = temp;
+
+        //        return IsValid(s);//檢查沒過就繼續
+        //    }
+
+        //}
+
+        //http://ocw.aca.ntu.edu.tw/ntu-ocw/ocw/cou/101S210/15
+        //看完台大開放課計算機概論自己更新版，利用stack的特性(先進後出)最後進的左邊下一個一定要對最後進的右邊 -> 進左就存入stack，進右就檢查最後存入的對不對
+        public class Solution
+        {
+            public bool IsValid(string s)
+            {
+                s = s.Replace(" ", "");//
+                char[] chars = s.ToCharArray();
+                Stack<char> stack = new Stack<char>();
+                Dictionary<char, char> dictionary = new Dictionary<char, char> { { '(', ')' }, { '[', ']' }, { '{', '}' }, };
+                for (int i = 0; i < chars.Length; i++)
+                {
+                    if (chars[i] == '(' || chars[i] == '[' || chars[i] == '{')//如果是左邊就存入stack
+                    {
+                        stack.Push(chars[i]);
+                    }
+                    else
+                    {
+                        if (stack.Count == 0)//進了右邊卻沒有對應的左邊就false
+                        {
+                            return false;
+                        }
+                        char pop = stack.Pop();
+                        if (chars[i] != dictionary[pop])//進了右邊檢查左邊對不對
+                        {
+                            return false;
+                        }
+                    }
+
+                }
+
+                if (stack.Count != 0)//都順利會都沒剩
+                {
+                    return false;
+                }
+
+                return true;//然後就對
+            }
+
+        }
+        //其他
+        //這個用stack來記錄相反邊來達成省去dictionary，會快又省，猛
+        //https://leetcode.com/problems/valid-parentheses/discuss/9290/C-Solution
+        //方法一樣但比較簡潔
+        //https://leetcode.com/problems/valid-parentheses/discuss/2297798/C-Using-Stack
+        //這也是省去dictionary但是把判斷直接寫在if，不知為啥快一點
+        //https://leetcode.com/problems/valid-parentheses/discuss/278445/C-stack
+        //這也是dictionary方法，不過多出判斷奇數字元，除此之外跟我一樣普通
+        //https://leetcode.com/problems/valid-parentheses/discuss/256800/C-faster-than-99.4-(with-comments
+        //方法一樣dictionary，不過他們都有個好習慣就是用containkey或containvalue，我沒做這個直接else，如果有目標以外的字元說不定會跟預想結果不同
+        //https://leetcode.com/problems/valid-parentheses/discuss/9633/C-Classic-Version-with-Dictionary
+
+    }
+}

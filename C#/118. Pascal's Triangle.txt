@@ -1,0 +1,66 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //下面這個int[]如果有new其實裡面都有值，預設0
+            //int[] nextlist;
+            //nextlist = new int[10];
+            //for(int i = 0; i < nextlist.Length; i++)
+            //{
+            //    Console.WriteLine(nextlist[i]);
+            //}
+
+            int numRows = 5;
+            Solution solution = new Solution();
+            IList<IList<int>> resultlist = solution.Generate(numRows);
+
+            for(int i = 0; i < resultlist[numRows - 1].Count; i++)
+            {
+                Console.WriteLine(resultlist[numRows - 1][i]);
+            }
+
+            Console.ReadKey();
+
+        }
+
+
+    }
+    public class Solution
+    {
+        public IList<IList<int>> Generate(int numRows)
+        {
+            int[] nowlist;
+            int[] nextlist;
+            IList<IList<int>> resultlist = new List<IList<int>>();
+
+            nowlist = new int[1] { 1 };
+            resultlist.Add(nowlist);//第一行已經設好
+
+            for (int i = 1; i < numRows; i++)//因第一行已設好由int 1 開始
+            {
+                nextlist = new int[nowlist.Length + 1];
+                for(int j = 0; j < nowlist.Length; j++)
+                {
+                    nextlist[j] = nextlist[j] + nowlist[j];//因new後值預設0所以可以直接相加
+                    nextlist[j+1] = nextlist[j+1] + nowlist[j];//其實就依位置計算而已
+                }
+                nowlist = nextlist;
+                resultlist.Add(nowlist);
+            }
+
+
+            return resultlist;
+        }
+    }
+
+
+}

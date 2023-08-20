@@ -1,0 +1,56 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Diagnostics.Contracts;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var grid = new int[][] { new int[] { 5,0,20 },
+            new int[] { 0,5,0 },
+            new int[] { 6,0,2 }};
+            Solution solution = new Solution();
+            var result = solution.CheckXMatrix(grid);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public bool CheckXMatrix(int[][] grid)
+            {
+                int head = 0;
+                int tail = grid[0].Length-1;
+                for(int i = 0;i<grid.Length ;i++)
+                {
+                    for (int j = 0; j < grid[0].Length; j++)
+                    {
+                        if (j == head)//若執行完馬上head++會導至下個迴圈還是j == head，這個判斷也可用i==j輔助，當然，現在沒有這個情況
+                        {
+                            if (grid[i][j] == 0)
+                                return false;
+                        }
+                        else if (j == tail)
+                        {
+                            if (grid[i][j] == 0)
+                                return false;
+                        }
+                        else if (grid[i][j] != 0)
+                            return false;                        
+                    }
+                    head++;//放在外面是怕對角線重疊時tail會沒被判斷到而少--
+                    tail--;
+                }
+                return true;
+            }
+        }
+    }
+}

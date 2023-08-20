@@ -1,0 +1,45 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+using System.Reflection;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] piles = new int[] { 2, 4, 1, 2, 7, 8 };
+            Solution solution = new Solution();
+            var result = solution.MaxCoins(piles);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+
+        public class Solution
+        {
+            public int MaxCoins(int[] piles)
+            {
+                Array.Sort(piles);
+
+                int limit = piles.Length / 3 - 1;//基本上最小的都給最後一位，因為index所以-1
+                int result = 0;
+
+                for(int i = piles.Length-2; i>limit;i=i-2)//把每次能拿的第二大的拿走   
+                    result += piles[i];
+                
+                return result;
+
+            }
+        }
+        //題目意外的一樣，速度普通
+    }
+}

@@ -1,0 +1,87 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var grid = new int[4][] { 
+                            new[] { 0,1,0,0 },
+                            new[] { 1,1,1,0},
+                            new[] { 0,1,0,0},
+                            new[] { 1,1,0,0},
+                        };            
+            var result = solution.IslandPerimeter(grid);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public int IslandPerimeter(int[][] grid)
+            {                
+                int result = 0;
+
+                for(int i = 0; i < grid.Length; i++)
+                {
+                    for(int j = 0; j < grid[0].Length; j++)
+                    {
+                        if(grid[i][j] == 1)
+                        {
+                            result = result +4;
+                            if(i > 0)
+                            {
+                                if (grid[i - 1][j] == 1)
+                                    //result = result - 2;//原本相接邊就會-2，但相接的兩個element都會做檢查，所以-1*2=-2
+                                    result = result - 1;
+                            }
+
+                            if (i < grid.Length - 1)
+                            {
+                                if (grid[i + 1][j] == 1)
+                                    result = result - 1;
+                            }
+
+                            if (j > 0)
+                            {
+                                if (grid[i][j-1] == 1)
+                                    result = result - 1;
+                            }
+
+                            if (j < grid[0].Length-1)
+                            {
+                                if (grid[i][j+1] == 1)
+                                    result = result - 1;
+                            }
+
+                        }
+                    }
+                }
+
+                return result;
+            }
+            //就是遍歷並檢查上下左右，速度意外不慢
+            //其他
+            //這題目是有變喔?這位是用int[,]解，可以學一下他的int[,].GetLength(dimension)，其他解題方法基本跟我一樣
+            //https://leetcode.com/problems/island-perimeter/solutions/117974/c-solution/
+            //題目好像真的以前不一樣，這位是用recursive DFS，當遇到邊界就邊+1，但感覺就是複雜且容易出事(我啦)
+            //https://leetcode.com/problems/island-perimeter/solutions/173687/c-dfs-solution/
+            //這個就是把檢查上下左右的部分另做function，但她把function做得有點複雜..，速度還很快..
+            //https://leetcode.com/problems/island-perimeter/solutions/724505/c-clean-solution/
+            //這方法跟我一樣，是遍歷+檢查上下左右，不過他寫的比較簡潔一點，速度不錯
+            //https://leetcode.com/problems/island-perimeter/solutions/321004/c-solution/
+            //這方法也跟我一樣，是遍歷+檢查上下左右，但也寫的比較簡潔一點，速度也快
+            //https://leetcode.com/problems/island-perimeter/solutions/487629/c-simple-solution/
+        }
+
+    }
+}

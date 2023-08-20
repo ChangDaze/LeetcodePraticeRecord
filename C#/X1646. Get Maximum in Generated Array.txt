@@ -1,0 +1,56 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+using System.Reflection;
+using System.Security.AccessControl;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int n = 7;
+            Solution solution = new Solution();
+            var result = solution.GetMaximumGenerated(n);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+
+        public class Solution
+        {
+            public int GetMaximumGenerated(int n)
+            {
+                if(n==0) return 0;
+                int[] array = new int[n+1];
+                array[0] = 0;
+                array[1] = 1;
+
+                int result = 1;
+
+                for(int i = 2; i <= n; i++)
+                {
+                    if(i%2==0)
+                        array[i] = array[i/2];
+                    else
+                        array[i] = array[(i-1) / 2]+ array[(i - 1) / 2+1];
+
+                    if (array[i]>result)
+                        result = array[i];
+                }
+
+                return result;
+            }
+        }
+        //這題目...有點智障，我是照著simulate寫啦，不過這種開頭固定0和1的，應該直接有公式解惑偷吃步的方式
+        //乾不知道C#的為啥其他人都差不多，難道統計的範例真的會挑?看其他語言也是，難道沒有公式解?
+    }
+}

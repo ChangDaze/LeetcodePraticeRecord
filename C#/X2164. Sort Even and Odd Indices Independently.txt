@@ -1,0 +1,57 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] nums = new int[] { 5, 39, 33, 5, 12, 27, 20, 45, 14, 25, 32, 33, 30, 30, 9, 14, 44, 15, 21 };
+            Solution solution = new Solution();
+            var result = solution.SortEvenOdd(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+        public class Solution
+        {
+            public int[] SortEvenOdd(int[] nums)
+            {
+                int[] odds = new int[nums.Length / 2];
+                int[] evens = new int[nums.Length % 2 == 0 ? nums.Length / 2 : nums.Length / 2 + 1];//有多會是even先多(因為雖然index是even但數量上是屬於odd出現時)
+
+                for(int i = 0;i<nums.Length;i++)
+                {
+                    if(i%2==0)                    
+                        evens[i/2] = nums[i];
+                    else
+                        odds[i/2] = nums[i];
+                }
+
+                Array.Sort(odds);
+                Array.Reverse(odds);
+                Array.Sort(evens);
+
+                //倒過來塞回
+                for (int i = 0; i < nums.Length; i++)
+                {
+                    if (i % 2 == 0)
+                        nums[i] = evens[i / 2];
+                    else
+                        nums[i] = odds[i / 2];
+                }
+                return nums;
+            }
+        }
+        //超慢
+    }
+}

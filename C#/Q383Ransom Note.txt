@@ -1,0 +1,53 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var result = false;
+            string ransomNote = "aa";
+            string magazine = "cb";
+
+            //超爛，只贏5%人
+            for(int i = 0; i < ransomNote.Length; i++)
+            {
+                var curgoal =  ransomNote[i];
+                
+                if (magazine.Contains(curgoal))
+                {
+                    var firstmatchstr = magazine.IndexOf(curgoal);
+                    magazine = magazine.Remove(firstmatchstr, 1);
+                    ransomNote = ransomNote.Remove(i, 1);
+                    i--;
+
+                    Console.WriteLine(ransomNote);
+                    Console.WriteLine(magazine);
+                }
+            }
+
+            Console.WriteLine(ransomNote);
+            Console.WriteLine(magazine);
+
+            if (ransomNote == "")
+            {
+                result = true;
+            }
+
+
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+    }   
+    
+
+}

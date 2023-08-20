@@ -1,0 +1,53 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Xml.Linq;
+using System.Security.Policy;
+using System.Security.Cryptography;
+using System.Data.SqlTypes;
+using System.Reflection;
+using System.Security.AccessControl;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string s = "ABFCACDB";
+            Solution solution = new Solution();
+            var result = solution.MinLength(s);
+            Console.WriteLine(result);
+            Console.ReadKey();
+        }
+
+        public class Solution
+        {
+            public int MinLength(string s)
+            {
+                Stack<string> stack = new Stack<string>();
+
+                foreach(char c in s)
+                {
+                    if (stack.Count() > 0)
+                    {
+                        string temp = stack.Peek() + c.ToString();
+                        if(temp == "AB" || temp == "CD"){
+                            stack.Pop();
+                            continue;
+                        }
+                    }
+
+                    stack.Push(c.ToString());
+                }
+
+                return stack.Count();
+            }
+        }
+        //依題目hint來說，應該可以單純greedy，不會有特殊的排列組合
+    }
+}

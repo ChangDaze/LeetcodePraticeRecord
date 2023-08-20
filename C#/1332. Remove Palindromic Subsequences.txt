@@ -1,0 +1,55 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var s = "ababa";
+            var result = solution.RemovePalindromeSub(s);
+            Console.WriteLine(result);
+            
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int RemovePalindromeSub(string s)
+            {
+                string s2 = "";
+                for(int i = s.Length-1; i >= 0; i--)
+                {
+                    s2 = s2 + s[i];
+                }
+
+                if (s2 == s)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return 2;
+                }
+            }
+            //這類型問題以前好像出現過，解完還是很惱怒，不過主要的重點還是題目理解，關於Subsequences可以一次全刪a又全刪b，下次可以先簡單嘗試這種不合常理的方式再看答案
+            //不過 s.reverse.tostring()這裡好像不能直接通，可能有些轉型問題或只適合array，應該說應該string(array)吧，沒試，不過我現在這簡單的方法也還行，其他還有跑length/2前後互換，不過懶的寫
+            //這個的解題方法其實還不錯，他不用另存變數，他是自己比對，只要錯了就return(可以錯了就結束)，不知道是否某些情況下他很快?速度其實還行
+            //不過像評論寫的，他的過濾方法其實不要比較好，不然某些情況下會是錯的
+            //https://leetcode.com/problems/remove-palindromic-subsequences/solutions/1100342/c-solution/
+            //這題其實提醒我還有return 0的必要性ㄟ，因為只要一開始是""就是空字串return 0，題目也看起來是這樣定義的，這個人的提前檢查可以學一下
+            //他第二步檢查的方法跟第一位差不多，但第一位比較好因為只比一半長度，速度100%ㄟ = =，我覺得網路有差...，但應該還是快的
+            //https://leetcode.com/problems/remove-palindromic-subsequences/solutions/490357/c-solution/
+            //這個人方法幾乎跟第二位一模一樣了，也是速度100%(網路...)
+            //https://leetcode.com/problems/remove-palindromic-subsequences/solutions/523503/c-68-ms/
+        }
+
+    }
+}

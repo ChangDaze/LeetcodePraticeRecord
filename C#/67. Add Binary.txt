@@ -1,0 +1,135 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+
+
+            //int c = 4;
+            //string binary = Convert.ToString(c, 2);
+            //Console.WriteLine(binary);
+
+            //Console.WriteLine(Convert.ToDecimal(a));
+
+            Solution solution = new Solution();
+            //string a = "11";
+            //string b = "1";
+            //string a = "1010";
+            //string b = "1011";
+            string a = "10100000100100110110010000010101111011011001101110111111111101000000101111001110001111100001101";
+            string b = "110101001011101110001111100110001010100001101011101010000011011011001011101111001100000011011110011";
+            //    10100000100100110110010000010101111011011001101110111111111101000000101111001110001111100001101
+            //110101001011101110001111100110001010100001101011101010000011011011001011101111001100000011011110011
+            //110111101100010011000101110110100000011101000101011001000011011000001100011110011010010011000000000
+            //110111101100010011000101110110100000011101000101011000000000000000000000000000000000000000000000000
+
+            Console.WriteLine(solution.AddBinary(a,b));
+
+            //int i = -10;
+            //int aBit = i < 0 || a[i--] == '0' ? 0 : 1;//這裡會先檢查前面的i<0因此會跳過後面的a[i--] == '0'檢查，意外的是有順序姓
+            //Console.WriteLine(a);
+
+            //Console.WriteLine(0 + '0');
+            Console.ReadKey();
+
+        }
+
+
+        //public class Solution
+        //{
+        //    public string AddBinary(string a, string b)
+        //    {
+        //        double int_a = BinarydigitToDecinalnumber(a);
+        //        double int_b = BinarydigitToDecinalnumber(b);
+
+        //        return DecinalnumberToBinarydigit((decimal)(int_a+int_b));
+        //    }
+
+        //    public double BinarydigitToDecinalnumber(string binarydigit)
+        //    {
+        //        double decimalnumber = 0;
+        //        int digitlength = binarydigit.Length-1;
+        //        if(digitlength < 0)
+        //        {
+        //            return decimalnumber;
+        //        }
+
+        //        for (int i = digitlength; i >=0; i--)
+        //        {
+        //            decimalnumber += (Char.GetNumericValue(binarydigit[i])*Math.Pow(2,digitlength-i));
+        //        }
+
+        //        return decimalnumber;
+        //    }
+
+        //    public string DecinalnumberToBinarydigit(double decimalnumber)
+        //    {
+        //        if(decimalnumber == 0)
+        //        {
+        //            return "0";
+        //        }
+        //        string binarydigit = "";
+        //        Stack<string> chars = new Stack<string>();
+
+        //        while (decimalnumber > 0)
+        //        {
+        //            double temp = decimalnumber % 2;
+        //            chars.Push((temp).ToString());
+
+        //            decimalnumber = (decimalnumber -temp)/2;
+        //        }
+
+        //        foreach(string c in chars)
+        //        {
+        //            binarydigit += c;
+        //        }
+
+        //        return binarydigit;
+        //    }
+        //}
+        //這是舊版的把a和b變成數字來處理，但因為位數太長(位數短的還是能用)會爆炸(int,decimal)或後面失真(double)
+        //因此用字串判斷和carry變數處理進位一個個處理比較好(也剛好只是二進位)
+
+        public class Solution
+        {
+            public string AddBinary(string a, string b)
+            {
+                List<string> list = new List<string>();
+                int i = a.Length-1;//從個位數開始處理(字串最尾)
+                int j = b.Length-1;
+                int carry = 0;
+                while (i >= 0 || j >= 0 || carry > 0)//i、j = 0要做，carry=0不做(這裡有考慮到最後的進位就會變abit:0,bbit:0,carry:1也能處理，很棒)
+                {
+                    int abit = i<0||a[i--]=='0'?0:1;//i--會返回減減前;--i會返回減減後
+                    int bbit = j < 0 || b[j--] == '0' ? 0 : 1; ;//因三元運算子判斷，比較短的字串更大的位數就都用0呈現
+                    int sum = abit + bbit + carry;//計算
+                    carry = sum / 2;//進位
+                    list.Add((sum%2).ToString());//進位後剩下的留下
+                }
+
+                string result = string.Empty;
+                list.Reverse();//一般list是先進先出所以要reverse
+                for(int k = 0; k < list.Count; k++)
+                {
+                    result = result + list[k];
+                }
+
+                return result;
+                
+            }
+        }
+        //我這題最後是參考別人的
+        //這個用stack就不用reverse
+        //https://leetcode.com/problems/add-binary/discuss/1681987/C-Stack-for-String
+        //這個carry最後的進位另外處理不是迴圈一次跑完
+        //https://leetcode.com/problems/add-binary/discuss/282385/C-while-and-carry
+
+    }
+}

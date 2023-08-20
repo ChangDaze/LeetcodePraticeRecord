@@ -1,0 +1,78 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var nums = new int[] { 1, 3, 2, 2, 5, 2, 3, 7 };
+            var result = solution.FindLHS(nums);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int FindLHS(int[] nums)
+            {
+                Dictionary<int,int> record = new Dictionary<int,int>();//計數
+                foreach(int num in nums)
+                {
+                    if(record.ContainsKey(num))
+                        record[num]++;
+                    else
+                        record[num] = 1;
+                }
+
+                int[] sortedKeys = record.Keys.OrderBy(x => x).ToArray();
+                List<Tuple<int,int>> pairs = new List<Tuple<int, int>>();//找|a-b|=1的pair
+                #region 沒有sort時要找pairs，會有個嚴重問題，ex:(1,2)和(2,1)是一樣的，但她會重複找
+                //foreach(int num_a in record.Keys)
+                //{
+                //    int count = 0;
+                //    foreach(int num_b in record.Keys)
+                //    {
+                //        if(Math.Abs(num_a - num_b) == 1)
+                //        {
+                //            pairs.Add(new Tuple<int, int>(num_a, num_b));
+                //            count++;
+                //        }
+
+                //        if (count >= 2)
+                //            break;
+                //    }
+                //}
+                #endregion
+                for (int i = sortedKeys.Length - 1; i >= 1;i--)
+                {
+                    if (sortedKeys[i] - sortedKeys[i-1] == 1)
+                        pairs.Add(new Tuple<int, int>(sortedKeys[i], sortedKeys[i-1]));
+                }
+
+                if (pairs.Count == 0)//這裡沒判斷到找Max會報錯
+                    return 0;
+
+                return pairs.Max(x => record[x.Item1] + record[x.Item2]);//找Max
+            }
+            //速度其實還行，就是步驟有點多，還用了sort
+            //其他
+            //速度很快，他第一步計數跟我相同，但猛的是第二步她沒有sort直接if (!dict.ContainsKey(item + 1)) continue; -> 有就做沒有就繼續..他這樣應該O(N)喔
+            //https://leetcode.com/problems/longest-harmonious-subsequence/solutions/177418/c-readable-code/
+            //這個方法跟第一位一樣，不過他用LINQ讓程式變很精簡，Groupby+todic，oneline就能計數，速度不錯
+            //https://leetcode.com/problems/longest-harmonious-subsequence/solutions/404593/c-simple-solution/
+            //這方法跟第一位一樣，不過也是厲害，他用三元運算也oneline寫完計數sDic[num] = sDic.ContainsKey(num) ? sDic[num]+1 : 1;，速度很快
+            //https://leetcode.com/problems/longest-harmonious-subsequence/solutions/103520/short-optimized-c-solution-o-n/
+            //這方法也是沒用sort，不過他用aggregate，判斷兩者差距是否一，可能是aggregate會兩兩配對(不過他把aggrgate寫成function的方式可以參考一下)，所以反而慢一點，速度還行
+            //https://leetcode.com/problems/longest-harmonious-subsequence/solutions/115822/c-solution-using-linq-aggregate/
+        }
+
+    }
+}

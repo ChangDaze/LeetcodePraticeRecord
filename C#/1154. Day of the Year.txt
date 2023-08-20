@@ -1,0 +1,96 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();            
+            string date = date = "2004-03-01";            
+            int result = solution.DayOfYear(date);
+            Console.WriteLine(result);
+
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int DayOfYear(string date)
+            {
+                Dictionary<int, int> monthday = new Dictionary<int, int>()
+                {
+                    {1,31},
+                    {2,28},//2月預設
+                    {3,31},
+                    {4,30},
+                    {5,31},
+                    {6,30},
+                    {7,31},
+                    {8,31},
+                    {9,30},
+                    {10,31},
+                    {11,30},
+                    {12,31},
+                };
+                int result = 0;
+
+                string[] splitDate = date.Split('-');
+                int month = Convert.ToInt32(splitDate[1]);
+                for (int i = 1; i < month; i++)//因為當月不用算所以<就好
+                {
+                    result = result + monthday[i];
+                }
+
+                result = result + Convert.ToInt32(splitDate[2]);
+
+                if (month > 2 && IsLeapYear(Convert.ToInt32(splitDate[0])))//3月以上且閏年就++
+                {
+                    result = result + 1;
+                }
+
+                return result;
+            }
+
+            public bool IsLeapYear(int year)
+            {
+                if (year % 4 == 0 && year % 100 != 0)
+                {
+                    return true;
+                }
+                else if (year % 400 == 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+        //跟著題目hint做，速度不快但簡單易懂
+        //其他
+        //這個很天才，他用一天一天扣，扣到換年就知道今年有幾天，速度雖然不快但不用考慮閏年且很有創意
+        //https://leetcode.com/problems/day-of-the-year/discuss/356068/c-solution
+        //這是我的簡單變化版，差不多，只是他是先把對應月份的日數加好就不用dic用array就好，存的空間也會變小一點，也蠻好玩的
+        //https://leetcode.com/problems/day-of-the-year/discuss/1081389/C-Faster-than-100.00
+        //這個人也很扯，原來DayOfYear在C#的datetime中本來就有方法，速度好像也不快，但直接用很方便
+        //https://leetcode.com/problems/day-of-the-year/discuss/390996/Easy-C-Accepted-Solution
+
+
+        //public class Solution
+        //{
+        //    public int DayOfYear(string date)
+        //    {
+        //        DateTime d = DateTime.Parse(date);
+        //        return d.DayOfYear;
+        //    }
+        //}
+    }
+}

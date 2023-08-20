@@ -1,0 +1,63 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Globalization;
+using System.Runtime.Remoting.Messaging;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var nums = new int[] { 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0 };
+            var k = 2;
+            var result = solution.LongestOnes(nums, k);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int LongestOnes(int[] nums, int k)
+            {
+                int count = 0;
+                int max = int.MinValue;
+                int left = 0;
+                int right = 0;
+
+                while(right < nums.Length)
+                {
+                    if (k < 0)
+                    {
+                        if (nums[left] == 0)
+                            k++;
+                        count--;
+                        left++;
+                    }
+                    else
+                    {
+                        if (nums[right] != 1)
+                            k--;
+
+                        count++;
+                        right++;
+                    }
+
+                    //因為count和k都是同時變動，所以處理鑾後還是要統一跟k比決定要不要比較max
+                    if (k >= 0)
+                        max = max > count ? max : count;
+                }
+
+                return max;
+            }
+            
+        }
+    }
+}

@@ -1,0 +1,48 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.ComponentModel;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var arr = new int[]{ 2, 3, 4, 7, 11 };
+            var k = 5;
+            Solution solution = new Solution();
+            var result = solution.FindKthPositive(arr, k);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int FindKthPositive(int[] arr, int k)
+            {
+                int left = 0;
+                int right = arr.Length-1;
+                while (left <= right)
+                {
+                    int mid = (left+right)/2;
+                    int missing = arr[mid]-(mid+1);//mid+1是因為mid是index但數字由1開始，missing就是到目前中間確定缺幾個數
+                    if (missing < k)
+                        left = mid+1;
+                    else
+                        right = mid-1;
+                }
+                //在必定有答案下，最後left(missing >= k的第一個數字)會到下一個數字，right(missing >= k的上一個數字)會到上一個數字，答案就在兩者之間
+
+                return (right + 1 )+ k;//right和left的值之間有答案，right + 1 就是index補1再補上k(缺的數字量) = 答案(有點抽象，畫圖可能比較好懂)
+                //也能說是 答案 - 已出現的數字量(right + 1) = k(缺的數字量)，這可能好懂一些
+            }
+        }
+        //https://leetcode.com/problems/kth-missing-positive-number/solutions/1993168/java-binary-search/?q=binary&orderBy=most_relevant
+    }
+}
