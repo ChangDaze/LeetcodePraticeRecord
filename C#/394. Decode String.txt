@@ -1,0 +1,249 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using System.Globalization;
+using System.Runtime.Remoting.Messaging;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Solution solution = new Solution();
+            var s = "3[a2[c]]";
+            var result = solution.DecodeString(s);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        //2023.08.27.0914
+        public class Solution
+        {
+            public string DecodeString(string s)
+            {
+                Stack<int> indexs = new Stack<int>();
+
+                for(int i = 0;i<s.Length;i++)
+                {
+                    if (s[i] == '[')
+                    {
+                        indexs.Push(i);
+                        continue;
+                    }
+
+                    if (s[i] == ']')
+                    {
+                        int leftIndex = indexs.Pop();
+                        int numberIndex = leftIndex- 1;
+                        while (numberIndex > -1 && s[numberIndex] >= '0' && s[numberIndex] <= '9')//因為可能 numberIndex = -1 這時要停下
+                            numberIndex--;
+                        numberIndex++;//會停到第一個不是數字的，所以推回來一下
+
+                        int number = Convert.ToInt32(s.Substring(numberIndex, leftIndex - numberIndex));//取出數字
+                        string content = string.Join("",Enumerable.Repeat(s.Substring(leftIndex+1, i-(leftIndex+1)),number));//倍數內容
+                        //leftIndex+1是因為要跳過'['
+
+                        s = s.Substring(0, numberIndex) + content + s.Substring(i+1,s.Length-1-i);//處理完，這輪相關的[]會被丟掉
+                        i = numberIndex + content.Length-1;//因為 ']' 本身會被丟掉，所以要-1                         
+                    }
+                }
+
+                return s;
+            }
+        }
+        //hans寫的，基本上是下面的方法做修改(1)用原字串s來存(2)遇到]才做及時處理
+
+        //2023.08.27.0826
+        //public class Solution
+        //{
+        //    public string DecodeString(string s)
+        //    {
+        //        Stack<string> strings = new Stack<string>();//存前斷層
+        //        Stack<int> numbers = new Stack<int>();//存當前斷層的倍數
+
+        //        string currentString = "";//文字(累積當前斷層內容)
+        //        int currentNumber = 0;//數字(給下個斷層用)
+
+        //        foreach (char c in s)
+        //        {
+        //            if (c == '[')
+        //            {
+        //                //斷層處理
+        //                strings.Push(currentString);
+        //                numbers.Push(currentNumber);
+        //                currentString = "";//累積斷層內容
+        //                currentNumber = 0;
+        //            }
+        //            else if(c == ']')                    
+        //                //斷層結束處理
+        //                //前斷層(銜接) + 斷層倍數處理                        
+        //                currentString = strings.Pop() + string.Join("", Enumerable.Repeat(currentString, numbers.Pop()));                    
+        //            else if ( c-'0'<=9 && c - '0' >= 0)
+        //                //數字(給下個斷層用)
+        //                currentNumber = currentNumber * 10 + (c - '0');
+        //            else
+        //                //文字(累積當前斷層內容)
+        //                currentString += c;
+        //        }
+
+        //        //若[]都正常，最後[]會都處理完，全斷層復原到第一層currentString
+        //        return currentString;
+        //    }
+        //}
+        //主要模仿這位
+        //https://leetcode.com/problems/decode-string/solutions/87662/python-solution-using-stack/?envType=study-plan-v2&envId=leetcode-75
+
+        //2023.0804.0305， 無說明原版
+        //public class Solution
+        //{
+        //    Stack<char> stack = new Stack<char>();
+        //    bool flag = false;
+        //    string s = "";
+        //    int index = 0;
+        //    public string DecodeString(string s)
+        //    {
+        //        this.s = s;
+        //        string result = "";
+
+        //        while (index < s.Length)
+        //            result += MultiBracketsDeal("");
+
+        //        string temp = "";
+        //        while (stack.Count() > 0)
+        //            temp = stack.Pop() + temp;
+
+        //        return result + temp;
+        //    }
+
+        //    public string MultiBracketsDeal(string content)
+        //    {                
+        //        while(index < s.Length)
+        //        {
+        //            if (s[index] == ']')
+        //            {
+        //                index++;
+        //                if (flag)
+        //                    return content = BracketsDeal(content);
+
+        //                flag = true;
+        //                return content += BracketsDeal("");
+
+        //            }
+
+        //            stack.Push(s[index]);                    
+
+        //            if (s[index] == '[')
+        //            {
+        //                flag = false;
+        //                index++;
+        //                content += MultiBracketsDeal("");
+        //                continue;
+        //            }
+
+        //            index++;
+
+        //        }                
+
+        //        return content;
+        //    }
+
+        //    public string BracketsDeal(string content)
+        //    {
+        //        string temp = "";
+        //        while (stack.Peek() != '[')
+        //            temp = stack.Pop() + temp;
+
+        //        content += temp;
+
+        //        stack.Pop();
+
+        //        string repeat = "";
+        //        while (stack.Count() > 0 && stack.Peek() >= 48 && stack.Peek() <= 57)
+        //            repeat = stack.Pop() + repeat;
+
+        //        content = string.Join("", Enumerable.Repeat(content, Convert.ToInt32(repeat)));
+
+        //        while (stack.Count() > 0 && stack.Peek() >= 97 && stack.Peek() <= 122)
+        //            content = stack.Pop() + content;
+
+        //        return content;
+        //    }
+        //}
+
+        //2023.0804.0358 ， 補上說明+小調版本
+        //public class Solution
+        //{
+        //    Stack<char> stack = new Stack<char>();
+        //    bool flag = false;
+        //    string s = "";
+        //    int index = 0;
+        //    public string DecodeString(string s)
+        //    {
+        //        this.s = s;
+        //        string result = MultiBracketsDeal("");
+
+        //        string temp = "";//將最後尾部未處理的同層處理完，一般尾部同層會因為']'的計算處理掉，但s的尾部不一定是']'
+        //        while (stack.Count() > 0)//把尾巴做完
+        //            temp = stack.Pop() + temp;
+
+        //        return result + temp;
+        //    }
+
+        //    //這裡主要就是透過recursive做分層切割，當道此層最後的]，就要把內容一並放入BracketsDeal處理
+        //    public string MultiBracketsDeal(string content)
+        //    {
+        //        while (index < s.Length)//還沒走完就會繼續
+        //        {
+        //            stack.Push(s[index]);
+        //            index++;//stack變化，代表此字元已納入考慮
+
+        //            if (stack.Peek() == '[')//遇到'['時代表遇到同層，要相加
+        //            {
+        //                flag = false;//標註非連續']'       //主要會差在 [A]+[B] 和 [A[B]]的差別
+        //                content += MultiBracketsDeal("");//遇到同層只加結果，同層內容單獨計算
+        //            }
+        //            else if (stack.Peek() == ']')
+        //            {
+        //                stack.Pop();//']'作為判斷標的已使用完
+        //                flag = true;//標註連續']'
+        //                if (flag) return content = BracketsDeal(content);//【連續】遇到']'時，代表此層【已沒再遇到同層】，整層結果相加後進行計算返回
+        //                return BracketsDeal("");//【正常】遇到']'時，簡單計算返回
+        //            }
+        //        }
+
+        //        return content;
+        //    }
+
+        //    public string BracketsDeal(string content)
+        //    {
+        //        string temp = "";
+        //        while (stack.Peek() != '[')
+        //            temp = stack.Pop() + temp;//stack要先進後出，所以stack計算的值也要先出排後
+
+        //        content += temp;//【已沒再遇到同層】的計算才會content有值，同層要放前面
+
+        //        stack.Pop();//'['作為判斷標的已使用完
+
+        //        string repeat = "";//遇到數字的處理
+        //        while (stack.Count() > 0 && stack.Peek() >= 48 && stack.Peek() <= 57)
+        //            repeat = stack.Pop() + repeat;//同stack計算
+
+        //        //計算處理
+        //        content = string.Join("", Enumerable.Repeat(content, Convert.ToInt32(repeat)));
+
+        //        //將同層且沒被納入過計算的值一並處理 ex: aa2[bb] 的 aa
+        //        while (stack.Count() > 0 && stack.Peek() >= 97 && stack.Peek() <= 122)
+        //            content = stack.Pop() + content;
+
+        //        //返回計算結果
+        //        return content;
+        //    }
+        //}
+    }
+}
