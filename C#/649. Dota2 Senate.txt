@@ -17,13 +17,13 @@ namespace testconsole2013
         static void Main(string[] args)
         {
             string senate = "RD";
-            var solution = new Solution();       
+            var solution = new Solution();
             var result = solution.PredictPartyVictory(senate);
             Console.WriteLine(result);
             Console.ReadKey();
 
         }
-
+        //2023.08.05
         public class Solution
         {
             public string PredictPartyVictory(string senate)
@@ -31,16 +31,16 @@ namespace testconsole2013
                 Queue<char> queue = new Queue<char>();
 
                 //R : R剩餘數量 、banR : R剩餘要ban數量
-                int R = 0, D = 0,banR = 0, banD = 0;
+                int R = 0, D = 0, banR = 0, banD = 0;
                 //第一輪先統計和準備好queue
                 foreach (char c in senate)
                 {
                     queue.Enqueue(c);
-                    if (c == 'R')R++;
+                    if (c == 'R') R++;
                     else D++;
                 }
 
-                while(true)//loop終究要return
+                while (true)//loop終究要return
                 {
                     char c = queue.Dequeue();
                     //感覺上要先做判斷，應該影響不大
@@ -49,7 +49,7 @@ namespace testconsole2013
 
                     if (c == 'R')
                     {
-                        if(banR > 0)//確認此人有無被ban
+                        if (banR > 0)//確認此人有無被ban
                         {
                             banR--; R--; continue;//被ban就剃除且不能做事
                         }
@@ -67,5 +67,11 @@ namespace testconsole2013
                 //return null; //compiler會自斷判斷while(true)、else、continur等，後面可以不用return
             }
         }
+        //這位的方法其實一樣，只是拆成兩個queue而已，差別是他們是不同方直接用index兩兩相比，然後回到隊伍的人要更新index，我覺得我的方法好像比較好懂
+        //https://leetcode.com/problems/dota2-senate/solutions/3483399/simple-diagram-explanation/?envType=study-plan-v2&envId=leetcode-75
+        //這位方法跟第一位差不多
+        //https://leetcode.com/problems/dota2-senate/solutions/105858/java-c-very-simple-greedy-solution-with-explanation/?envType=study-plan-v2&envId=leetcode-75
+        //這位方法也一樣，@@這方法比較好嗎?
+        //https://leetcode.com/problems/dota2-senate/solutions/3483301/solutions-in-c-python-and-java/?envType=study-plan-v2&envId=leetcode-75
     }
 }

@@ -10,49 +10,84 @@ namespace testconsole2013
     {
         static void Main(string[] args)
         {
-            TreeNode root = new TreeNode(3,new TreeNode(9),new TreeNode(20,new TreeNode(15),new TreeNode(7)));
+            TreeNode root = new TreeNode(3, new TreeNode(9), new TreeNode(20, new TreeNode(15), new TreeNode(7)));
             Solution solution = new Solution();
 
             Console.WriteLine(solution.MaxDepth(root));
             Console.ReadKey();
 
         }
-        
-         
-        public class TreeNode {
+
+
+        public class TreeNode
+        {
             public int val;
             public TreeNode left;
             public TreeNode right;
-            public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+            public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+            {
                 this.val = val;
                 this.left = left;
                 this.right = right;
             }
         }
-         
+
+        //2023.08.27.1555
         public class Solution
         {
             public int MaxDepth(TreeNode root)
             {
-                return recursive(root, 0, 0);//original currentdepth=0,maxdepth=0
-            }
-
-            public int recursive(TreeNode _root,int _currentdepth,int _maxdepth)
-            {
-                if (_root == null)//null node not need to deal
+                TreeNode currentNode = root;
+                Stack<Tuple<TreeNode, int>> stack = new Stack<Tuple<TreeNode, int>>();
+                
+                int depth = 1;
+                int maxDepth = 0;
+                while(stack.Count()>0 || currentNode != null)
                 {
-                    return _maxdepth;
+                    if(currentNode!=null)
+                    {
+                        if(depth > maxDepth) maxDepth= depth;
+                        stack.Push(new Tuple<TreeNode, int> (currentNode,depth));//tuple只能用建構式，不能用{}賦予filed
+                        currentNode = currentNode.left;
+                        depth++;
+                    }
+                    else
+                    {                        
+                        var tempTuple = stack.Pop();
+                        currentNode = tempTuple.Item1.right;
+                        depth = tempTuple.Item2 + 1;//不能單純depth++--，因為返回上層時可能一次跳多層
+                    }
                 }
-                _currentdepth++;//_root not null mean this node need to count
-                if(_currentdepth > _maxdepth)//judge break the record or not
-                    _maxdepth = _currentdepth;
 
-                _maxdepth = recursive(_root.left, _currentdepth, _maxdepth);//just do all left and right subtree recursive
-                _maxdepth = recursive(_root.right, _currentdepth, _maxdepth);
-                return _maxdepth;// return result
-
+                return maxDepth;
             }
         }
+        //參考，不用recursive的遍歷binaryTree
+        //https://ithelp.ithome.com.tw/articles/10247537
+
+        //public class Solution
+        //{
+        //    public int MaxDepth(TreeNode root)
+        //    {
+        //        return recursive(root, 0, 0);//original currentdepth=0,maxdepth=0
+        //    }
+
+        //    public int recursive(TreeNode _root, int _currentdepth, int _maxdepth)
+        //    {
+        //        if (_root == null)//null node not need to deal
+        //        {
+        //            return _maxdepth;
+        //        }
+        //        _currentdepth++;//_root not null mean this node need to count
+        //        if (_currentdepth > _maxdepth)//judge break the record or not
+        //            _maxdepth = _currentdepth;
+
+        //        _maxdepth = recursive(_root.left, _currentdepth, _maxdepth);//just do all left and right subtree recursive
+        //        _maxdepth = recursive(_root.right, _currentdepth, _maxdepth);
+        //        return _maxdepth;// return result
+
+        //    }
+        //}
         //other
         //這個很簡潔，NULL舊return0，非null的就+1，理念應該是左邊和右邊的subtree比depth大小，但因為是recusive我不知道用math.max算不算好
         //https://leetcode.com/problems/maximum-depth-of-binary-tree/discuss/131072/c-implementation

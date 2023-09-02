@@ -1,0 +1,97 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            TreeNode root = new TreeNode(1000000000,
+                    new TreeNode(1000000000,
+                        new TreeNode(1000000000,
+                            new TreeNode(294967296,
+                                new TreeNode(1000000000,
+                                    new TreeNode(1000000000,
+                                        new TreeNode(1000000000),
+                                        null),
+                                    null),
+                                null),
+                            null),
+                        null),
+                    null);
+            int targetSum = 8;
+            Solution solution = new Solution();
+
+            Console.WriteLine(solution.PathSum(root,targetSum));
+            Console.ReadKey();
+
+        }
+
+
+        public class TreeNode
+        {
+            public int val;
+            public TreeNode left;
+            public TreeNode right;
+            public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+            {
+                this.val = val;
+                this.left = left;
+                this.right = right;
+            }
+        }
+
+        //2023.09.02.1716
+        public class Solution
+        {
+            int result = 0;
+            int targetSum = 0;
+            public int PathSum(TreeNode root, int targetSum)
+            {
+                this.targetSum = targetSum;
+                TreeNode currentNode = root;
+                Stack<TreeNode> stack = new Stack<TreeNode>();
+
+                while (stack.Count() > 0 || currentNode != null)
+                {
+                    if (currentNode != null)
+                    {
+                        Recursive(currentNode, 0);
+                        stack.Push(currentNode);                        
+                        currentNode = currentNode.left;
+                    }
+                    else                    
+                        currentNode = stack.Pop().right;                    
+                }
+
+                return result;
+            }
+
+            private void Recursive(TreeNode root,long sum)//單純因為計算溢位所以用long
+            {
+                if(root == null)                                    
+                    return;
+                
+                sum += root.val;
+                if (sum == targetSum)
+                    result++;
+                Recursive(root.left, sum);
+                Recursive(root.right, sum);
+            }
+        }
+        //簡單來所就是暴力遍歷
+        //這位JAVA解法有點牛逼，一開始看不懂，第二個連結是簡化題(array)，另外可以看看其他人評論，基本上是如果相等，當下就+1(這邊用(0,1)的起始hashmap取代)，然後currSum超出target的值可以透過剃除前方部分的tree(subarray)形成subtree來滿足，這部分透過hashmap檢查，所以每層檢查hashmap內值其實都不同(只會檢查當下符合條件，又因檢查點不斷變化，所以不會重複算)，剩下的就是遍歷，並沿路紀錄可剃除的可能性進hashmap
+        //重點是我的方法應算O(n^n)，他這直接變O(n)
+        //https://leetcode.com/problems/path-sum-iii/solutions/91878/17-ms-o-n-java-prefix-sum-method/?envType=study-plan-v2&envId=leetcode-75
+        //https://www.geeksforgeeks.org/number-subarrays-sum-exactly-equal-k/
+        //這位JAVA方法跟我一樣，他直接巢狀recursive
+        //https://leetcode.com/problems/path-sum-iii/solutions/91889/simple-java-dfs/?envType=study-plan-v2&envId=leetcode-75
+        //這位C++方法本質上就是窮舉，說是Backtrack好像也只是他沒做值的傳遞，function 參數 用 & 代表reference的樣子
+        //https://leetcode.com/problems/path-sum-iii/solutions/2618641/easy-simple-and-crisp-solution-cpp-code-with-commented-explanation/?envType=study-plan-v2&envId=leetcode-75
+        //https://leodflagblog.wordpress.com/2019/02/11/c-%E6%8C%87%E6%A8%99-%E8%B7%9F-%E7%9A%84%E7%94%A8%E6%B3%95%E5%8F%8A%E7%A8%8B%E5%BC%8F%E7%A2%BC%E7%AF%84%E4%BE%8B/
+    }
+}
