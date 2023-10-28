@@ -1,0 +1,85 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using static System.Net.Mime.MediaTypeNames;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string[] words = new string[] { "abc", "acb", "bac", "bca", "cab", "cba" };
+            Solution solution = new Solution();
+            solution.NumSpecialEquivGroups(words);
+            Console.WriteLine();
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public int NumSpecialEquivGroups(string[] words)
+            {
+                Dictionary<string,int> dictionary = new Dictionary<string,int>();
+
+                foreach (string word in words)
+                {
+                    int[] chars1 = new int[26];
+                    int[] chars2 = new int[26];
+
+                    for(int i = 0; i < word.Length; i += 2)
+                    {
+                        chars1[word[i] - 'a']++;
+                    }
+
+                    for (int i = 1; i < word.Length; i += 2)
+                    {
+                        chars2[word[i] - 'a']++;
+                    }
+
+                    StringBuilder oddChars = new StringBuilder();
+
+                    for (int i = 0; i < chars1.Length ; i ++)
+                    {
+                        if (chars1[i] > 0)
+                        {
+                            oddChars.Append(chars1[i]);
+                            oddChars.Append((char)(i + 'a'));
+                        }
+                    }
+
+                    StringBuilder evenChars = new StringBuilder();
+
+                    for (int i = 0; i < chars2.Length; i++)
+                    {
+                        if (chars2[i] > 0)
+                        {
+                            evenChars.Append(chars2[i]);
+                            evenChars.Append((char)(i + 'a'));
+                        }
+                    }
+
+                    string chars = oddChars.ToString()+'|'+evenChars.ToString();
+
+                    if (dictionary.ContainsKey(chars))
+                    {
+                        dictionary[chars]++;
+                    }
+                    else
+                    {
+                        dictionary[chars] = 1;
+                    }
+                }                
+
+                return dictionary.Keys.Count;
+            }
+        }
+        //基本上是hashtable連發，不過看別人有很短的版本        
+    }
+}

@@ -1,0 +1,61 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[][] grid = new int[][]
+            {
+                new int[]{3,0,8,4},
+                new int[]{2,4,5,7},
+                new int[]{9,2,6,3},
+                new int[]{0,3,1,0}
+            }
+            Solution solution = new Solution();
+            var result = solution.MaxIncreaseKeepingSkyline(grid);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public int MaxIncreaseKeepingSkyline(int[][] grid)
+            {
+                int[] rowMax = new int[grid.Length];
+                int[] colMax = new int[grid[0].Length];
+
+                for(int i = 0;i<grid.Length;i++)
+                {
+                    for(int j = 0; j < grid[0].Length; j++)
+                    {
+                        if (grid[i][j] > colMax[j])
+                            colMax[j] = grid[i][j];
+                        if (grid[i][j] > rowMax[i])
+                            rowMax[i] = grid[i][j];
+                    }
+                }
+
+                int result = 0;
+                for (int i = 0; i < grid.Length; i++)                
+                    for (int j = 0; j < grid[0].Length; j++)                    
+                        if (grid[i][j] < colMax[j] && grid[i][j] < rowMax[i])
+                            result += (colMax[j] > rowMax[i]) ?
+                                        (rowMax[i] - grid[i][j]) :
+                                        (colMax[j] -grid[i][j]);
+
+                return result;
+            }
+        }
+        //大概意思就是只要跟同行和同列的第一比就好，只要自己不是第一就不會影響他人視野
+    }
+}

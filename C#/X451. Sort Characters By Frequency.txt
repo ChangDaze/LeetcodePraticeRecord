@@ -1,0 +1,69 @@
+using System.Text;
+
+namespace LeetcodeConsole
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            string s = "raaeaedere";
+            Solution solution = new Solution();
+            solution.FrequencySort(s);
+            Console.WriteLine();
+            Console.ReadKey();
+        }
+
+        public class Solution
+        {
+            public string FrequencySort(string s)
+            {
+                int[] record = new int[127];
+
+                foreach (int i in s)
+                    record[i]++;
+
+                //因為預設較小的權重較前，所以要再建比較器
+                //PriorityQueue要用C#10才有
+                PriorityQueue<string, int> queue = new PriorityQueue<string, int>(new NormalComparer());
+
+                for(int i = 48; i < record.Length; i++)                
+                    if (record[i] > 0)
+                        //因為PriorityQueue好像取不出權重所以把次數融合進element裡，要用再解出來
+                        queue.Enqueue((char)i + record[i].ToString(), record[i]);
+                
+                
+                StringBuilder result = new StringBuilder();
+
+                while (queue.Count > 0)
+                {
+                    string element = queue.Dequeue();
+                    char character = element[0];
+                    int count = Convert.ToInt32(element.Substring(1,element.Length-1));
+                    while (count > 0)
+                    {
+                        result.Append(character);
+                        count--;
+                    }
+                }
+
+                return result.ToString();
+            }
+
+            /// <summary>
+            /// 自訂比較器
+            /// </summary>
+            public class NormalComparer : IComparer<Int32>//Class裡面也可以再放class
+            {
+                public int Compare(int x, int y)
+                {
+                    if(x>y) return -1;
+                    else if(x<y) return 1;
+                    else return 0;
+                }
+            }
+            //說明
+            //https://a032332852.pixnet.net/blog/post/223909150-%2811%29-c%23-comparer-%E6%AF%94%E8%BC%83%E7%94%A8%E6%B3%95
+        }
+        //比較經典的priority queue的題目
+    }
+}

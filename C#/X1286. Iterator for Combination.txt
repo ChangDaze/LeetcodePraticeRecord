@@ -1,0 +1,82 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using static System.Net.Mime.MediaTypeNames;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            CombinationIterator solution = new CombinationIterator("abc", 2);
+            solution.Next();
+            solution.HasNext();
+            solution.Next();
+            solution.HasNext();
+            Console.WriteLine();
+            Console.ReadKey();
+
+        }
+
+
+        public class CombinationIterator
+        {
+            string target;
+            Queue<string> record = new Queue<string>();
+            public CombinationIterator(string characters, int combinationLength)
+            {
+                target = characters;
+                GenerateSubstring(combinationLength, 0, new StringBuilder());
+            }
+
+            private void GenerateSubstring(int remainLen, int index, StringBuilder combination)
+            {
+                //remainLen 剩餘長度
+                //index 組合值起始點
+                //combination 目前組合內容
+                if (remainLen == 0)//長度到達了就結束
+                {
+                    record.Enqueue(combination.ToString());
+                    return;
+                }
+
+                //注意target.Length - remainLen，這代表目前往後取值所能到達的target的index，不是受combinationLength限制
+                //至於用remainLen事因為最多只能到remainLen，至少讓combination後續的字串取的到一個值
+                for (int i = index; i <= target.Length - remainLen; i++)//好像就一般backtracking + for 迴圈
+                {
+                    combination.Append(this.target[i]);
+                    GenerateSubstring(remainLen - 1, i + 1, combination);//每次remainLen - 1紀錄長度，index+1讓取值照順序一定往後取
+                    combination.Remove(combination.Length - 1, 1);//移除最尾端
+                }
+            }
+
+            public string Next()
+            {                
+                return record.Count > 0 ? record.Dequeue() : "";
+            }
+
+            public bool HasNext()
+            {
+                return record.Count > 0;
+            }
+        }
+
+        //基本上抄這位的用backtracking，不過多開了一個function
+        //https://leetcode.com/problems/iterator-for-combination/
+        //這位可能才是正統的解法， bit mask，但有點難懂，先跳過
+        //(1)if(num&1)，當尾端bit是1時才成立
+        //(2)num>>=1，bit向右shift ex: 3 -> 1
+        //(3)while(num)，c++中只要非0都成立
+        //以題目 1 ~ 7 為例對應 001 ~ 111 全部組合，000不用應該是單純不會全部沒有，加上應該也沒差
+        //然後沿路向右shift
+        //ex: 111 -> 11 -> 1，因為尾端都是 1，這會是一個三個都有的組合
+        //(4)所以加了個限制comString.length()==len來要求內容長度
+        //(5)最後這個方法能成也需要題目限制 -> 每個字元distinct + 字串已排序
+        //https://leetcode.com/problems/iterator-for-combination/solutions/789164/c-using-bit-manipulation-detail-explain/
+    }
+}

@@ -1,0 +1,43 @@
+using System.Text;
+
+namespace LeetcodeConsole
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            string order = "cba", s = "abcd";
+            Solution solution = new Solution();
+            solution.CustomSortString(order,s);
+            Console.WriteLine();
+            Console.ReadKey();
+        }
+
+        public class Solution
+        {
+            public string CustomSortString(string order, string s)
+            {
+                string result = string.Empty;
+                Dictionary<char,int> dictionary = new Dictionary<char,int>();
+                int[] records = new int[order.Length];
+
+                for (int i = 0; i < order.Length; i++)
+                    dictionary[order[i]] = i;
+
+                foreach (char c in s)
+                {
+                    if (dictionary.ContainsKey(c))
+                        records[dictionary[c]]++;
+                    else
+                        result += c;
+                }
+
+                for (int i = 0; i < order.Length; i++)
+                    result += string.Join("", Enumerable.Repeat(order[i], records[i]));
+
+                return result;
+            }
+        }
+        //這題算簡單，但其他人應該能把過程更濃縮
+    }
+}

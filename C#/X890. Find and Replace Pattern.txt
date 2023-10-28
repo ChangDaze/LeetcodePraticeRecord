@@ -1,0 +1,62 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string[] words = new string[] { "abc", "deq", "mee", "aqq", "dkd", "ccc" };
+            string pattern = "abb";
+
+            Solution solution = new Solution();
+            var result = solution.FindAndReplacePattern(words,pattern);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        //2023.0910.0152
+        public class Solution
+        {
+            public IList<string> FindAndReplacePattern(string[] words, string pattern)
+            {
+                List<string> result = new List<string>();
+
+                foreach (string word in words)
+                {
+                    Dictionary<char,char> dic = new Dictionary<char,char>();
+                    HashSet<char> set = new HashSet<char>();
+                    int i = 0;
+                    for(;i<word.Length;i++)
+                    {
+                        if (!dic.ContainsKey(pattern[i]))
+                        {
+                            if (!set.Contains(word[i]))
+                            {
+                                dic[pattern[i]] = word[i];
+                                set.Add(word[i]);
+                            }
+                            else
+                                break;                            
+                        }
+                        else if (dic[pattern[i]] != word[i]) break;                            
+                    }
+
+                    if(i==word.Length) result.Add(word);
+                }
+
+                return result;
+            }
+        }
+        //寫的有點羞愧
+
+    }
+
+
+}

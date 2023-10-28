@@ -1,0 +1,122 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using static System.Net.Mime.MediaTypeNames;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string[] nums = new string[] { "74", "1", "67", "1", "74" };
+            string target = "174";
+            //"".Substring(1, 2);
+            //var a = " ".Substring(0, 0);
+            Solution solution = new Solution();
+            solution.NumOfPairs(nums,target);
+            Console.WriteLine();
+            Console.ReadKey();
+
+        }
+
+
+        //public class Solution
+        //{
+        //    public int NumOfPairs(string[] nums, string target)
+        //    {
+        //        Dictionary<string,int> dictionary = new Dictionary<string,int>();
+        //        List<string> needParts = new List<string>();
+        //        int targetLen = target.Length;
+        //        for (int i = 0;i< nums.Length; i++)
+        //        {
+        //            int len = nums[i].Length;
+        //            if (len > target.Length)
+        //            {
+        //                //needParts長度會對應nums，對應位置為"NA"代表連組成都做不到
+        //                needParts.Add("NA");
+        //                continue;
+        //            }                    
+
+        //            //從前面往後比
+        //            int j = 0;
+        //            for (; j < len;j++)                    
+        //                if (nums[i][j] != target[j])
+        //                    break;                    
+
+        //            if(j== len)//代表j確實跑完
+        //            {
+        //                //放入dictionary是缺的部分
+        //                string part = len==target.Length ? "" : target.Substring(len);
+        //                if(dictionary.ContainsKey(nums[i]))
+        //                    dictionary[nums[i]]++;
+        //                else
+        //                    dictionary[nums[i]] =1;
+
+        //                needParts.Add(part);
+        //                continue;
+        //            }
+
+        //            //從後面往前比
+        //            int k = 0;
+        //            for (; k < len; k++)                    
+        //                if (nums[i][len - k - 1] != target[targetLen-k-1])
+        //                    break;                    
+
+        //            if (k == len)//代表k確實跑完
+        //            {
+        //                string part = target.Substring(0, targetLen-k);
+        //                if (dictionary.ContainsKey(nums[i]))//加入自己
+        //                    dictionary[nums[i]]++;
+        //                else
+        //                    dictionary[nums[i]] = 1;
+
+        //                needParts.Add(part);//紀錄自己的needPart
+        //                continue;
+        //            }
+
+        //            needParts.Add("NA");//代表j、k都失敗
+        //        }
+
+        //        int result = 0;
+        //        for(int i = 0; i < needParts.Count; i++)
+        //        {
+        //            if (needParts[i]!="NA" && dictionary.ContainsKey(needParts[i]))
+        //            {
+        //                result += needParts[i] == nums[i] //相同的要-1，不能自己+自己
+        //                        ? (dictionary[needParts[i]] - 1)
+        //                        : dictionary[needParts[i]];
+        //            }
+        //        }
+
+        //        return result;
+        //    }
+        //}
+        //這個解法想超久，結果沒鳥用，因為題目有限定nums[i] + nums[j] == target，不是nums[i] + nums[j]、nums[j] + nums[i]這樣位置可以互換
+        //所以像["74","1","67","1","74"]、"174"答案才會是4而不是8
+        //如果沒有上面的限制就能用這個解法，但寫法還是略為複雜，且可能array要夠長才能發揮節省時間的用途
+
+        public class Solution
+        {
+            public int NumOfPairs(string[] nums, string target)
+            {
+                int result = 0;
+                for(int i = 0; i < nums.Length; i++)
+                    for(int j = 0; j < nums.Length; j++)
+                    {
+                        if (i == j) continue;//不能自己+自己
+                        if (nums[i] + nums[j] == target)
+                            result++;
+                    }
+                        
+
+                return result;
+
+            }
+        }
+    }
+}

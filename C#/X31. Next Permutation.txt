@@ -1,0 +1,61 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] nums = new int[] { 3, 2, 1 };
+            Solution solution = new Solution();
+            solution.NextPermutation(nums);
+            Console.WriteLine();
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public void NextPermutation(int[] nums)
+            {
+                for(int i = nums.Length-1; i > 0; i--)
+                {
+                    if (nums[i-1]< nums[i])//直到nums[i - 1]確定不是升序
+                    {
+                        ReverseSubArray(nums, i, nums.Length - 1);//i-1以後index確定變降序(當前最小組合)
+                        for (int j = i; j < nums.Length; j++)//nums[i - 1]是要替換為找到比自己略大的目標
+                        {
+                            if (nums[j] > nums[i - 1])//在升序中找到略大值跟他替換(因為升序排序過，就算替換也i-1以後index還是維持升序)
+                            {
+                                int temp = nums[i - 1];
+                                nums[i - 1] = nums[j];
+                                nums[j] = temp;
+                                return;
+                            }
+                        }
+                    }
+                }
+                Array.Sort(nums);//沒找到就返回排序後的值
+            }
+
+            private void ReverseSubArray(int[] nums,int i, int j)
+            {
+                int temp = 0;
+                while (i < j)
+                {
+                    temp = nums[i];
+                    nums[i] = nums[j];
+                    nums[j] = temp;
+                    i++;j--;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,75 @@
+using System.Text;
+
+namespace LeetcodeConsole
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            string s1 = "bxfowqvnrhuzwqohquamvszkvunb", s2 = "xjegbjccjjxfnsiearbsgsofywtq";
+            Solution solution = new Solution();
+            solution.CheckIfCanBreak(s1,s2);
+            Console.WriteLine();
+            Console.ReadKey();
+        }
+
+        public class Solution
+        {
+            public bool CheckIfCanBreak(string s1, string s2)
+            {
+                int[] s1Record = new int[26];
+                int[] s2Record = new int[26];
+
+                for(int i = 0;i<s1.Length;i++)
+                {
+                    s1Record[s1[i]-'a']++;
+                    s2Record[s2[i] - 'a']++;
+                }
+
+                string orderS1 = "";
+                string orderS2 = "";
+
+                //排序兩組字串，一般的orderby應該更簡潔啦，但不一定較快
+                for (int i = 0; i < s1Record.Length; i++)
+                {
+                    char c = (char)(i + 'a');
+                    if (s1Record[i] > 0)
+                        orderS1 += new string(Enumerable.Repeat(c, s1Record[i]).ToArray());
+
+                    if (s2Record[i] > 0)
+                        orderS2 += new string(Enumerable.Repeat(c, s2Record[i]).ToArray());
+                }
+
+                bool result = true;
+                //s1完全勝利
+                for(int i = 0; i < s1.Length; i++)
+                {
+                    if (orderS2[i] < orderS1[i])
+                    {
+                        result = false; 
+                        break;
+                    }
+                }
+
+                if(result)//已符合就不用再比
+                    return true;
+
+                //也可以判斷前面失敗前都是等於就能從原有的index繼續下去，不用i = 0從頭開始，但會複雜一點也不一定較快，就沒做了
+                //s2完全勝利
+                result = true;//重置
+                for (int i = 0; i < s1.Length; i++)
+                {
+                    if (orderS2[i] > orderS1[i])
+                    {
+                        result = false;
+                        break;
+                    }
+                }
+
+                return result;
+            }
+        }
+        //題目有點難懂，約等於田忌賽馬【不用策略】【其中一方】【完全勝利】版本
+        //基本上應該是能寫成function簡化
+    }
+}

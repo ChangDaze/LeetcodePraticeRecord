@@ -1,0 +1,68 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using static System.Net.Mime.MediaTypeNames;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string s = "12345";
+            Solution solution = new Solution();
+            solution.LetterCasePermutation(s);
+            Console.WriteLine();
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            List<string> result = new List<string>();
+            List<int> indexs = new List<int>();
+            char[] chars;
+            public IList<string> LetterCasePermutation(string s)
+            {
+
+                for (int i = 0; i < s.Length; i++)                
+                    if (!(s[i] >= 48 && s[i] <= 57))
+                        indexs.Add(i);
+
+                chars = s.ToCharArray();
+
+                if(indexs.Count > 0)
+                {
+                    Recursive(0, true);
+                    Recursive(0, false);
+                }else
+                    result.Add(new string(chars));
+
+                return result;
+            }
+
+            private void Recursive(int index, bool lowercase)
+            {                
+                if (lowercase && chars[indexs[index]] < 'a')                
+                    chars[indexs[index]] = (char)(chars[indexs[index]] + 32);                
+                else if ((!lowercase) && chars[indexs[index]] >= 'a')                
+                    chars[indexs[index]] = (char)(chars[indexs[index]]-32);
+
+                if (index == indexs.Count-1)
+                {
+                    result.Add(new string(chars));
+                    return;
+                }
+
+                Recursive(index + 1, true);
+                Recursive(index + 1, false);
+            }
+        }
+        //Backtracking定式解法我可能都用遞迴，儘管寫得不好
+    }
+}

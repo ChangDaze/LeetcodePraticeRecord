@@ -1,0 +1,95 @@
+using System.Numerics;
+using System.Text;
+
+namespace LeetcodeConsole
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] queries = new int[] { 3, 3, 2, 1 };
+            int m = 5;
+            Solution solution = new Solution();
+            Console.WriteLine(solution.ProcessQueries(queries,m));
+            Console.WriteLine();
+            Console.ReadKey();
+        }
+        public class Solution
+        {
+            public int[] ProcessQueries(int[] queries, int m)
+            {
+                int len = queries.Length;
+                BIT bit = new BIT(len+m+1);//多1的位置避開bit起始不為0(後來因為bit裡面都有index++，這個1好像可以不用)，m是permutation，len是query造成變化次數
+                Dictionary<int,int> map = new Dictionary<int,int>();
+                for(int i = 1; i <= m; i++)//上面有多把index0空出來，後面發現應該可以不用
+                {
+                    bit.Update(len + i, 1);//int[]預設為0，把permutation放到後面，一次次變化慢慢往前推，有點像window
+                    //使用【1】作為index的衡量
+                    map.Add(i, len+i);//紀錄permutaion的值目前對應的index
+                }
+
+                int[] result = new int[len];
+                for(int i = 0;i < len; i++)
+                {
+                    int inedx = map[queries[i]];//紀錄permutation的位置，之後要update bit
+                    map.Remove(queries[i]);//重定位此值index
+                    result[i] = bit.Query(inedx-1);//紀錄result，因為result是0index所以要-1
+
+                    int new_index = len - i;//移到相對位置index為0，bit值為1，把後面index往後推
+                    bit.Update(inedx, -1);//把舊位置註銷原本【1】影響力要變【0】，delta就是【-1】
+                    bit.Update(new_index, 1);//新位置放入bit
+                    map.Add(queries[i], new_index);//重定位此值index
+                }
+
+                //bit
+                //[0,0,0,0,0,1,1,【1】,1,1] -> len+m+1 -> map 【value3】 = 【相對位置index2】
+                //[0,0,0,0,1,1,1,0,1,1] -> 第1次query -> map 【value3】 = 【相對位置index0】
+                //相對位置是透過query加總bit值轉化為實際index位置
+
+                return result;
+            }
+
+            //自行編寫的bit
+            private class BIT
+            {
+                int[] tree;
+                public BIT(int len)
+                {
+                    tree = new int[len];
+                }
+                public void Update(int index, int delta)
+                {
+                    index++;//bit本身是由1出發，所以都會++
+                    while(index< tree.Length)
+                    {
+                        tree[index] += delta;
+                        index += index & (-index);//+lowbit找parent，並可update
+                        //lowbit(x) = x & (-x)
+                        //-x是加上二進位補位+1
+                        // & 用在二進位邏輯
+                        //ex: x = 0110，-x = 1001 + 1 = 1010
+                        //0110 &
+                        //1010
+                        //0010 = lowbit(x)
+                    }
+                }
+                public int Query(int index)
+                {
+                    index++;
+                    int result = 0;
+                    while(index>0)
+                    {
+                        result += tree[index];
+                        index-= index & (-index);//-lowbit找child
+                                                 //加總組合為【prefixsum】
+                    }
+                    return result;
+                }
+            }
+        }
+        //解釋binary indexed tree的內容，主要用來看可以update的prefix sum，本身储存空間是array，說是tree主要是跟二進位有關所以畫出來很像tree
+        //https://www.youtube.com/watch?v=WbafSgetDDk
+        //解答主要抄這位的，看得出解答都沒有很直接，都是經過設計的運用
+        //https://leetcode.com/problems/queries-on-a-permutation-with-key/solutions/575208/java-binary-indexed-tree-solution/
+    }
+}

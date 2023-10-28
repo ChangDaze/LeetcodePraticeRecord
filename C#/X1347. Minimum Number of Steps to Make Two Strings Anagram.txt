@@ -1,0 +1,55 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string s = "bab", t = "aba";
+            Solution solution = new Solution();
+
+            Console.WriteLine(solution.MinSteps(s,t));
+            Console.ReadKey();
+
+        }
+
+        public class Solution
+        {
+            public int MinSteps(string s, string t)
+            {
+                Dictionary<char, int> record = new Dictionary<char, int>();
+
+                foreach(char c in s)
+                {
+                    if (record.ContainsKey(c))
+                        record[c] += 1;
+                    else
+                        record[c] = 1;
+                }
+
+                int result = 0;
+
+                foreach (char c in t)
+                {
+                    if (record.ContainsKey(c))
+                    {
+                        if (record[c] > 1)
+                            record[c] -= 1;
+                        else//扣完=0馬上移除
+                            record.Remove(c);
+                    }
+                    else
+                        result++;
+                }
+
+                return result;
+            }
+        }
+    }
+}

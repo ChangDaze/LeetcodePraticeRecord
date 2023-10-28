@@ -1,0 +1,72 @@
+using System.Numerics;
+using System.Text;
+
+namespace LeetcodeConsole
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            UndergroundSystem undergroundSystem = new UndergroundSystem();
+            undergroundSystem.CheckIn(45, "Leyton", 3);
+            undergroundSystem.CheckIn(32, "Paradise", 8);
+            undergroundSystem.CheckIn(27, "Leyton", 10);
+            undergroundSystem.CheckOut(45, "Waterloo", 15);  // Customer 45 "Leyton" -> "Waterloo" in 15-3 = 12
+            undergroundSystem.CheckOut(27, "Waterloo", 20);  // Customer 27 "Leyton" -> "Waterloo" in 20-10 = 10
+            undergroundSystem.CheckOut(32, "Cambridge", 22); // Customer 32 "Paradise" -> "Cambridge" in 22-8 = 14
+            undergroundSystem.GetAverageTime("Paradise", "Cambridge"); // return 14.00000. One trip "Paradise" -> "Cambridge", (14) / 1 = 14
+            undergroundSystem.GetAverageTime("Leyton", "Waterloo");    // return 11.00000. Two trips "Leyton" -> "Waterloo", (10 + 12) / 2 = 11
+            undergroundSystem.CheckIn(10, "Leyton", 24);
+            undergroundSystem.GetAverageTime("Leyton", "Waterloo");    // return 11.00000
+            undergroundSystem.CheckOut(10, "Waterloo", 38);  // Customer 10 "Leyton" -> "Waterloo" in 38-24 = 14
+            undergroundSystem.GetAverageTime("Leyton", "Waterloo");    // return 12.00000.
+            Console.WriteLine();
+            Console.ReadKey();
+        }
+
+        public class UndergroundSystem
+        {
+            Dictionary<string, double[]> statistics;//要小心用double[]，因為用int在相除時結果會被變整數導致錯誤
+            Dictionary<int, Tuple<string, int>> records;
+            public UndergroundSystem()
+            {
+                statistics = new Dictionary<string, double[]>();
+                records = new Dictionary<int, Tuple<string, int>>();
+            }
+
+            public void CheckIn(int id, string stationName, int t)
+            {
+                records.Add(id,new Tuple<string, int>(stationName, t));
+            }
+
+            public void CheckOut(int id, string stationName, int t)
+            {
+                string path = records[id].Item1 + '>' + stationName;
+                if(statistics.ContainsKey(path))
+                {
+                    statistics[path][0]++;
+                    statistics[path][1]+=(t- records[id].Item2);
+                }
+                else
+                {
+                    statistics[path] = new double[2] { 1, t - records[id].Item2 };
+                }
+                records.Remove(id);//題目建立在一上必定搭配一下，不會連續上
+            }
+
+            public double GetAverageTime(string startStation, string endStation)
+            {
+                string path = startStation + '>' + endStation;
+                return statistics[path][1]/ statistics[path][0];//平均值沒落地是因為覺得每次有人搭完就都要取出來重算，看情況吧
+            }
+        }
+        /**
+         * Your UndergroundSystem object will be instantiated and called as such:
+         * UndergroundSystem obj = new UndergroundSystem();
+         * obj.CheckIn(id,stationName,t);
+         * obj.CheckOut(id,stationName,t);
+         * double param_3 = obj.GetAverageTime(startStation,endStation);
+         */
+        //比較基礎的多hashmap應用
+    }
+}

@@ -1,0 +1,57 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string s = "abcabc";
+
+            Solution solution = new Solution();
+            var result = solution.NumberOfSubstrings(s);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        //2023.0909.1455
+        public class Solution
+        {
+            public int NumberOfSubstrings(string s)
+            {
+                int result = 0;
+
+                Dictionary<char,int> dict = new Dictionary<char,int>();
+
+                for(int i = 0, j = 0; i < s.Length && j<s.Length;)
+                {
+                    if (dict.ContainsKey(s[j]))
+                        dict[s[j]]++;
+                    else
+                        dict[s[j]] = 1;
+
+                    while(dict.Keys.Count == 3)
+                    {
+                        result += (s.Length - j);
+                        if (--dict[s[i]] == 0)                        
+                            dict.Remove(s[i]);                        
+                        i++;
+                        continue;
+                    }
+                    j++;
+                }
+
+                return result;
+            }
+        }
+
+    }
+
+
+}

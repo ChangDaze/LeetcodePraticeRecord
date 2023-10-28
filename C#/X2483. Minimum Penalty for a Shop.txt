@@ -1,0 +1,54 @@
+using System.Numerics;
+using System.Text;
+
+namespace LeetcodeConsole
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            string customers = "YYNY";
+            Solution solution = new Solution();
+            solution.BestClosingTime(customers);
+            Console.WriteLine();
+            Console.ReadKey();
+        }
+
+        public class Solution
+        {
+            public int BestClosingTime(string customers)
+            {
+                customers = '$' + customers + '$';//多兩格做prefix，多出的兩格也能把題目最後不在範圍的特殊情況一並處理的(雖然題目沒有最前不在範圍的特殊情況)
+                int[] preN = new int[customers.Length];
+                int[] sufY = new int[preN.Length];                
+                int len = customers.Length;
+                for (int i = 1; i < len; i++)
+                {
+                    if (customers[i] == 'N')
+                        preN[i] = preN[i - 1] + 1;
+                    else
+                        preN[i] = preN[i - 1];
+
+                    if (customers[len - 1 - i] == 'Y')
+                        sufY[len - 1 - i] = sufY[len - i] + 1;
+                    else
+                        sufY[len - 1 - i] = sufY[len - i];
+                }
+
+                int min = int.MaxValue;
+                int result = 0;
+                for (int i = 1; i < len; i++)
+                {
+                    if (sufY[i] + preN[i-1] < min)//因為當前是close所以【大於等於的Y】要算(i)，【小於的N】才算(i-1)
+                    {
+                        min = sufY[i] + preN[i - 1];
+                        result = i - 1;
+                    }                        
+                }
+
+                return result;
+            }
+        }
+        //基礎的prefix，但要抓位置所以要仔細一點
+    }
+}

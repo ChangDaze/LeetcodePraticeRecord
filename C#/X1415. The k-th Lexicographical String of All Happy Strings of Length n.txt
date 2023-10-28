@@ -1,0 +1,54 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using static System.Net.Mime.MediaTypeNames;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int n = 1, k = 3;
+            Solution solution = new Solution();
+            solution.GetHappyString(n,k);
+            Console.WriteLine();
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            int k = 0;
+            string result = "";
+            List<char> happyChars = new List<char>() { 'a', 'b' , 'c' };
+            public string GetHappyString(int n, int k)
+            {
+                this.k = k;
+                Recursive("", ' ', n);
+                return result;
+            }
+
+            private void Recursive(string str, char preChar,int n)
+            {
+                if(str.Length == n)
+                {
+                    k--;
+                    if(k==0) result = str;//有k個才會走到這步
+                    return;
+                }
+
+                foreach(char c in happyChars)
+                {
+                    if (c == preChar) continue;
+                    Recursive(str+c, c, n);
+                }
+            }
+        }
+    }
+}

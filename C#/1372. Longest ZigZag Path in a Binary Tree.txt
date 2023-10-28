@@ -1,0 +1,114 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            TreeNode root = new TreeNode(1,
+                                new TreeNode(1,
+                                    null,
+                                    new TreeNode(1,
+                                        new TreeNode(1,
+                                            null,
+                                            new TreeNode(1)),
+                                        new TreeNode(1))),
+                                new TreeNode(1));
+            Solution solution = new Solution();
+
+            Console.WriteLine(solution.LongestZigZag(root));
+            Console.ReadKey();
+
+        }
+
+
+        public class TreeNode
+        {
+            public int val;
+            public TreeNode left;
+            public TreeNode right;
+            public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+            {
+                this.val = val;
+                this.left = left;
+                this.right = right;
+            }
+        }
+
+        //2023.09.02.2343
+        public class Solution
+        {
+            public int LongestZigZag(TreeNode root)
+            {
+                int max = 0;
+                TreeNode currentNode = root;
+                Stack<TreeNode> stack = new Stack<TreeNode>();
+
+                while(stack.Count > 0 || currentNode != null)
+                {
+                    if (currentNode != null)
+                    {
+                        int tempL = GetMaxZigZag(currentNode.left, 'L',0);
+                        int tempR = GetMaxZigZag(currentNode.right, 'R',0);
+                        if (tempL > max)
+                            max = tempL;
+                        if (tempR > max)
+                            max = tempR;
+                        stack.Push(currentNode);
+                        currentNode = currentNode.left;
+                    }
+                    else
+                        currentNode = stack.Pop().right;
+                }
+
+                return max;
+            }
+
+            private int GetMaxZigZag(TreeNode node,char direction,int count)
+            {
+                //透過標記，讓窮舉時盡量少跑重複的
+                // -1: 找過左邊 、 -2: 找過右邊 。 -3:都找過，因為val為1~100
+                if (node == null || node.val == -3)
+                {
+                    return count;
+                }
+                else if (direction == 'L' && node.val != -1)
+                {
+                    count++;
+                    if (node.val == -2)
+                        node.val = -3;
+                    else
+                        node.val = -1;
+                    count = GetMaxZigZag(node.right, 'R', count);                    
+                }
+                else if(direction == 'R' && node.val != -2)
+                {
+                    count++;
+                    if (node.val == -1)
+                        node.val = -3;
+                    else
+                        node.val = -2;
+                    count = GetMaxZigZag(node.left, 'L', count);
+                }
+
+                return count;
+            }
+        }
+        //這位的解法比較吃想像力，要重現比較難
+        //基本上是DFS由下往上回報答案，最底層是-1
+        //每層比較res時會將left[1]和right[0](因為是ZipZag所以才這樣取，left[0]左左和right[1]右右都是不需要在比較的)比較完後+1，最後產生res(當作這層的處理)，因此res跟res比本身則不會應該是怕下面有跟現在不連續的subtree有更長的情況
+        //然後往上傳遞時int[0]、int[1]還是要戴上這層的變化做+1
+        //因此整流程算是只要每層不是null就會做處理，剩下是比大小，算是很簡潔有力
+        //https://leetcode.com/problems/longest-zigzag-path-in-a-binary-tree/solutions/531867/java-python-dfs-solution/
+        //這位JAVA方法跟我一樣ㄟ，不過做得比我更好，比較像我想像中的樣子，他也是直直做下去，但他是如國中段就從中斷點繼續下去，只多用一個static max而已，不像我還在設定val，讚
+        //https://leetcode.com/problems/longest-zigzag-path-in-a-binary-tree/solutions/531880/simple-java-code-with-comments/
+        //這位C++感覺是單純窮舉ㄟ，因為他評論也說每層有兩個option，一個是走ZipZag一個是重新開始，如果每層都做都比較，那基本是窮舉
+        //https://leetcode.com/problems/longest-zigzag-path-in-a-binary-tree/solutions/534863/c-minimalizm/
+    }
+}

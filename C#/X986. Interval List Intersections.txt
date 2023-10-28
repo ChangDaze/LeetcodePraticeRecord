@@ -1,0 +1,65 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[][] firstList = new int[][] { new int[] { 0, 2 }, new int[] { 5, 10 }, new int[] { 13, 23 }, new int[] { 24, 25 } };
+
+            int[][] secondList = new int[][] { new int[] { 1,5 }, new int[] { 8,12 }, new int[] { 15,24 }, new int[] { 25,26 } };
+
+            Solution solution = new Solution();
+            var result = solution.IntervalIntersection(firstList,secondList);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        //2023.0909.1135
+        public class Solution
+        {
+            public int[][] IntervalIntersection(int[][] firstList, int[][] secondList)
+            {
+                List<int[]> result = new List<int[]>();
+
+                for(int i = 0, j = 0; i < firstList.Length && j < secondList.Length;)
+                {
+                    //找出intersection，放進答案
+                    int[] intersection = new int[] { -1, -1 };
+
+                    //找出哪方的起始點在對方的區間內
+                    if (firstList[i][0] <= secondList[j][0] && firstList[i][1] >= secondList[j][0])
+                        intersection[0] = secondList[j][0];
+                    else if (secondList[j][0] <= firstList[i][0] && secondList[j][1] >= firstList[i][0])
+                        intersection[0] = firstList[i][0];
+
+                    //比較小的一方當終點(當然也是可以用找起始點的方法來找，但確定有起始點就代表一定有intersection，所以可以簡單點)
+                    intersection[1] = secondList[j][1] > firstList[i][1]? firstList[i][1] : secondList[j][1];
+
+                    //有相交才放入答案
+                    if (intersection[0]!=-1)
+                        result.Add(intersection);
+
+                    //比較小的一方前進
+                    if (firstList[i][1] > secondList[j][1])                    
+                        j++;                        
+                    else
+                        i++;
+
+                }
+
+                return result.ToArray();
+            }
+        }
+
+    }
+
+
+}

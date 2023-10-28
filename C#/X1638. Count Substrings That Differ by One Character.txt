@@ -1,0 +1,79 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using static System.Net.Mime.MediaTypeNames;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string s = "ab", t = "bb";
+            Solution solution = new Solution();
+            solution.CountSubstrings(s,t);
+            Console.WriteLine();
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public int CountSubstrings(string s, string t)
+            {
+                int sLen = s.Length;
+                int tLen = t.Length;
+                s = '#' + s + '#';//因為index = 0 或 尾巴 時沒有dp可用會錯誤，不如一開始就給0用，實際使用時跳過就好
+                t = '#' + t + '#';
+
+                int[,] dpLeft = new int[s.Length, t.Length];//s.Length = sLen + 2
+                int[,] dpRight = new int[s.Length, t.Length];
+
+                //從左到右連續相同的
+                for(int i = 1; i <= sLen; i++)//不用index 0 和  s.Length
+                    for (int j = 1; j <= tLen; j++)
+                    {
+                        if (s[i] == t[j])
+                            dpLeft[i, j] = dpLeft[i - 1, j - 1] + 1; //符合條件就用前個dp + 1，因為是巢狀迴圈，所以dp也是直接[i - 1, j - 1]
+                        else
+                            dpLeft[i, j] = 0;
+                    }
+
+                //從右到左連續相同的
+                for (int i = sLen; i >= 1; i--)
+                    for (int j = tLen; j >= 1; j--)
+                    {
+                        if (s[i] == t[j])
+                            dpRight[i, j] = dpRight[i + 1, j + 1] + 1;
+                        else
+                            dpRight[i, j] = 0;
+                    }
+
+                //0代表可放置的邊界，x代表兩陣列連續相同的， i、j 代表兩陣列相異點
+                //0x0x0i0x0x0 -> 6個組合
+                //0x0x0j0x0x0 -> 6個組合
+                // 6*6 共 36 個排列組合
+
+                //用巢狀迴圈 + DP 把所有子字串相異點找出來計算排列組合後總和
+                int result = 0;
+                for (int i = 1; i <= sLen; i++)
+                    for (int j = 1; j <= tLen; j++)
+                    {
+                        if (s[i] != t[j])
+                            result += (dpLeft[i - 1, j - 1] + 1) * (dpRight[i + 1, j + 1]+1);//左*右 + 自己的index一個
+                    }
+
+                return result;
+            }
+        }
+	//要注意只能替換1個字，不是跟這個字相同的都替換
+        //其他人solution沒看懂所以看中文影片
+        //抄這位的DP
+        //https://www.youtube.com/watch?v=PlnhYLLnL9c
+    }
+}

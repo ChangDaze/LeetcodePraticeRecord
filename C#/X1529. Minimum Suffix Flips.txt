@@ -1,0 +1,50 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using static System.Net.Mime.MediaTypeNames;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string target = "10111";
+            Solution solution = new Solution();
+            solution.MinFlips(target);
+            Console.WriteLine();
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public int MinFlips(string target)
+            {
+                int result = 0;
+                char now = '0';
+
+                foreach (char c in target)
+                {
+                    if (c == now) continue;
+
+                    result++;
+
+                    if (now == '0')
+                        now = '1';
+                    else
+                        now = '0';
+                }
+
+                return result;
+            }
+        }
+        //這題有個明顯的特性，雖然第一個範例會有點搗亂，但第二個範例就很明顯
+        //就是【翻轉】的範圍是 x ~ (n-1)，我們能把握住每次都被影響的index目前的狀態，當目前index狀態符合，我們可將它從影響範圍中剃除，逐步縮小範圍，直到結束
+    }
+}

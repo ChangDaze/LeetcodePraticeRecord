@@ -1,0 +1,61 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using static System.Net.Mime.MediaTypeNames;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string s = "lEetcOde";
+            Solution solution = new Solution();
+            solution.SortVowels(s);
+            Console.WriteLine();
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public string SortVowels(string s)
+            {
+                HashSet<char> vowels = new HashSet<char>() { 'A', 'E' , 'I' , 'O' , 'U' , 'a' , 'e' , 'i' , 'o' , 'u' };
+                HashSet<int> indexs = new HashSet<int>();
+                List<char> list = new List<char>();
+
+                for(int i = 0; i<s.Length;i++)
+                    if (vowels.Contains(s[i]))
+                    {
+                        indexs.Add(i);
+                        list.Add(s[i]);
+                    }
+
+                list.Sort();
+
+                StringBuilder sb = new StringBuilder();
+
+                for (int i = 0,j=0; i < s.Length; i++)
+                {
+                    if (indexs.Contains(i))
+                    {
+                        sb.Append(list[j]);
+                        j++;
+                    }
+                    else
+                    {
+                        sb.Append(s[i]);
+                    }
+                }
+                    
+                return sb.ToString();
+            }
+        }
+    }
+}

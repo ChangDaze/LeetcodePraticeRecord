@@ -1,0 +1,39 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] pref = new int[] {5, 2, 0, 3, 1};
+            Solution solution = new Solution();
+
+            Console.WriteLine(solution.FindArray(pref));
+            Console.ReadKey();
+
+        }
+        //2023.0905.0445
+        public class Solution
+        {
+            public int[] FindArray(int[] pref)
+            {
+                int[] result = new int[pref.Length];
+
+                result[0] = pref[0];
+                int preSum = pref[0];
+                for(int i = 1; i < pref.Length; i++)
+                {
+                    result[i] = preSum ^ pref[i];
+                    preSum ^= result[i];
+                }                                  
+                return result;
+            }
+        }
+    }
+}

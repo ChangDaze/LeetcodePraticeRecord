@@ -1,0 +1,42 @@
+using System.Text;
+
+namespace LeetcodeConsole
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            string s = "]]][[[";
+            Solution solution = new Solution();
+            solution.MinSwaps(s);
+            Console.WriteLine();
+            Console.ReadKey();
+        }
+
+        public class Solution
+        {
+            public int MinSwaps(string s)
+            {
+                List<char> stack = new List<char>() {};
+
+                //把閉合的都剃除，有點像交換律
+                for(int i = 0;i<s.Length;i++)
+                {
+                    if(stack.Count > 0 && s[i] == ']' && stack.Last()!= s[i])//只有"]"有機會削減，count沒大於0也不考慮削減
+                        stack.RemoveAt(stack.Count-1);                    
+                    else
+                        stack.Add(s[i]);
+                }
+
+                //最後剩的一定是]]][[[形式，且是偶數，如果依提示的每次交換都換最遠的，一次一定滿足兩個閉合(4個字元可剔除)，所以就檢查餘4
+                //且因為題目限制，這種swap最終一定剛好換到two pointer頭尾相遇的位置，所以我就直接計算不做實際swap
+                return stack.Count % 4 == 0
+                        ? (stack.Count/4)
+                        : (stack.Count / 4 + 1);
+            }
+        }
+        //一開始沒看懂，後來看著提示就不知為啥解開了
+        //比較是看括號本身的特性(open、close)
+        //其他人解法可能會有趣些
+    }
+}

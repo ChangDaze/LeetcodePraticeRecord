@@ -1,0 +1,113 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using static System.Net.Mime.MediaTypeNames;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //string s = "kpygkivtlqoockpygkivtlqoocssnextkqzjpycbylkaondsskpygkpygkivtlqoocssnextkqzjpkpygkivtlqoocssnextkqzjpycbylkaondsycbylkaondskivtlqoocssnextkqzjpycbylkaondssnextkqzjpycbylkaondshijzgaovndkjiiuwjtcpdpbkrfsi", part = "kpygkivtlqoocssnextkqzjpycbylkaonds";
+            string s = "daabcbaabcbc";
+            string part = "abc";
+            Solution solution = new Solution();
+            solution.RemoveOccurrences(s,part);
+            Console.WriteLine();
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public string RemoveOccurrences(string s, string part)
+            {
+                List<char> chars = s.ToCharArray().ToList();
+                List<int> orders = new List<int>();//為了剔除時確認前後能銜接
+                int[] nextMap = GetNextMap(part);
+                int pointer = 0;
+                for(int i = 0; i < chars.Count; i++)
+                {           
+                    while(pointer != 0)
+                    {
+                        if (chars[i] == part[pointer])//KMP的part銜接
+                        {
+                            orders.Add(pointer);
+                            pointer++;
+                            break;
+                        }
+                        pointer = nextMap[pointer - 1];
+                    }
+
+                    if (pointer == 0)//一定要判斷，因為orders.Add和pointer一輪只能設定一次
+                    {
+                        if(chars[i] == part[0])
+                        {
+                            orders.Add(0);
+                            pointer = 1;
+                        }
+                        else
+                        {
+                            orders.Add(-1);//一定要加，讓chars和對應orders的index要一致
+                            //到這必定pointer = 0
+                        }                        
+                    }
+
+                    if (pointer == part.Length)
+                    {
+                        chars.RemoveRange(i - pointer + 1, pointer);//剔除動作
+                        orders.RemoveRange(i - pointer + 1, pointer);
+                        i-= pointer;
+                        if (i >= 0 && orders[i] >= 0)
+                            pointer = orders[i] + 1;//剔除時若可銜接就銜接
+                        else
+                            pointer = 0;
+                    }
+                }
+
+                return string.Join("", chars);
+            }
+
+            private int[] GetNextMap(string part)
+            {
+                int[] next = new int[part.Length];
+
+                // 部分字串的指針
+                int iPartial = 1;
+
+                // 完整字串的指針
+                int iWhole = 0;
+
+                while (iPartial < part.Length)
+                {
+                    if (part[iPartial] == part[iWhole])//比較難懂的是nextMap是自己對自己比對，重點是留下線索來依序把可能的prefix比完
+                    {
+                        iPartial += 1;
+                        iWhole += 1;
+
+                        next[iPartial - 1] = iWhole;
+                    }
+                    else if (iWhole <= 0)
+                    { // 當完整字串正在被比較的前綴是第一個前綴(連一個前綴比對都沒過)
+                        iPartial += 1;
+
+                        next[iPartial - 1] = 0;
+                    }
+                    else
+                    {// 當完整字串正在被比較的前綴1不是第一個前綴，就用目前比對通過的前綴(next[index-1]紀錄向前的線索)往前找線索，直到找到或都失敗
+                        iWhole = next[iWhole - 1];
+                    }
+                }
+
+                return next;
+            }
+        }
+        //我好像寫成雙重KMP，可以看看其他人怎麼簡化
+    }
+}

@@ -57,6 +57,29 @@ namespace testconsole2013
                 this.next = next;
             }
         }
+        //2023.0905.2050
+        public class Solution
+        {
+            public ListNode ReverseList(ListNode head)
+            {
+                if (head == null || head.next == null)
+                    return head;
+
+                ListNode step = head;                
+                ListNode temp = null;
+                ListNode reverseNode = null;                
+
+                while (step != null)
+                {
+                    temp = step;
+                    step = step.next;
+                    temp.next = reverseNode;
+                    reverseNode= temp;
+                }
+
+                return reverseNode;
+            }
+        }
 
         //拉出來值慢慢解
         //public class Solution
@@ -117,30 +140,30 @@ namespace testconsole2013
         //}
 
         //2023.0806.1352
-        public class Solution
-        {
-            public ListNode ReverseList(ListNode head)
-            {
-                if (head == null || head.next == null)
-                    return head;
+        //public class Solution
+        //{
+        //    public ListNode ReverseList(ListNode head)
+        //    {
+        //        if (head == null || head.next == null)
+        //            return head;
 
-                ListNode originalStep = head.next;
-                ListNode reverseNode = head;//準備好拼接模型
-                reverseNode.next = null;//切斷頭
-                ListNode executer = null;//迴圈用的斷頭台
+        //        ListNode originalStep = head.next;
+        //        ListNode reverseNode = head;//準備好拼接模型
+        //        reverseNode.next = null;//切斷頭
+        //        ListNode executer = null;//迴圈用的斷頭台
 
-                while (originalStep != null)//沒頭可斷就停下
-                {
-                    executer = originalStep;//放上斷頭台
-                    originalStep= originalStep.next;//指標往下個目標走
-                    executer.next = null;//切斷頭
-                    executer.next = reverseNode; //把原本順序的頭接到後面斷下的頭的尾部
-                    reverseNode = executer;//沿著斷頭往上移到下個拼接點
-                }
+        //        while (originalStep != null)//沒頭可斷就停下
+        //        {
+        //            executer = originalStep;//放上斷頭台
+        //            originalStep = originalStep.next;//指標往下個目標走
+        //            executer.next = null;//切斷頭
+        //            executer.next = reverseNode; //把原本順序的頭接到後面斷下的頭的尾部
+        //            reverseNode = executer;//沿著斷頭往上移到下個拼接點
+        //        }
 
-                return reverseNode;
-            }
-        }
+        //        return reverseNode;
+        //    }
+        //}
         //算是最早寫法的優化版
         //下次可以試先DFS到最底層取得reverse的head和原本的head作互動，只少應該不會這麼像人體蜈蚣
         //可以看出linklist很適合用白板

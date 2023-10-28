@@ -34,26 +34,44 @@ namespace testconsole2013
             }
         }
 
+        //2023.0913.2114
         public class Solution
         {
-            TreeNode result = null;
-            int target = 0;
             public TreeNode SearchBST(TreeNode root, int val)
             {
-                target = val;
-                Recurive(root);
-                return result;
-            }
-            public void Recurive(TreeNode node)
-            {
-                if (node == null || result!= null)
-                    return;
+                var node = root;
+                while(node!= null && node.val != val)
+                {
+                    if(node.val< val)                    
+                        node = node.right;
+                    else
+                        node = node.left;
+                }
 
-                if (node.val == target)
-                    result = node;
-                Recurive(node.left);
-                Recurive(node.right);
+                return node;
             }
         }
+
+        //public class Solution
+        //{
+        //    TreeNode result = null;
+        //    int target = 0;
+        //    public TreeNode SearchBST(TreeNode root, int val)
+        //    {
+        //        target = val;
+        //        Recurive(root);
+        //        return result;
+        //    }
+        //    public void Recurive(TreeNode node)
+        //    {
+        //        if (node == null || result != null)
+        //            return;
+
+        //        if (node.val == target)
+        //            result = node;
+        //        Recurive(node.left);
+        //        Recurive(node.right);
+        //    }
+        //}
     }
 }

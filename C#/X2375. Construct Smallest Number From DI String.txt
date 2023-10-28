@@ -1,0 +1,50 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace testconsole2013
+{
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string pattern = "IIIDIDDD";
+
+            Solution solution = new Solution();
+            var result = solution.SmallestNumber(pattern);
+            Console.WriteLine(result);
+            Console.ReadKey();
+
+        }
+
+        //2023.0910.0337
+        public class Solution
+        {
+            public string SmallestNumber(string pattern)
+            {
+                StringBuilder result = new StringBuilder();
+                Stack<string> stack = new Stack<string>();
+
+                for(int i = 0;i<=pattern.Length;i++)
+                {
+                    stack.Push((i+1).ToString());
+                    if (i == pattern.Length || pattern[i] == 'I')
+                    {
+                        result.Append(string.Join("",stack));
+                        stack.Clear();
+                    }
+                }
+
+                return result.ToString();
+            }
+        }
+        //抄這位的
+        //https://leetcode.com/problems/construct-smallest-number-from-di-string/solutions/2422380/java-c-python-easy-reverse/
+    }
+
+
+}

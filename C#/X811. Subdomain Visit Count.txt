@@ -1,0 +1,76 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using static System.Net.Mime.MediaTypeNames;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string[] SubdomainVisits = new string[] { "9001 discuss.leetcode.com" };
+            Solution solution = new Solution();
+            solution.SubdomainVisits(SubdomainVisits);
+            Console.WriteLine();
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public IList<string> SubdomainVisits(string[] cpdomains)
+            {
+                Dictionary<string,int> dictionary = new Dictionary<string,int>();
+
+                foreach (string cpdomain in cpdomains)
+                {
+                    int i = 0;
+                    for(;i<cpdomain.Length;i++)
+                        if (cpdomain[i] == ' ')
+                            break;
+
+                    int times = Convert.ToInt32(cpdomain.Substring(0, i));
+                    
+                    int j = cpdomain.Length - 1;
+                    int startIndex = j, endIndex = j;
+
+                    for (; j > i; j--)
+                    {
+                        if (cpdomain[j] == '.')
+                        {
+                            startIndex = j + 1;
+
+                            string subDomain = cpdomain.Substring(startIndex, endIndex-j);
+                            if(dictionary.ContainsKey(subDomain))
+                                dictionary[subDomain]+=times;
+                            else
+                                dictionary[subDomain]=times;
+
+                        }
+                    }
+
+                    string domain = cpdomain.Substring(j+1, endIndex - j);
+                    if (dictionary.ContainsKey(domain))
+                        dictionary[domain] += times;
+                    else
+                        dictionary[domain] = times;
+                }
+
+                List<string> result = new List<string>();
+                foreach(string key in dictionary.Keys)
+                {
+                    result.Add(dictionary[key].ToString() + " " + key);
+                }
+
+                return result;
+            }
+        }
+        //比較一般的字串拆解，可能就看有沒有加速的方法
+    }
+}

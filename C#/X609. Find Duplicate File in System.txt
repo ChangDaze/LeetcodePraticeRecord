@@ -1,0 +1,63 @@
+using System.Numerics;
+using System.Text;
+
+namespace LeetcodeConsole
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            string[] paths = new string[] { "root/a 1.txt(abcd) 2.txt(efgh)", "root/c 3.txt(abcd)", "root/c/d 4.txt(efgh)", "root 4.txt(efgh)" };
+            Solution solution = new Solution();
+            solution.FindDuplicate(paths);
+            Console.WriteLine();
+            Console.ReadKey();
+        }
+
+        public class Solution
+        {
+            public IList<IList<string>> FindDuplicate(string[] paths)
+            {
+                Dictionary<string,int> groupMap = new Dictionary<string,int>();
+                List<List<string>> results = new List<List<string>>();
+
+                foreach (string path in paths)
+                {                    
+                    string[] contents = path.Split(' ');
+                    string directory = contents[0];
+
+                    for(int i = 1; i < contents.Length; i++)
+                    {
+                        for(int j = 0; j < contents[i].Length; j++)
+                        {
+                            if (contents[i][j] == '(')
+                            {
+                                string content = contents[i].Substring(j+1, contents[i].Length-1-j-1);
+                                string fullPath = directory + '/' + contents[i].Substring(0, j);
+                                if (groupMap.ContainsKey(content))
+                                {
+                                    results[groupMap[content]].Add(fullPath);
+                                }
+                                else
+                                {
+                                    groupMap[content] = results.Count;
+                                    results.Add(new List<string> { fullPath });
+                                }
+                            }
+                        }
+                    }
+                }
+
+                for(int i =0;i<results.Count;i++)//因為沒有重複的不丟
+                    if (results[i].Count<=1)
+                    {
+                        results.RemoveAt(i);
+                        i--;
+                    }
+
+                return results.ToArray();
+            }
+        }
+        //超暴力解，也超慢，要好好檢討自己一下了...
+    }
+}

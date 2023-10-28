@@ -1,0 +1,86 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using static System.Net.Mime.MediaTypeNames;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string num1 = "1+1i", num2 = "1+1i";
+            Solution solution = new Solution();
+            solution.ComplexNumberMultiply(num1,num2);
+            Console.WriteLine();
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public string ComplexNumberMultiply(string num1, string num2)
+            {
+                //這邊說的complex是指複數，題目很貼心的中間都用+隔開，就算有-也會並列
+                string[] num1Array = num1.Split('+');
+                string[] num2Array = num2.Split('+');
+
+                bool[] imaginaryFlag1 = new bool[num1Array.Length];
+                bool[] imaginaryFlag2 = new bool[num2Array.Length];
+
+                //先把是否為虛數的部分標記起來避免窮舉時一直if
+                for (int i = 0; i < num1Array.Length; i++)
+                {
+                    if (num1Array[i].Last() == 'i')
+                        imaginaryFlag1[i] = true;
+                }
+
+                for (int i = 0; i < num2Array.Length; i++)
+                {
+                    if (num2Array[i].Last() == 'i')
+                        imaginaryFlag2[i] = true;
+                }
+
+                int real = 0;//實數部分
+                int imaginary = 0;//虛數部分
+
+                //窮舉
+                for(int i = 0; i < num1Array.Length; i++)
+                {
+                    for (int j = 0; j < num2Array.Length; j++)
+                    {
+                        if (imaginaryFlag1[i] && imaginaryFlag2[j])//都是是虛數
+                        {
+                            real += (Convert.ToInt32(num1Array[i].Substring(0, num1Array[i].Length-1)) //num1Array + i
+                                        * Convert.ToInt32(num2Array[j].Substring(0, num2Array[j].Length - 1))//num2Array + j ，這樣分行比較好看和除錯，避免num1Array + i和num2Array + j搞混
+                                        * (-1));//i^2時變實數
+                        }
+                        else if (imaginaryFlag1[i])//只有num1Array[i]是虛數
+                        {
+                            imaginary += (Convert.ToInt32(num1Array[i].Substring(0, num1Array[i].Length - 1))//Length - 1是計算數字時去掉i
+                                        * Convert.ToInt32(num2Array[j]));
+                        }
+                        else if (imaginaryFlag2[j])//只有num2Array[j]是虛數
+                        {
+                            imaginary += (Convert.ToInt32(num1Array[i])
+                                        * Convert.ToInt32(num2Array[j].Substring(0, num2Array[j].Length - 1)));
+                        }
+                        else//都是實數
+                        {
+                            real += (Convert.ToInt32(num1Array[i]) 
+                                    * Convert.ToInt32(num2Array[j]));
+                        }
+                    }
+                }
+
+                return real.ToString() + '+' + imaginary.ToString() + 'i';//組合字串
+            }
+            //雖然混了一點數學，但本質上只是字串組合而已
+        }
+    }
+}

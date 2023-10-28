@@ -1,0 +1,52 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Data.Common;
+using static System.Net.Mime.MediaTypeNames;
+
+namespace testconsole2013
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string seq = "(()())";
+            Solution solution = new Solution();
+            solution.MaxDepthAfterSplit(seq);
+            Console.WriteLine();
+            Console.ReadKey();
+
+        }
+
+
+        public class Solution
+        {
+            public int[] MaxDepthAfterSplit(string seq)
+            {
+                int[] result = new int[seq.Length];
+                int depth = 0;
+                for(int i = 0;i<seq.Length;i++)
+                {
+                    if (seq[i] == '(')//open = '('
+                    {
+                        depth++;
+                        result[i] = depth % 2;//加深度後，才紀錄的深度
+                    }
+                    else//close = ')'
+                    {
+                        result[i] = depth % 2;//減深度之前，紀錄的深度不變，open 和 close時處理方法有點小不同
+                        depth--;
+                    }
+                }
+
+                return result;
+            }
+        }
+        //這題比較奇妙的是雖然分成AB兩組，但沒有要求A、B內容一定要連續，所以基本上只要深度有2的倍數就分兩組，在此情況下min max depth也最大是max depth / 2
+        //基本上抄這位的
+        //https://leetcode.com/problems/maximum-nesting-depth-of-two-valid-parentheses-strings/solutions/358419/confused-by-this-problem-i-was-too-here-is-how-it-became-crystal-clear/
+    }
+}

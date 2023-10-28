@@ -1,0 +1,49 @@
+using System.Numerics;
+using System.Text;
+
+namespace LeetcodeConsole
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            string s = "aacaba";
+            Solution solution = new Solution();
+            solution.CountSubstrings(s);
+            Console.WriteLine();
+            Console.ReadKey();
+        }
+
+        public class Solution
+        {
+            public int CountSubstrings(string s)
+            {
+                int result = 0;
+                for (int i = 0; i < s.Length; i++)//backtracking窮舉且不重複
+                {
+                    result +=
+                        (CheckPalindrome(s, i, i) + //奇數組合 ex: aba
+                        CheckPalindrome(s, i, i + 1)); //偶數組合 ex: aa
+                    //因字串本身是奇數和偶數所以分開做也必定不重複
+                    //像aa是偶數檢查會漏掉aaa但奇數會幫忙檢查到
+                }
+                return result;
+            }
+
+            private int CheckPalindrome(string s,int left, int right)
+            {
+                int count = 0;
+                //0和Length檢查要在前，避免超出範圍
+                while (left >= 0 && right< s.Length && s[left] == s[right])//只有符合迴文條件才有機會繼續檢查
+                {
+                    count++;//符合迴文
+                    left--;//左右擴展迴文(長度偶數增長)，單次檢查一定會漏，所以外部奇偶互補
+                    right++;
+                }
+                return count;
+            }
+        }
+        //基本上抄這位的
+        //Java solution, 8 lines, extendPalindrome
+    }
+}
