@@ -1,0 +1,65 @@
+using System.Numerics;
+using System.Text;
+
+namespace LeetcodeConsole
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int[][] grid = new int[3][]
+            {
+                new int[]{ 0,1,1},
+                new int[]{ 1,0,1},
+                new int[]{ 0,0,1}
+            };
+            Solution solution = new Solution();
+            Console.WriteLine(solution.OnesMinusZeros(grid));
+            Console.WriteLine();
+            Console.ReadKey();
+        }
+        public class Solution
+        {
+            public int[][] OnesMinusZeros(int[][] grid)
+            {
+                int[,] rowsRecord = new int[grid.Length,2];
+                int[,] colsRecord = new int[grid[0].Length, 2];
+                //後來想想 1 和 0 是正負關係，所以可以不用二維陣列分別存也可以，用一維互相加減就可以
+                for (int i = 0; i < grid.Length; i++)
+                {
+                    int onesRow = 0;
+                    int zerosRow = 0;
+                    for (int j = 0;j< grid[i].Length; j++)
+                    {
+                        if (grid[i][j] == 0)
+                        {
+                            zerosRow++;
+                            colsRecord[j, 0]++;
+                        }
+                        else if (grid[i][j] == 1)
+                        {
+                            onesRow++;
+                            colsRecord[j, 1]++;
+                        }
+                    }
+                    rowsRecord[i, 0] = zerosRow;
+                    rowsRecord[i, 1] = onesRow;
+                }
+
+                int[][] result = new int[grid.Length][];
+                for (int i = 0; i < grid.Length; i++)
+                {
+                    int[] row = new int[grid[i].Length];
+                    for (int j = 0; j < grid[i].Length; j++)
+                    {
+                        row[j] = rowsRecord[i,1] + colsRecord[j,1] - rowsRecord[i,0] - colsRecord[j,0];
+                    }
+                    result[i] = row;
+                }
+
+                return result;
+            }
+        }
+        //比較基礎的陣列遍例，多一點就能變prefix sum + dp，但這題應該還沒
+    }
+}
