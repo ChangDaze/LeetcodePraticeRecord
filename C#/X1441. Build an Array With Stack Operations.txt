@@ -1,0 +1,44 @@
+using System.Numerics;
+using System.Text;
+
+namespace LeetcodeConsole
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] target = new int[] { 1, 3 };
+            int n = 3;
+            Solution solution = new Solution();
+            Console.WriteLine(solution.BuildArray(target,n));
+            Console.WriteLine();
+            Console.ReadKey();
+        }
+        public class Solution
+        {
+            public IList<string> BuildArray(int[] target, int n)
+            {
+                int streamIndex = 1;
+
+                List<string> result = new List<string>();
+                foreach (int num in target)
+                {
+                    for(; streamIndex <= n; streamIndex++)
+                    {
+                        result.Add("Push");
+                        if(streamIndex == num)
+                        {
+                            streamIndex++;//因為brak時不會++，所以要補上避免重複做
+                            break;
+                        }                                                   
+                        result.Add("Pop");
+                    }
+                }
+
+                return result;
+            }
+        }
+        //基礎array到有點不像medium
+
+    }
+}

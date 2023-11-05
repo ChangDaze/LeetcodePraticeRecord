@@ -1,0 +1,39 @@
+using System.Numerics;
+using System.Text;
+
+namespace LeetcodeConsole
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] target = new int[] { 1, 2, 3, 4, 5 };
+            Solution solution = new Solution();
+            Console.WriteLine(solution.TriangularSum(target));
+            Console.WriteLine();
+            Console.ReadKey();
+        }
+        public class Solution
+        {
+            public int TriangularSum(int[] nums)
+            {
+                int flag = nums.Length-1;//因為每次對應格數固定少一格，可以簡單做
+
+                while (flag > 0)
+                {
+                    for(int i = 0; i < flag; i++)
+                    {
+                        nums[i] = (nums[i]+ nums[i + 1])%10;
+                    }
+                    flag--;
+                }
+
+                return nums[0];
+            }
+        }
+        //本身就是帕斯卡三角形然後互動的公式變了而已，也許有人能統計出最直接的公式，但沒有數學基礎可能就先這樣
+        //我看其他人就算知道也是乖乖算，頂多用不同工具來解
+        //https://leetcode.com/problems/find-triangular-sum-of-an-array/solutions/1909302/pascal-triangle/
+
+    }
+}

@@ -1,0 +1,36 @@
+using System.Numerics;
+using System.Text;
+
+namespace LeetcodeConsole
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] nums = new int[] { 3, 2, 4, 6 };
+            Solution solution = new Solution();
+            Console.WriteLine(solution.MaximumXOR(nums));
+            Console.WriteLine();
+            Console.ReadKey();
+        }
+        public class Solution
+        {
+            public int MaximumXOR(int[] nums)
+            {
+                int result = 0;
+                foreach (int i in nums)
+                {
+                    result |= i;
+                }
+                return result;
+            }
+        }
+        //1.x可以是任何數字
+        //2.AND(XOR)只會當前num任存在為1的bit變0(題外話，用【同樣的】x做AND(XOR)第二次會變回原來數字)
+        //3.所以所有num排出來只要透過XOR把每一個bit的1刪到剩一個就一定是最大值(所以只要確保那個bit有個1就好 -> OR)
+        //詳細解說
+        //https://leetcode.com/problems/maximum-xor-after-operations/solutions/2196006/simplest-o-n-solution-with-explanation/
+        //其實題目就一小點邏輯
+
+    }
+}

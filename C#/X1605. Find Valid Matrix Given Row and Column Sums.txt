@@ -1,0 +1,73 @@
+using System.Numerics;
+using System.Text;
+
+namespace LeetcodeConsole
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] rowSum = new int[] { 3, 8 };
+            int[] colSum = new int[] { 4, 7 };
+            Solution solution = new Solution();
+            Console.WriteLine(solution.RestoreMatrix(rowSum,colSum));
+            Console.WriteLine();
+            Console.ReadKey();
+        }
+        public class Solution
+        {
+            public int[][] RestoreMatrix(int[] rowSum, int[] colSum)
+            {                
+                int[][] result = new int[rowSum.Length][];
+                for (int i = 0; i < rowSum.Length; i++)                
+                    result[i] = new int[colSum.Length];
+
+                int rowFlag = 0;
+                int colFlag = 0;
+
+                while(rowFlag < rowSum.Length || colFlag < colSum.Length)
+                {
+                    if(rowFlag == rowSum.Length)
+                    {
+                        result[rowFlag - 1][colFlag] = colSum[colFlag];
+                        colFlag++;
+                        continue;
+                    }else if(colFlag == colSum.Length)
+                    {
+                        result[rowFlag][colFlag-1] = rowSum[rowFlag];
+                        rowFlag++;
+                        continue;
+                    }
+
+                    if (rowSum[rowFlag] == colSum[colFlag])//沒把等於的判斷也加入，前面的if會多做事
+                    {
+                        result[rowFlag][colFlag] = rowSum[rowFlag];
+                        rowSum[rowFlag] = 0;
+                        colSum[colFlag] = 0;
+                        rowFlag++;
+                        colFlag++;
+                    }
+                    else if (rowSum[rowFlag] < colSum[colFlag])
+                    {
+                        result[rowFlag][colFlag] = rowSum[rowFlag];
+                        colSum[colFlag] -= rowSum[rowFlag];//-=要在對方歸零前
+                        rowSum[rowFlag] = 0;              
+                        rowFlag++;
+                    }
+                    else
+                    {
+                        result[rowFlag][colFlag] = colSum[colFlag];
+                        rowSum[rowFlag] -= colSum[colFlag];
+                        colSum[colFlag] = 0;
+                        colFlag++;
+                    }
+                }
+
+                return result;
+            }
+        }
+        //這題就明顯的greedy因為row和col會互相影響，就單純找規律，應該再進化也只是縮減程式碼寫法(雖然都是hint告訴我的)
+	//動手模擬一下會更明顯有規律
+
+    }
+}

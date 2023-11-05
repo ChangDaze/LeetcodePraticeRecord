@@ -1,0 +1,65 @@
+using System.Numerics;
+using System.Text;
+
+namespace LeetcodeConsole
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            TreeNode root = new TreeNode(-1,null,new TreeNode(-1));
+            FindElements findElements = new FindElements(root);
+            Console.WriteLine(findElements.Find(1));
+            Console.WriteLine(findElements.Find(2));
+            Console.ReadKey();
+        }
+
+        public class TreeNode
+        {
+            public int val;
+            public TreeNode left;
+            public TreeNode right;
+            public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+            {
+                this.val = val;
+                this.left = left;
+                this.right = right;
+            }
+        }
+
+        public class FindElements
+        {
+            HashSet<int> record;
+            public FindElements(TreeNode root)
+            {
+                record = new HashSet<int>();
+                root.val = 0;
+                Recursive(root);
+            }
+
+            public bool Find(int target)
+            {
+                return record.Contains(target);
+            }
+
+            private void Recursive(TreeNode root)
+            {
+                if (root == null) return;
+                record.Add(root.val);
+                if(root.left != null)
+                {
+                    root.left.val = 2 * root.val + 1;
+                    Recursive(root.left);
+                }
+
+                if (root.right != null)
+                {
+                    root.right.val = 2 * root.val + 2;
+                    Recursive(root.right);
+                }
+
+            }
+        }
+        //照著提示做就很簡單，就是hashmap+遍歷tree，本身不用存tree之類的
+    }
+}

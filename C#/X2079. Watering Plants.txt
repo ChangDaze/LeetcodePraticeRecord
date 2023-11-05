@@ -1,0 +1,40 @@
+using System.Numerics;
+using System.Text;
+
+namespace LeetcodeConsole
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] plants = new int[] { 2, 2, 3, 3 };
+            int capacity = 5;
+            Solution solution = new Solution();
+            Console.WriteLine(solution.WateringPlants(plants,capacity));
+            Console.WriteLine();
+            Console.ReadKey();
+        }
+        public class Solution
+        {
+            public int WateringPlants(int[] plants, int capacity)
+            {
+                int steps = 1;
+                int curCapacity = capacity - plants[0];
+                for(int i = 0; i < plants.Length-1; i++)
+                {
+                    if(curCapacity < plants[i+1])//往後看是不是足夠灌溉下一個index
+                    {
+                        curCapacity = capacity;
+                        steps = steps + (i + 1) * 2;//去提水回到現在的位置
+                    }
+
+                    curCapacity -= plants[i + 1];
+                    steps++;
+                }
+
+                return steps;
+            }
+        }
+        //好像就普通的simulation題目
+    }
+}
