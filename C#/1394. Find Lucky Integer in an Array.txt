@@ -1,0 +1,45 @@
+using System.Numerics;
+using System.Text;
+
+namespace LeetcodeConsole
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] arr = new int[]{2,2,3,4};
+
+            Solution solution = new Solution();
+            Console.WriteLine(solution.FindLucky(arr));
+            Console.ReadKey();
+        }
+
+        //2024.0311.0002
+        public class Solution
+        {
+            public int FindLucky(int[] arr)
+            {
+                Dictionary<int,int> records = new Dictionary<int,int>();
+
+                for (int i = 0; i < arr.Length; i++)
+                {
+                    if (records.ContainsKey(arr[i]))
+                        records[arr[i]]++;
+                    else
+                        records[arr[i]]=1;
+                }
+
+                int max = -1;
+                foreach (int key in records.Keys)
+                {
+                    if (records[key] == key && key > max)
+                        max = key;
+                }
+                return max;
+            }
+        }
+        //這兩位C++和JAVA方法很多，我比較看得懂的大概是用array計數和array反過來找最大值比較快這兩點，我個人這題比較純粹的情況下就不用想太多
+        //https://leetcode.com/problems/find-lucky-integer-in-an-array/solutions/557113/3-approaches-2-variations/
+        //https://leetcode.com/problems/find-lucky-integer-in-an-array/solutions/554838/java-python-3-two-similar-clean-codes-array-and-hashmap-counter/
+    }
+}

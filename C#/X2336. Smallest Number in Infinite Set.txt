@@ -1,0 +1,50 @@
+using System.Numerics;
+using System.Text;
+
+namespace LeetcodeConsole
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            SmallestInfiniteSet smallestInfiniteSet = new SmallestInfiniteSet();
+            smallestInfiniteSet.PopSmallest();
+            //Console.WriteLine(solution.RestoreArray(adjacentPairs));
+            Console.ReadKey();
+        }
+
+        public class SmallestInfiniteSet
+        {
+            HashSet<int> sets;
+            int curr;
+            public SmallestInfiniteSet()
+            {
+                sets = new HashSet<int>();
+                curr = 1;//類似pointer
+            }
+            public int PopSmallest()
+            {
+                int smallest;
+                if (sets.Count == 0)//當沒值代表沒有回補
+                {
+                    smallest = curr;
+                    curr++;
+                    return smallest;
+                }
+                else//當有值代表有回補，這樣set一開始就不會很大
+                {
+                    smallest = sets.Min();
+                    sets.Remove(smallest);
+                    return smallest;
+                }
+            }
+            public void AddBack(int num)
+            {
+                if(curr>num)//小於pointer的才有機會回補
+                    sets.Add(num);
+            }
+        }
+        //抄這位的
+        //https://leetcode.com/problems/smallest-number-in-infinite-set/solutions/3452136/image-explanation-fastest-easiest-with-dry-run-c-java-python/
+    }
+}

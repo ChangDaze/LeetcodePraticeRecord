@@ -1,0 +1,61 @@
+using System.Numerics;
+using System.Text;
+
+namespace LeetcodeConsole
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] pushed = new int[] { 2, 1, 0 };
+            int[] popped = new int[] { 1, 2, 0 };
+            Solution solution = new Solution();
+            Console.WriteLine(solution.ValidateStackSequences(pushed,popped));
+            Console.ReadKey();
+        }
+
+        //2024.0707.2145
+        public class Solution
+        {
+            public bool ValidateStackSequences(int[] pushed, int[] popped)
+            {
+                List<int> storeList = new List<int>();
+
+                int popPointer = 0;
+                for (int pushPointer = 0; pushPointer < pushed.Length; pushPointer++)
+                {
+                    storeList.Add(pushed[pushPointer]);                    
+                    popPointer = TryPop(popped, popPointer, storeList); //取得最新popPointer
+                }
+
+                if(popPointer < popped.Length)
+                    return false;
+
+                return true;
+            }
+
+            private int TryPop(int[] popped, int popPointer, List<int> storeList)
+            {
+                int oldPopPointer = popPointer;
+                while (popPointer < popped.Length && storeList.Any())
+                {
+                    oldPopPointer = popPointer;
+                    if (popped[popPointer] == storeList.Last())
+                    {
+                        storeList.RemoveAt(storeList.Count - 1);
+                        popPointer ++;
+                    }
+
+                    if (oldPopPointer == popPointer)
+                        break;
+                }
+
+                return popPointer;
+            }
+        }
+        //這題是在說兩個陣列不看順序是否能滿足stack的過程，所以以最有利的方式來pop和push來看能不能成功就好，很簡單
+        //這位C++的法1是直接用內建的stack，然後最後檢查的是storeList，都可以參考，法2有點硬要，就是用foreach + pointer + 不斷的set 把push的陣列來當storeList用
+        //https://leetcode.com/problems/validate-stack-sequences/solutions/197685/c-java-python-simulation-o-1-space/
+        //其他幾位方法應該都差不多
+    }
+}

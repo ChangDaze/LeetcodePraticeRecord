@@ -1,0 +1,45 @@
+using System.Numerics;
+using System.Text;
+
+namespace LeetcodeConsole
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int a = 2;
+            int b = 4;
+            int[] candidates = new int[] { 16, 17, 71, 62, 12, 24, 14 };
+            Console.WriteLine(a>>1);
+            Console.WriteLine(b >> 1);
+            Console.WriteLine((b >> 1)&1);
+            Console.WriteLine(b >> 2);
+            Solution solution = new Solution();
+            Console.WriteLine(solution.LargestCombination(candidates));
+            Console.ReadKey();
+        }
+
+        public class Solution
+        {
+            public int LargestCombination(int[] candidates)
+            {
+                int result = 0;
+                for (int i = 0; i < 32; i++)//32是因為int最多32位，且題目限制candidate一定>1
+                {
+                    int count = 0;
+                    for (int j = 0; j < candidates.Length; j++)
+                    {
+                        count += (candidates[j] >> i) & 1;//用位數shift來把要算的位數(i)移到個位數，如果那位數bit=0，&1就沒值，反之就有值
+                    }
+                    if (count > result)
+                        result = count;
+                }
+
+                return result;
+            }
+        }
+        //基本上我們只要知道哪一位數的bit有最多數量的1那就是答案，因為bit=1的那幾個數就能組成combination，題目本身跟hashset無關，有也是bit部分，處理起來比較像二維array
+        //這位下面一位叫 sachuverma ，他的解釋超清楚        
+        //https://leetcode.com/problems/largest-combination-with-bitwise-and-greater-than-zero/solutions/2039717/check-each-bit/
+    }
+}

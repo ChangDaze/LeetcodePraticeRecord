@@ -1,0 +1,43 @@
+using System.Numerics;
+using System.Text;
+
+namespace LeetcodeConsole
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] nums = new int[] { 4, 3, 2, 7, 8, 2, 3, 1 };
+            Solution solution = new Solution();
+            Console.WriteLine(solution.FindDuplicates(nums));
+            Console.ReadKey();
+        }      
+
+        public class Solution
+        {
+            public IList<int> FindDuplicates(int[] nums)
+            {
+                HashSet<int> record = new HashSet<int>(nums.Length);
+                List<int> result = new List<int>();
+                foreach (int num in nums)
+                {
+                    if (record.Contains(num))
+                    {
+                        result.Add(num);
+                    }
+                    else
+                    {
+                        record.Add(num);
+                    }
+                }
+                return result;
+            }
+        }
+        //這題目本身很簡單，但有些好用的小技巧，像下面兩位就用index+array+題目限制[1,n]來達成不用額外空間且快速的檢查
+        //下面兩位JAVA方法一樣
+        //https://leetcode.com/problems/find-all-duplicates-in-an-array/solutions/92387/java-simple-solution/
+        //https://leetcode.com/problems/find-all-duplicates-in-an-array/solutions/1505444/o-n-time-o-1-space-in-place-java-solution/
+        //這位C++最後方法也一樣，意外大家都一樣，不過這位寫得很詳細把大家會用的的幾個方法都演變出來了
+        //https://leetcode.com/problems/find-all-duplicates-in-an-array/solutions/775798/c-four-solution-o-n-n-to-o-n-explain-all/
+    }
+}

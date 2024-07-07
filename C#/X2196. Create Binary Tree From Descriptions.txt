@@ -1,0 +1,90 @@
+using System.Numerics;
+using System.Text;
+
+namespace LeetcodeConsole
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int[][] descriptions = new int[][]
+            {
+                new int[]{20,15,1},
+                new int[]{20,17,0},
+                new int[]{50,20,1},
+                new int[]{50,80,0},
+                new int[]{ 80, 19, 1 }
+            };
+            
+            Solution solution = new Solution();
+            Console.WriteLine(solution.CreateBinaryTree(descriptions));
+            Console.ReadKey();
+        }
+
+        public class TreeNode
+        {
+            public int val;
+            public TreeNode left;
+            public TreeNode right;
+            public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+            {
+                this.val = val;
+                this.left = left;
+                this.right = right;
+            }
+        }
+
+        public class Solution
+        {
+            public TreeNode CreateBinaryTree(int[][] descriptions)
+            {
+                Dictionary<int, int[]> records = new Dictionary<int, int[]>();
+                HashSet<int> parent = new HashSet<int>();
+                HashSet<int> childrens = new HashSet<int>();
+
+                foreach (int[] description in descriptions)
+                {                    
+                    if (records.ContainsKey(description[0]))
+                    {
+                        records[description[0]][description[2] == 1 ? 0 : 1] = description[1];
+                    }
+                    else
+                    {
+                        records[description[0]] = new int[2];
+                        records[description[0]][description[2] == 1 ? 0 : 1] = description[1];
+                    }
+                    parent.Add(description[0]);
+                    childrens.Add(description[1]);
+                }
+
+                foreach(int children in childrens)                
+                    parent.Remove(children);
+
+                TreeNode result = new TreeNode(parent.First());
+                Queue<TreeNode> queue = new Queue<TreeNode>();
+                queue.Enqueue(result);
+                while (queue.Count > 0)
+                {
+                    TreeNode node = queue.Dequeue();
+                    if (!records.ContainsKey(node.val)) continue;//沒有key就跳過避免報錯
+                    node.left = (records[node.val][0] == 0 ? null : new TreeNode(records[node.val][0]))!; // !在後，容許null
+                    if (node.left is not null)
+                        queue.Enqueue(node.left);
+                    node.right = (records[node.val][1] == 0 ? null : new TreeNode(records[node.val][1]))!;
+                    if (node.right is not null)
+                        queue.Enqueue(node.right);
+                }
+                return result;
+            }
+        }
+        //就整理好在解，和找出root
+        //這位C++方法不錯ㄟ，在過程就組好tree了，且hashmap存tree reference，hashset存ischild，都用得很好，最後找出非child就知道是root可以丟回
+        //https://leetcode.com/problems/create-binary-tree-from-descriptions/solutions/1823687/c-map/
+        //這位JAVA方法跟第一位一樣
+        //https://leetcode.com/problems/create-binary-tree-from-descriptions/solutions/1823716/simple-java-solution-hashmap/
+        //這位Python方法跟第一位一樣，不過Python寫起來真的很簡潔
+        //https://leetcode.com/problems/create-binary-tree-from-descriptions/solutions/1823804/python-solution/
+        //這位C#方法跟前面幾位一樣，但他有做一些複雜變體，在過程中來分辨root，但感覺划不來
+        //https://leetcode.com/problems/create-binary-tree-from-descriptions/solutions/2463145/c-solution/
+    }
+}

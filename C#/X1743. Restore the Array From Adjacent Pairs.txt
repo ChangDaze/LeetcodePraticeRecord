@@ -1,0 +1,72 @@
+using System.Numerics;
+using System.Text;
+
+namespace LeetcodeConsole
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int[][] adjacentPairs = new int[][] { new int[] { 1,2 }, new int[] { 3, 4 }, new int[] { 3, 2 } };
+            Solution solution = new Solution();
+            Console.WriteLine(solution.RestoreArray(adjacentPairs));
+            Console.ReadKey();
+        }
+
+        public class Solution
+        {
+            public int[] RestoreArray(int[][] adjacentPairs)
+            {
+                Dictionary<int, List<int>> record = new Dictionary<int, List<int>>();//把所有出現的值和相鄰的值都做紀錄，為了寫起來簡單用List<int>，不然也能用int[]
+                HashSet<int> tail = new HashSet<int>();//用來存放只出現一次的頭或尾
+
+                foreach (int[] pair in adjacentPairs)
+                {
+                    if (record.ContainsKey(pair[0]))
+                    {
+                        record[pair[0]].Add(pair[1]);
+                        tail.Remove(pair[0]);//出現第二次就移除
+                    }
+                    else
+                    {
+                        record[pair[0]] = new List<int>() { pair[1] };
+                        tail.Add(pair[0]);
+                    }
+
+                    //相鄰的兩個值都要做，確保reocrd的key有【所有】值的記錄
+                    if (record.ContainsKey(pair[1]))
+                    {
+                        record[pair[1]].Add(pair[0]);
+                        tail.Remove(pair[1]);
+                    }
+                    else
+                    {
+                        record[pair[1]] = new List<int>() { pair[0] };
+                        tail.Add(pair[1]);
+                    }
+                }
+
+                int[] result = new int[adjacentPairs.Length + 1];
+                result[0] = tail.First();//拿出現一次的值當邊界
+                result[1] = record[result[0]][0];//此值一定只有一個相鄰
+
+                for(int i = 2;i<result.Length;i++)
+                {
+                    if(record[result[i - 1]][0] == result[i - 2])//確認是前面是哪邊相鄰再取值
+                        result[i] = record[result[i - 1]][1];
+                    else
+                        result[i] = record[result[i - 1]][0];                   
+                }
+
+                return result;
+            }
+        }
+        //最直接照hint的暴力解
+        //這位C++作法一模一樣ㄟ，還最多人vote
+        //https://leetcode.com/problems/restore-the-array-from-adjacent-pairs/solutions/1042989/c-find-the-head/
+        //這位JAVA方式一樣，但用DFS和BFS變成對相鄰的list<int>窮舉，只能說一開始會有點看不懂
+        //https://leetcode.com/problems/restore-the-array-from-adjacent-pairs/solutions/1043371/java-bfs-or-dfs-code-intuition-visualisation/
+        //J個C#有點帥，方法本質一樣，但他不用list<int>存，因為只有最多兩個相鄰的，所以他用XOR加密兩個值來存，取出來時再解密推論該放哪個，這方法在XOR 2個值時是可行的，很有創意
+        //https://leetcode.com/problems/restore-the-array-from-adjacent-pairs/solutions/1044181/c-beats-100-based-on-an-idea-from-xor-linked-lists/
+    }
+}

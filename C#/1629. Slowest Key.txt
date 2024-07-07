@@ -1,0 +1,51 @@
+using System.Numerics;
+using System.Text;
+
+namespace LeetcodeConsole
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] TreleaseTimes = new int[] { 9, 29, 49, 50 };
+            string keysPressed = "cbcd";
+
+            Solution solution = new Solution();
+            Console.WriteLine(solution.SlowestKey(TreleaseTimes, keysPressed));
+            Console.ReadKey();
+        }
+
+        //2024.0309.2239
+        public class Solution
+        {
+            public char SlowestKey(int[] releaseTimes, string keysPressed)
+            {
+                List<char> targets = new List<char>() { keysPressed[0] };
+                int longestDuration = releaseTimes[0];
+                for (int i = 1; i < releaseTimes.Length; i++)
+                {
+                    int duration = releaseTimes[i] - releaseTimes[i - 1];
+                    if (duration < longestDuration)
+                        continue;
+                    else if(duration > longestDuration)
+                    {
+                        longestDuration = duration;
+                        targets.Clear();
+                    }
+                    
+                    targets.Add(keysPressed[i]);
+                }
+
+                return (char)targets.Max();
+            }
+        }
+        //這位JAVA方法一樣，不過他沒用list存最大應該比我這樣用好
+        //https://leetcode.com/problems/slowest-key/solutions/909070/java-solution-o-n-explained/
+        //這位Python方法跟上面JAVA一樣
+        //https://leetcode.com/problems/slowest-key/solutions/909825/python-one-pass-solution-without-using-an-extra-space/
+        //這位Python one liner先用map將r, [0]+r相減(sub)，再用zip將map和字串兩兩分組(比較最多到較短array盡頭)，再找出max，zip後是tuple，如果比對值相等max會照順序比對直到tuple中決定出最大者時
+        //https://leetcode.com/problems/slowest-key/solutions/985258/1-line-python/
+        //https://ithelp.ithome.com.tw/articles/10214139
+
+    }
+}
